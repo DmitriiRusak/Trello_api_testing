@@ -8,6 +8,7 @@ import io.qameta.allure.*;
 import io.qameta.allure.testng.Tag;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -25,16 +26,35 @@ import static api.base.TestData.BoardTestData.*;
 @Tag("api")
 public class BoardApiTest extends BaseTest {
 
+    @AfterClass
+    public void tearDown(){
+        getBoardSteps().deleteBoard(DEFIEND_PERMISSION_BOARD_ID);
+    }
+
     @Test(priority = 1)
     @Story("Bord")
     @Description("Get list of user")
     @Severity(SeverityLevel.CRITICAL)
-    public void testCreateABoard() {
+    public void testCreateABoardWithDefaultOptions() {
         Response response = getBoardSteps().createBoard(BoardTestData.BOARD_NAME);
         BoardTestData.boardId = response.jsonPath().getString("id");
 
         Assert.assertTrue(!response.jsonPath().getString("id").isEmpty());
         Assert.assertEquals(response.getStatusCode(), 200);
+    }
+
+    @Test(priority = 1)
+    @Story("Bord")
+    @Description("Get list of user")
+    @Severity(SeverityLevel.CRITICAL)
+    public void testCreateABoardWithPublicAccess() {
+
+        Response response = getBoardSteps().createABoardWithDefinedPermissionLevel(BoardTestData.BOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS, PERMISSION_LEVEL_PUBLIC);
+        BoardTestData.DEFIEND_PERMISSION_BOARD_ID = response.jsonPath().getString("id");
+
+        Assert.assertTrue(!response.jsonPath().getString("id").isEmpty());
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.jsonPath().getString("prefs.permissionLevel"), PERMISSION_LEVEL_PUBLIC);
     }
 
     @Test(priority = 2)

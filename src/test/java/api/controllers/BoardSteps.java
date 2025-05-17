@@ -164,4 +164,13 @@ public class BoardSteps extends BaseService {
         return response;
 
     }
+
+    public Response createABoardWithDefinedPermissionLevel(String boardNameCreatedWithSpecificOptions, String permissionLeve) {
+
+        requestSpecification.queryParam("name", boardNameCreatedWithSpecificOptions);
+        requestSpecification.queryParam("prefs_permissionLevel", permissionLeve);
+        Response response = apiClient.post(BoardEndPoints.BOARDS_BASE_PATH, requestSpecification);
+        initRequestSpecification();
+        return response;
+    }
 }

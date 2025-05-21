@@ -7,39 +7,39 @@ import org.testng.annotations.Listeners;
 @Listeners(ListeningConfig.class)
 public class BaseTest {
 
-    private final BoardSteps boardSteps = new BoardSteps();
-    private final ActionsSteps actionsSteps = new ActionsSteps();
-    private final CardsSteps cardsSteps = new CardsSteps();
-    private final LabelsSteps labelsSteps = new LabelsSteps();
-    private final MembersSteps membersSteps = new MembersSteps();
-    private final ChecklistsSteps checklistsSteps = new ChecklistsSteps();
-    private final ListsSteps listsSteps = new ListsSteps();
+    private final BoardService boardService = new BoardService();
+    private final ActionsService actionsService = new ActionsService();
+    private final CardsService cardsService = new CardsService();
+    private final LabelsService labelsService = new LabelsService();
+    private final MembersService membersService = new MembersService();
+    private final ChecklistsService checklistsService = new ChecklistsService();
+    private final ListsService listsService = new ListsService();
 
-    public BoardSteps getBoardSteps() {
-        return boardSteps;
+    public BoardService getBoardService() {
+        return boardService;
     }
 
-    public ChecklistsSteps getChecklistsSteps() {
-        return checklistsSteps;
+    public ChecklistsService getChecklistsSteps() {
+        return checklistsService;
     }
 
-    public ListsSteps getListsSteps() {
-        return listsSteps;
+    public ListsService getListsSteps() {
+        return listsService;
     }
 
-    public ActionsSteps getActionsSteps() {
-        return actionsSteps;
+    public ActionsService getActionsSteps() {
+        return actionsService;
     }
 
-    public CardsSteps getCardsSteps() {
-        return cardsSteps;
+    public CardsService getCardsSteps() {
+        return cardsService;
     }
 
-    public LabelsSteps getLabelsSteps() {
-        return labelsSteps;
+    public LabelsService getLabelsSteps() {
+        return labelsService;
     }
 
-    public MembersSteps getMembersSteps() {
-        return membersSteps;
+    public MembersService getMembersSteps() {
+        return membersService;
     }
 }

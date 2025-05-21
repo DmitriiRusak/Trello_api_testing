@@ -1,11 +1,10 @@
 package api.cucumber.steps;
 
 import api.base.TestData;
-import api.controllers.BoardSteps;
-import api.controllers.CardsSteps;
-import api.controllers.ListsSteps;
+import api.controllers.BoardService;
+import api.controllers.CardsService;
+import api.controllers.ListsService;
 
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -17,12 +16,12 @@ import org.testng.Assert;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SmokeStepDefinitions extends BoardSteps {
+public class SmokeStepDefinitions extends BoardService {
     private static final Logger logger = LogManager.getLogger(SmokeStepDefinitions.class);
 
-    BoardSteps boardSteps = new BoardSteps();
-    ListsSteps listsSteps = new ListsSteps();
-    CardsSteps cardsSteps = new CardsSteps();
+    BoardService boardService = new BoardService();
+    ListsService listsService = new ListsService();
+    CardsService cardsService = new CardsService();
     private String boardId;
     private Response responseBord;
     private  Response responseList;
@@ -40,7 +39,7 @@ public class SmokeStepDefinitions extends BoardSteps {
 
     @When("i create a new board with name {string}")
     public void i_create_a_new_board_with_name(String string) {
-        responseBord = boardSteps.createBoard(string);
+        responseBord = boardService.createBoard(string);
         boardId = responseBord.jsonPath().getString("id");
 
     }
@@ -58,13 +57,13 @@ public class SmokeStepDefinitions extends BoardSteps {
 
     @Then("i delete the created board")
     public void i_delete_the_created_board() {
-        responseBord = boardSteps.deleteABoardFromService(boardId);
+        responseBord = boardService.deleteABoardFromService(boardId);
     }
    // @list
 
     @When("I create a list with name {string} on the board")
     public void i_create_a_list_with_name_on_the_board(String string) {
-        responseList = listsSteps.createList(string, boardId);
+        responseList = listsService.createList(string, boardId);
 
     }
     @Then("the response should contain a valid list id")
@@ -84,8 +83,8 @@ public class SmokeStepDefinitions extends BoardSteps {
     @When("I have created a list named {string} on the board")
     public void i_have_created_a_list_named_on_the_board(String string) {
 
-        Response response = listsSteps.createList(string, boardId);
-        newCreatedListId = listsSteps.getIdOfTheFirstListOnABoard(boardId);
+        Response response = listsService.createList(string, boardId);
+        newCreatedListId = listsService.getIdOfTheFirstListOnABoard(boardId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.path("name"), string);
@@ -96,7 +95,7 @@ public class SmokeStepDefinitions extends BoardSteps {
         Map<String, String> queryParametersForRequestSpec = new HashMap<>();
         queryParametersForRequestSpec.put("idList", TestData.CardsTestData.listId);
 
-        responseCard = cardsSteps.createACard(queryParametersForRequestSpec);
+        responseCard = cardsService.createACard(queryParametersForRequestSpec);
 
 
     }

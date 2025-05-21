@@ -8,7 +8,7 @@ import io.restassured.response.Response;
 import java.io.File;
 import java.util.Objects;
 
-public class CardsSteps extends BaseService {
+public class CardsService extends BaseService {
 
 
 

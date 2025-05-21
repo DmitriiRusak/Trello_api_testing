@@ -9,7 +9,7 @@ import static api.base.PathParameters.LabelsPath.LABELS_BASE_PATH;
 import static api.base.PathParameters.ListsPath.LISTS_BASE_PATH;
 import static api.base.PathParameters.MembersPath.MEMBERS_BASE_PATH;
 
-public class BoardSteps extends BaseService {
+public class BoardService extends BaseService {
 
     @Step("Create board with name: {nameOfTheBoard}")
     public Response createBoard(String nameOfTheBoard) {

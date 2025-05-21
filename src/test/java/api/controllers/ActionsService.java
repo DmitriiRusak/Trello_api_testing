@@ -4,7 +4,7 @@ import api.base.PathParameters.*;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
-public class ActionsSteps extends BaseService {
+public class ActionsService extends BaseService {
 
     @Step("Get an action with id = {actiontId} from a board")
     public Response getAnAction(String actiontId) {

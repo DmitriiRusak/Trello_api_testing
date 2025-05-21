@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 
 import static api.base.PathParameters.MembersPath.*;
 
-public class MembersSteps extends BaseService {
+public class MembersService extends BaseService {
 
     @Step("Get a member with id - {firstMemberId}")
     public Response getAMember(String firstMemberId) {

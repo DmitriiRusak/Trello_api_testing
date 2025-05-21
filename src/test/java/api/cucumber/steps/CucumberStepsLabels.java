@@ -7,7 +7,6 @@ import io.cucumber.java.en.When;
 import org.testng.Assert;
 
 import static api.base.TestData.BoardTestData.boardId;
-import static api.base.TestData.LabelsTestData.NEW_NAME;
 import static api.base.TestData.LabelsTestData.labelId;
 import static api.base.TestData.response;
 
@@ -15,7 +14,7 @@ public class CucumberStepsLabels extends BaseTest {
 
     @When("Я создаю доску {string}")
     public void createBoardRU(String boardName) {
-        response = getBoardSteps().createBoard(boardName);
+        response = getBoardService().createBoard(boardName);
         boardId = response.jsonPath().getString("id");
     }
 
@@ -26,7 +25,7 @@ public class CucumberStepsLabels extends BaseTest {
 
     @And("Я удаляю доску")
     public void delete() {
-        getBoardSteps().deleteBoard(boardId);
+        getBoardService().deleteBoard(boardId);
     }
 
     @When("I create a new Label on a Board with {string} and {string}")

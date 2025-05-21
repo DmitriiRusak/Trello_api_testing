@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 
 import static api.base.PathParameters.ListsPath.*;
 
-public class ListsSteps extends BaseService {
+public class ListsService extends BaseService {
 
 
     @Step("Create a new List: name = {name}")

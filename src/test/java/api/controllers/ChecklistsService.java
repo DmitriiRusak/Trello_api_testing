@@ -6,7 +6,7 @@ import io.restassured.response.Response;
 import static api.base.PathParameters.CheckListsPath.CHECKLISTS_BASE_PATH;
 import static api.base.PathParameters.CheckListsPath.*;
 
-public class ChecklistsSteps extends BaseService {
+public class ChecklistsService extends BaseService {
 
     @Step("Get all fields of a checklist with id - {'checklistId'}")
     public Response getCheckList(String checklistId) {

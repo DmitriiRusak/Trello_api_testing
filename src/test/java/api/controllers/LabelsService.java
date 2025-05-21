@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 
 import static api.base.PathParameters.LabelsPath.LABELS_BASE_PATH;
 
-public class LabelsSteps extends BaseService {
+public class LabelsService extends BaseService {
 
     @Step("Create a new Label: name = {name}, color = {color}, board id = {idBoard}")
     public Response createLabel(String labelName, String color, String boardId) {

@@ -40,11 +40,11 @@ public class Specification {
                 .build();
     }
 
-    public static ResponseSpecification installResponse() {
-        return new ResponseSpecBuilder()
-                .log(LogDetail.ALL)
-                .build();
-    }
+//    public static ResponseSpecification installResponse() {
+//        return new ResponseSpecBuilder()
+//                .log(LogDetail.ALL)
+//                .build();
+//    }
 }
 
 

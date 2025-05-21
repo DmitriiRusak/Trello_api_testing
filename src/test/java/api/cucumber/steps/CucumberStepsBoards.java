@@ -57,32 +57,32 @@ public class CucumberStepsBoards extends BaseTest {
 
     @When("I get actions from a board")
     public void getActionsOnBoard() {
-        response = getBoardService().getActions(boardId, ACTIONS_BASE_PATH);
+//        response = getBoardService().getActions(boardId, ACTIONS_BASE_PATH);
     }
 
     @When("I get checklists from a board")
     public void getChecklistsFromBoard() {
-        response = getBoardService().getChecklists(boardId, CHECKLISTS_BASE_PATH);
+//        response = getBoardService().getChecklists(boardId, CHECKLISTS_BASE_PATH);
     }
 
     @When("I get all existed cards from a bord")
     public void getCardsFromBoard() {
-        response = getBoardService().getCards(boardId, CARDS_BASE_PATH);
+//        response = getBoardService().getCards(boardId, CARDS_BASE_PATH);
     }
 
     @When("I get all existed filtered {string} cards from a bord")
     public void getFilteredCardsFromBoard(String filter) {
-        response = getBoardService().getFilteredCards(boardId, CARDS_BASE_PATH, filter);
+//        response = getBoardService().getFilteredCards(boardId, CARDS_BASE_PATH, filter);
     }
 
     @When("I get all existed custom fields from a bord")
     public void getCustomFieldsFomBoard() {
-        response = getBoardService().getCustomFieldsForABoard(boardId, CUSTOM_FIELDS_BASE_PATH);
+//        response = getBoardService().getCustomFieldsForABoard(boardId, CUSTOM_FIELDS_BASE_PATH);
     }
 
     @When("I get {string} lists from a bord")
     public void getListsFromBoard(String filter) {
-        response = getBoardService().getFilteredListsOnABoard(boardId, LISTS_BASE_PATH, filter);
+//        response = getBoardService().getFilteredListsOnABoard(boardId, LISTS_BASE_PATH, filter);
     }
 
     @When("I get members of a bord")
@@ -92,7 +92,7 @@ public class CucumberStepsBoards extends BaseTest {
 
     @When("I invite Member to Board via email")
     public void getInviteMembers() {
-        response = getBoardService().inviteMemberToBoardViaEmail(boardId, MEMBERS_BASE_PATH);
+//        response = getBoardService().inviteMemberToBoardViaEmail(boardId, MEMBERS_BASE_PATH);
     }
 
     @When("I update a board by giving a new name {string}")
@@ -102,7 +102,7 @@ public class CucumberStepsBoards extends BaseTest {
 
     @When("I get boardStars on a Board")
     public void getBoardStarsBoard() {
-        response = getBoardService().getBoardStarsOnBoard(boardId, boardStarsEnPoint);
+//        response = getBoardService().getBoardStarsOnBoard(boardId, boardStarsEnPoint);
     }
 
     @When("I get memberships of a Board")

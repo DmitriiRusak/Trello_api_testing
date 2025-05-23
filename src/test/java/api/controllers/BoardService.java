@@ -23,6 +23,23 @@ public class BoardService extends BaseService {
         return response;
     }
 
+    public Response createABoardWithDefinedPermissionLevel(String boardNameCreatedWithSpecificOptions, String permissionLeve) {
+
+        requestSpecification.queryParam("name", boardNameCreatedWithSpecificOptions);
+        requestSpecification.queryParam("prefs_permissionLevel", permissionLeve);
+        Response response = apiClient.post(BoardEndPoints.BOARDS_BASE_PATH, requestSpecification);
+        initRequestSpecification();
+        return response;
+    }
+
+    public Response createABoardWithSpecificResource(String boardName, String resourceName, String resourceValue){
+        requestSpecification.queryParam("name", boardName);
+        requestSpecification.queryParam(resourceName, resourceValue);
+        Response response = apiClient.post(BoardEndPoints.BOARDS_BASE_PATH, requestSpecification);
+        initRequestSpecification();
+        return response;
+    }
+
     @Step("Delete board {boardId}")
     public Response deleteABoardFromService(String boardId) {
 
@@ -172,12 +189,4 @@ public class BoardService extends BaseService {
 
     }
 
-    public Response createABoardWithDefinedPermissionLevel(String boardNameCreatedWithSpecificOptions, String permissionLeve) {
-
-        requestSpecification.queryParam("name", boardNameCreatedWithSpecificOptions);
-        requestSpecification.queryParam("prefs_permissionLevel", permissionLeve);
-        Response response = apiClient.post(BoardEndPoints.BOARDS_BASE_PATH, requestSpecification);
-        initRequestSpecification();
-        return response;
-    }
 }

@@ -1,4 +1,4 @@
-package api.cucumber.steps;
+package api.cucumber;
 
 import api.base.BaseTest;
 import api.base.TestData;
@@ -10,13 +10,6 @@ import org.testng.Assert;
 
 import java.util.List;
 
-import static api.base.PathParameters.ActionsEndPoints.ACTIONS_BASE_PATH;
-import static api.base.PathParameters.BoardEndPoints.boardStarsEnPoint;
-import static api.base.PathParameters.CUSTOM_FIELDS_BASE_PATH;
-import static api.base.PathParameters.CardsEndPoints.CARDS_BASE_PATH;
-import static api.base.PathParameters.CheckListsPath.CHECKLISTS_BASE_PATH;
-import static api.base.PathParameters.ListsPath.LISTS_BASE_PATH;
-import static api.base.PathParameters.MembersPath.MEMBERS_BASE_PATH;
 import static api.base.TestData.BoardTestData.EXPECTED_RESULT;
 import static api.base.TestData.BoardTestData.boardId;
 import static api.base.TestData.response;

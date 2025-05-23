@@ -1,9 +1,6 @@
 package api.tests;
 
 import api.base.BaseTest;
-import api.base.PathParameters;
-import api.base.PathParameters.ActionsEndPoints;
-import api.base.PathParameters.BoardEndPoints;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.Tag;
 import io.restassured.response.Response;
@@ -13,10 +10,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static api.base.PathParameters.CardsEndPoints.CARDS_BASE_PATH;
-import static api.base.PathParameters.CheckListsPath.CHECKLISTS_BASE_PATH;
-import static api.base.PathParameters.ListsPath.LISTS_BASE_PATH;
-import static api.base.PathParameters.MembersPath.MEMBERS_BASE_PATH;
 import static api.base.TestData.BoardTestData;
 import static api.base.TestData.BoardTestData.*;
 
@@ -28,7 +21,7 @@ public class BoardApiTest extends BaseTest {
 
     @AfterClass
     public void tearDown(){
-        getBoardService().deleteBoard(DEFIEND_PERMISSION_BOARD_ID);
+        getBoardService().deleteBoard(DefiendPermissionBoardId);
     }
 
     @Test(priority = 1)
@@ -50,7 +43,7 @@ public class BoardApiTest extends BaseTest {
     public void testCreateABoardWithPublicAccess() {
 
         Response response = getBoardService().createABoardWithDefinedPermissionLevel(BoardTestData.BOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS, PERMISSION_LEVEL_PUBLIC);
-        BoardTestData.DEFIEND_PERMISSION_BOARD_ID = response.jsonPath().getString("id");
+        BoardTestData.DefiendPermissionBoardId = response.jsonPath().getString("id");
 
         Assert.assertTrue(!response.jsonPath().getString("id").isEmpty());
         Assert.assertEquals(response.getStatusCode(), 200);

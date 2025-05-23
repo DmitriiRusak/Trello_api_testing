@@ -21,7 +21,7 @@ final public class TestData {
         public final static String PERMISSION_LEVEL_PUBLIC = "public";
 
         public static String boardId;
-        public static String DEFIEND_PERMISSION_BOARD_ID;
+        public static String DefiendPermissionBoardId;
         public static String boardName;
         public static String labelId;
         public static String listId;

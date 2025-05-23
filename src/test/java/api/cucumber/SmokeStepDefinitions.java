@@ -1,4 +1,4 @@
-package api.cucumber.steps;
+package api.cucumber;
 
 import api.base.TestData;
 import api.controllers.BoardService;

@@ -1,6 +1,7 @@
 package api.tests;
 
 import api.base.BaseTest;
+import api.base.TestData;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -21,8 +22,8 @@ public class ListsApiTest extends BaseTest {
 
     @BeforeClass
     public void setUp() {
-        boardId = getListsSteps().createABord(bordName);
-        toDoListId = getListsSteps().getIdOfTheFirstListOnABoard(boardId);
+        TestData.ListsTestData.boardId = getListsSteps().createABord(bordName);
+        TestData.ListsTestData.toDoListId = getListsSteps().getIdOfTheFirstListOnABoard(boardId);
     }
 
     @AfterClass

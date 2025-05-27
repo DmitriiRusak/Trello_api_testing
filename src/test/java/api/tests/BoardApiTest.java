@@ -113,7 +113,7 @@ public class BoardApiTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void testGetActionsOfABoard() {
 
-        Response response = getBoardService().getActions(BoardTestData.boardId);
+        Response response = getBoardService().getActionsOfABoard(BoardTestData.boardId);
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(arrayList.size(), 3);
@@ -135,7 +135,7 @@ public class BoardApiTest extends BaseTest {
     @Description("Get all existed cards from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetCardsOnABoard() {
-        Response response = getBoardService().getCards(BoardTestData.boardId);
+        Response response = getBoardService().getCardsOfABoard(BoardTestData.boardId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().asString(), EXPECTED_RESULT);
@@ -146,7 +146,7 @@ public class BoardApiTest extends BaseTest {
     @Description("Get all existed filtered cards from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetFilteredCardsOnABoard() {
-        Response response = getBoardService().getFilteredCards(BoardTestData.boardId, "all");
+        Response response = getBoardService().getFilteredCardsOfABoard(BoardTestData.boardId, "all");
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().asString(), EXPECTED_RESULT);
@@ -157,7 +157,7 @@ public class BoardApiTest extends BaseTest {
     @Description("Get all existed custom fields from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetCustomFieldsForBoard() {
-        Response response = getBoardService().getCustomFieldsForABoard(BoardTestData.boardId);
+        Response response = getBoardService().getCustomFieldsOfAABoard(BoardTestData.boardId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().asString(), EXPECTED_RESULT);
@@ -180,7 +180,7 @@ public class BoardApiTest extends BaseTest {
     @Description("Get closed lists from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetFilteredListsOnABoard() {
-        Response response = getBoardService().getFilteredListsOnABoard(BoardTestData.boardId, NAME_OF_A_FILTER);
+        Response response = getBoardService().getFilteredListsOfABoard(BoardTestData.boardId, NAME_OF_A_FILTER);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().asString(), EXPECTED_RESULT);
@@ -225,7 +225,7 @@ public class BoardApiTest extends BaseTest {
     @Description("Get boardStars on a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetBoardStarsOnABoard() {
-        Response response = getBoardService().getBoardStarsOnBoard(BoardTestData.boardId);
+        Response response = getBoardService().getBoardStarsOfABoard(BoardTestData.boardId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -235,7 +235,7 @@ public class BoardApiTest extends BaseTest {
     @Description("Get memberships of a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetMembershipsOfABoard() {
-        Response response = getBoardService().getMembershipsOnBoard(BoardTestData.boardId);
+        Response response = getBoardService().getMembershipsOfABoard(BoardTestData.boardId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }

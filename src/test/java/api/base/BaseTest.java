@@ -31,7 +31,7 @@ public class BaseTest {
         return actionsService;
     }
 
-    public CardsService getCardsSteps() {
+    public CardsService getCardsService() {
         return cardsService;
     }
 

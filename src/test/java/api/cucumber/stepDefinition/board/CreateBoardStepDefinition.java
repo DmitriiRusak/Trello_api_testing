@@ -1,4 +1,4 @@
-package api.cucumber.board;
+package api.cucumber.stepDefinition.board;
 import api.base.BaseTest;
 import api.base.TestData;
 import io.cucumber.java.en.*;

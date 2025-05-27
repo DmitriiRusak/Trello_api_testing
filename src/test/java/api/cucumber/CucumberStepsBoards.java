@@ -50,7 +50,7 @@ public class CucumberStepsBoards extends BaseTest {
 
     @When("I get actions from a board")
     public void getActionsOnBoard() {
-//        response = getBoardService().getActions(boardId, ACTIONS_BASE_PATH);
+//        response = getBoardService().getActionsOfABoard(boardId, ACTIONS_BASE_PATH);
     }
 
     @When("I get checklists from a board")
@@ -60,17 +60,17 @@ public class CucumberStepsBoards extends BaseTest {
 
     @When("I get all existed cards from a bord")
     public void getCardsFromBoard() {
-//        response = getBoardService().getCards(boardId, CARDS_BASE_PATH);
+//        response = getBoardService().getCardsOfABoard(boardId, CARDS_BASE_PATH);
     }
 
     @When("I get all existed filtered {string} cards from a bord")
     public void getFilteredCardsFromBoard(String filter) {
-//        response = getBoardService().getFilteredCards(boardId, CARDS_BASE_PATH, filter);
+//        response = getBoardService().getFilteredCardsOfABoard(boardId, CARDS_BASE_PATH, filter);
     }
 
     @When("I get all existed custom fields from a bord")
     public void getCustomFieldsFomBoard() {
-//        response = getBoardService().getCustomFieldsForABoard(boardId, CUSTOM_FIELDS_BASE_PATH);
+//        response = getBoardService().getCustomFieldsOfAABoard(boardId, CUSTOM_FIELDS_BASE_PATH);
     }
 
     @When("I get {string} lists from a bord")
@@ -80,7 +80,7 @@ public class CucumberStepsBoards extends BaseTest {
 
     @When("I get members of a bord")
     public void getMembersOfBoard() {
-        response = getBoardService().getMembershipsOnBoard(boardId);
+        response = getBoardService().getMembershipsOfABoard(boardId);
     }
 
     @When("I invite Member to Board via email")
@@ -95,12 +95,12 @@ public class CucumberStepsBoards extends BaseTest {
 
     @When("I get boardStars on a Board")
     public void getBoardStarsBoard() {
-//        response = getBoardService().getBoardStarsOnBoard(boardId, boardStarsEnPoint);
+//        response = getBoardService().getBoardStarsOfABoard(boardId, boardStarsEnPoint);
     }
 
     @When("I get memberships of a Board")
     public void getMembershipsBoard() {
-        response = getBoardService().getMembershipsOnBoard(boardId);
+        response = getBoardService().getMembershipsOfABoard(boardId);
     }
 
     @When("I remove member from board")

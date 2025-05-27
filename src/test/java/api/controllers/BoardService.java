@@ -97,7 +97,7 @@ public class BoardService extends BaseService {
     }
 
     @Step("Get all actions existed on a board with id - {'boardId'}")
-    public Response getActions(String boardId) {
+    public Response getActionsOfABoard(String boardId) {
 
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + PathParameters.ActionsEndPoints.ACTIONS_BASE_PATH, requestSpecification);
         initRequestSpecification();
@@ -105,7 +105,6 @@ public class BoardService extends BaseService {
     }
 
     @Step("Get checklists presented on a board with id - {'boardId'}")
-//    public Response getChecklists(String boardId, String checklistsEndPoint) {
     public Response getChecklists(String boardId) {
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + CHECKLISTS_BASE_PATH, requestSpecification);
         initRequestSpecification();
@@ -113,8 +112,7 @@ public class BoardService extends BaseService {
     }
 
     @Step("Get cards presented on a board")
-//    public Response getCards(String boardId, String cardsEndPoint) {
-    public Response getCards(String boardId) {
+    public Response getCardsOfABoard(String boardId) {
 
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + CARDS_BASE_PATH, requestSpecification);
         initRequestSpecification();
@@ -122,8 +120,7 @@ public class BoardService extends BaseService {
     }
 
     @Step("Get filtered cards presented on a board")
-//    public Response getFilteredCards(String boardId, String filtereCardsEndPoint, String filterName) {
-    public Response getFilteredCards(String boardId, String filterName) {
+    public Response getFilteredCardsOfABoard(String boardId, String filterName) {
 
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + CARDS_BASE_PATH + filterName, requestSpecification);
         initRequestSpecification();
@@ -131,8 +128,7 @@ public class BoardService extends BaseService {
     }
 
     @Step("Get custom fields presented on a board")
-//    public Response getCustomFieldsForABoard(String boardId, String customFieldsEndPoint) {
-    public Response getCustomFieldsForABoard(String boardId) {
+    public Response getCustomFieldsOfAABoard(String boardId) {
 
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + PathParameters.CUSTOM_FIELDS_BASE_PATH, requestSpecification);
         initRequestSpecification();
@@ -148,7 +144,7 @@ public class BoardService extends BaseService {
     }
 
     @Step("Get list on board filtered by - {'filter'}")
-    public Response getFilteredListsOnABoard(String boardId, String filter) {
+    public Response getFilteredListsOfABoard(String boardId, String filter) {
 
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + LISTS_BASE_PATH + filter, requestSpecification);
         initRequestSpecification();
@@ -157,6 +153,7 @@ public class BoardService extends BaseService {
 
     @Step("Invite member to a board with id - {'boardId'} via email")
     public Response inviteMemberToBoardViaEmail(String boardId) {
+
         requestSpecification.param("email", "ironman-968-privet-test@ya.ru");
         requestSpecification.param("allowBillableGuest", true);
         Response response = apiClient.put(BoardEndPoints.BOARDS_BASE_PATH + boardId + MEMBERS_BASE_PATH, requestSpecification);
@@ -165,16 +162,24 @@ public class BoardService extends BaseService {
     }
 
     @Step("Get boardStars on a Board: id board = {boardId}")
-    public Response getBoardStarsOnBoard(String boardId) {
+    public Response getBoardStarsOfABoard(String boardId) {
+
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + BoardEndPoints.boardStarsEnPoint, requestSpecification);
         initRequestSpecification();
         return response;
     }
 
     @Step("Get memberships on a Board: id board = {boardId}")
-    public Response getMembershipsOnBoard(String boardId) {
+    public Response getMembershipsOfABoard(String boardId) {
 
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + BoardEndPoints.MEMBER_SHIPS_ENDPOINT, requestSpecification);
+        initRequestSpecification();
+        return response;
+    }
+
+    @Step("Get resource of a board")
+    public Response getResourceOfABoard(String boardId, String resourceEndPoint){
+        Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + resourceEndPoint, requestSpecification);
         initRequestSpecification();
         return response;
     }

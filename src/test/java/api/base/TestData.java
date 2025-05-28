@@ -1,6 +1,7 @@
 package api.base;
 
 import io.restassured.response.Response;
+import org.json.JSONObject;
 import org.testng.annotations.DataProvider;
 
 import java.util.List;
@@ -27,11 +28,10 @@ final public class TestData {
         public static String boardName;
         public static String labelId;
         public static String listId;
-        public static List listsAmountPresentedOnABoard;
-        public static List membersNamesPresentedOnABoard;
-        public static List cardsAmountPresentedOnABoard;
-        public static List labelsAmountPresentedOnABoard;
+
         public static List universalListForResource;
+
+        public static Response commonResponseBetweenSteps;
     }
 
     public final static class ActionsTestData {

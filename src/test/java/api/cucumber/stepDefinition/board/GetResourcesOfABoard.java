@@ -26,33 +26,13 @@ public class GetResourcesOfABoard extends BaseTest {
 
     @When("I do request to get {string} Of a board")
     public void i_do_request_to_get_of_a_board(String string) {
-        Response response = getBoardService().getResourceOfABoard(TestData.BoardTestData.boardId, "/"+string);
-        TestData.BoardTestData.universalListForResource = response.jsonPath().getList("id");
+        TestData.BoardTestData.commonResponseBetweenSteps = getBoardService().getResourceOfABoard(TestData.BoardTestData.boardId, "/"+string);
     }
 
     @Then("I got back requested resource")
     public void i_got_back_requested_resource() {
+        TestData.BoardTestData.universalListForResource = TestData.BoardTestData.commonResponseBetweenSteps.jsonPath().getList("id");
         Assert.assertTrue(!TestData.BoardTestData.universalListForResource.isEmpty());
     }
-
-//    @Then("I got back lists that currently presented on a board")
-//    public void i_got_back_lists_that_currently_presented_on_a_board() {
-//        Assert.assertEquals(TestData.BoardTestData.universalListForResource.size(), 3);
-//    }
-//
-//    @Then("I got back members that currently presented on a board")
-//    public void i_got_back_members_that_currently_presented_on_a_board() {
-//        Assert.assertEquals(TestData.BoardTestData.universalListForResource.size(), 1 );
-//    }
-//
-//    @Then("I got back cards that currently presented on a board")
-//    public void i_got_back_cards_that_currently_presented_on_a_board() {
-//        Assert.assertEquals(TestData.BoardTestData.universalListForResource.size(),1);
-//    }
-//
-//    @Then("I got back labels that currently presented on a board")
-//    public void i_got_back_labels_that_currently_presented_on_a_board() {
-//        Assert.assertEquals(TestData.BoardTestData.universalListForResource.size(), 6);
-//    }
 
 }

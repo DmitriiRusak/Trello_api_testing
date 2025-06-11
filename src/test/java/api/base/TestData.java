@@ -25,7 +25,6 @@ final public class TestData {
 
         public static String boardId;
         public static String DefiendPermissionBoardId;
-        public static String boardName;
         public static String labelId;
         public static String listId;
 

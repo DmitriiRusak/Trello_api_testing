@@ -57,8 +57,8 @@ public class BoardService extends BaseService {
     }
 
     @Step("Update Board: id board = {boardId}, new name board = {bordName}")
-    public Response updateBoard(String boardId, String bordName) {
-        requestSpecification.param("name", bordName);
+    public Response updateBoard(String boardId, String optionName, String bordName) {
+        requestSpecification.param(optionName, bordName);
         Response response = apiClient.put(BoardEndPoints.BOARDS_BASE_PATH + boardId, requestSpecification);
         initRequestSpecification();
         return response;

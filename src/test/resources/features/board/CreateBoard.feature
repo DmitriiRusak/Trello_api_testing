@@ -10,6 +10,7 @@ Feature: Create a board
 
   Rule: Create a board with default options
 
+    @createDefaultBoard
       Scenario: Create a board with 3 default lists on it.
         When I create a board with default options
         Then A board is created
@@ -17,22 +18,19 @@ Feature: Create a board
 
   Rule: Create a board with specific options
 
-      Scenario: Create a board with public access.
-        When I create a board using "prefs_permissionLevel" option with value "public"
+      Scenario Outline: Create a board with public access.
+        When I create a board using "<optionName>" option with value "<value>"
         Then A board is created
-        And a board has "prefs_permissionLevel" option set wth value "public"
+        And a board has "<optionName>" option set wth value "<value>"
+
+        Examples:
+        |optionName|value|
+        |prefs_permissionLevel|public|
+        |desc                 |Sample description|
+        |prefs_background     |red               |
 
       Scenario: Create a board without default lists.
         When I create a board using "defaultLists" option with value "false"
         Then A board is created
         And 0 number of lists presented on the board
-
-      Scenario: Create a board with description.
-        When I create a board using "desc" option with value "Sample description"
-        Then A board is created
-        And a board has "desc" option set wth value "Sample description"
-
-      Scenario: Create a board with red colored background.
-        When I create a board using "prefs_background" option with value "red"
-        Then A board is created
-        And a board has "prefs_background" option set wth value "red"
+        And Since the scenario is for testing purpose only I delete the board to keep workspace clean

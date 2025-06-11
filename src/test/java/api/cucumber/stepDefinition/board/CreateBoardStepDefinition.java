@@ -48,20 +48,24 @@ public class CreateBoardStepDefinition extends BaseTest {
         Assert.assertEquals(numberOfListsPresentedOnABoard, expectedNumberOfLists);
     }
 
-    @Then("a board has {string} option set wth value {string}")
-    public void a_board_has_option_set_wth_value(String string, String string2) {
-                if(string.contains("_")){
-            string=string.replace('_', '.');
-        }
-        Response response = getBoardService().getBoard(TestData.BoardTestData.boardId);
-        String resourceValue = response.jsonPath().getString(string);
+    @And("a board has {string} option set wth value {string}")
+    public void a_board_has_option_set_wth_value(String optionName, String newOptionValue) {
 
-        Assert.assertEquals(resourceValue, string2);
+        if(optionName.contains("_") || optionName.contains("/")){
+            optionName = optionName.replace('_', '.');
+            optionName=optionName.replace('/', '.');
+        }
+
+        Response response = getBoardService().getBoard(TestData.BoardTestData.boardId);
+        String currentOptionValue = response.jsonPath().getString(optionName);
+
+        Assert.assertEquals(currentOptionValue, newOptionValue);
     }
 
     @Then("Since the scenario is for testing purpose only I delete the board to keep workspace clean")
     public void since_the_scenario_is_for_testing_purpose_only_i_delete_the_board_to_keep_workspace_clean() {
         getBoardService().deleteBoard(TestData.BoardTestData.boardId);
     }
+
 
 }

@@ -18,6 +18,12 @@ public class GetOptionsOfABoard extends BaseTest {
         TestData.BoardTestData.commonResponseBetweenSteps = getBoardService().getBoard(TestData.BoardTestData.boardId);
     }
 
+    @When("I change {string} of a board to {string}")
+    public void i_change_of_a_board_to(String optionName, String newOptionValue) {
+        TestData.BoardTestData.commonResponseBetweenSteps = getBoardService().updateBoard(TestData.BoardTestData.boardId, optionName, newOptionValue);
+        System.out.println(TestData.BoardTestData.commonResponseBetweenSteps.asPrettyString());
+    }
+
     @Then("I got back requested options")
     public void i_got_back_requested_options() {
 

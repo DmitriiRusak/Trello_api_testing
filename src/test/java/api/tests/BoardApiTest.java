@@ -1,6 +1,7 @@
 package api.tests;
 
 import api.base.BaseTest;
+import api.base.TestData;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.Tag;
 import io.restassured.response.Response;
@@ -214,7 +215,7 @@ public class BoardApiTest extends BaseTest {
     @Description("Update a board by giving a new name")
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateABoard() {
-        Response response = getBoardService().updateBoard(BoardTestData.boardId, NEW_NAME_FOR_A_BOARD);
+        Response response = getBoardService().updateBoard(BoardTestData.boardId, TestData.BoardTestData.FIELD_NAME, NEW_NAME_FOR_A_BOARD);
 
         Assert.assertEquals(response.body().jsonPath().get("id").toString(), BoardTestData.boardId);
         Assert.assertEquals(response.body().jsonPath().get("name").toString(), NEW_NAME_FOR_A_BOARD);

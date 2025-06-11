@@ -1,3 +1,4 @@
+@Get_resources_of_a_board
 Feature: Get resources of a board
 
   As an authorized user

@@ -3,7 +3,7 @@
 <suite name="All test" >
     <test name="Test Cucumber with xml">
         <classes>
-            <class name="api.cucumber.runners.CucumberRunnerTest"/>
+            <class name="api.cucumber.runners.CucumberTestNGRunnerTest"/>
         </classes>
     </test>
 </suite>

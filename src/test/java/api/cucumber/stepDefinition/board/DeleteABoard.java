@@ -3,6 +3,7 @@ package api.cucumber.stepDefinition.board;
 import api.base.BaseTest;
 import api.base.TestData;
 import io.cucumber.java.en.*;
+import io.restassured.response.Response;
 import org.testng.Assert;
 
 public class DeleteABoard extends BaseTest {
@@ -13,7 +14,7 @@ public class DeleteABoard extends BaseTest {
     }
     @Then("Board is deleted")
     public void board_is_deleted() {
-        TestData.BoardTestData.commonResponseBetweenSteps = getBoardService().getBoard(TestData.BoardTestData.boardId);
-        Assert.assertEquals(TestData.BoardTestData.commonResponseBetweenSteps.asPrettyString(), "The requested resource was not found.");
+        TestData.commonResponseBetweenSteps = getBoardService().getBoard(TestData.BoardTestData.boardId);
+        Assert.assertEquals(TestData.commonResponseBetweenSteps.asPrettyString(), "The requested resource was not found.");
     }
 }

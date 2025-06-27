@@ -15,23 +15,13 @@ public class GetOptionsOfABoard extends BaseTest {
     @When("I do request for all options of the board")
     public void i_do_request_for_all_options_of_the_board() {
 
-        TestData.BoardTestData.commonResponseBetweenSteps = getBoardService().getBoard(TestData.BoardTestData.boardId);
+        TestData.commonResponseBetweenSteps = getBoardService().getBoard(TestData.BoardTestData.boardId);
     }
 
     @When("I change {string} of a board to {string}")
     public void i_change_of_a_board_to(String optionName, String newOptionValue) {
-        TestData.BoardTestData.commonResponseBetweenSteps = getBoardService().updateBoard(TestData.BoardTestData.boardId, optionName, newOptionValue);
-        System.out.println(TestData.BoardTestData.commonResponseBetweenSteps.asPrettyString());
-    }
-
-    @Then("I got back requested options")
-    public void i_got_back_requested_options() {
-
-        File getBoardjsonSchema = new File("src/test/resources/getBoardJSONSchema.json");
-        MatcherAssert.assertThat(
-                "Validate json schema",
-                TestData.BoardTestData.commonResponseBetweenSteps.getBody().asString(),
-                JsonSchemaValidator.matchesJsonSchema(getBoardjsonSchema));
+        TestData.commonResponseBetweenSteps = getBoardService().updateBoard(TestData.BoardTestData.boardId, optionName, newOptionValue);
+        System.out.println(TestData.commonResponseBetweenSteps.asPrettyString());
     }
 
     @Then("I got back requested {string}")
@@ -40,7 +30,24 @@ public class GetOptionsOfABoard extends BaseTest {
         Response currentResponse = getBoardService().getBoard(TestData.BoardTestData.boardId);
         String currentResource = currentResponse.jsonPath().getString(string);
 
-        Assert.assertEquals(currentResource, TestData.BoardTestData.commonResponseBetweenSteps.jsonPath().getString("_value"));
+        Assert.assertEquals(currentResource, TestData.commonResponseBetweenSteps.jsonPath().getString("_value"));
+
+        System.out.println(TestData.commonResponseBetweenSteps.asPrettyString());
     }
 
+    @Then("I got back requested options for {string}")
+    public void iGotBackRequestedOptionsFor(String objectName) {
+
+        File getBoardjsonSchema = new File("src/test/resources/get"+objectName+"JSONSchema.json");
+        MatcherAssert.assertThat(
+                "Validate json schema",
+                TestData.commonResponseBetweenSteps.getBody().asString(),
+                JsonSchemaValidator.matchesJsonSchema(getBoardjsonSchema));
+    }
+
+    @When("I do request to get {string} Of a board")
+    public void iDoRequestToGetOfABoard(String optionName) {
+
+        TestData.commonResponseBetweenSteps = getBoardService().getOptionOfABoard(TestData.BoardTestData.boardId, "/"+optionName);
+    }
 }

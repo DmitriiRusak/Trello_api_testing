@@ -1,4 +1,5 @@
 @Delete_a_board
+@Smoke
 Feature: Delete a board
 
   As an authorized user

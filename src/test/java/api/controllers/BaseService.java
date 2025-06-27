@@ -1,6 +1,5 @@
 package api.controllers;
 
-import api.base.PathParameters;
 import api.base.PathParameters.*;
 import api.utils.ApiClient;
 import api.utils.Specification;
@@ -97,4 +96,25 @@ public abstract class BaseService {
         initRequestSpecification();
         return response;
     }
+
+    //работает только по листу? Надо чтобы работало универсально
+    @Step("Get resource of a board")
+    public Response getOptionOfAnObject(String resourceEndPoint, String resourceId, String optionName){
+
+        requestSpecification.queryParam("fields", optionName);
+        Response response = apiClient.get(resourceEndPoint + resourceId, requestSpecification);
+        initRequestSpecification();
+        return response;
+    }
+
+    @Step("Get the board of a list")
+    public Response getResourceOfAnObject(String resourceEndPoint, String resourceId, String objectTipe){
+
+//        requestSpecification.queryParam("fields", optionName);
+        Response response = apiClient.get(resourceEndPoint + resourceId + objectTipe, requestSpecification);
+        initRequestSpecification();
+        return response;
+    }
+
+
 }

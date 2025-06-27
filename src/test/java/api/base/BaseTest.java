@@ -23,7 +23,7 @@ public class BaseTest {
         return checklistsService;
     }
 
-    public ListsService getListsSteps() {
+    public ListsService getListsService() {
         return listsService;
     }
 

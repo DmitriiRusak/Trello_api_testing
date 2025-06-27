@@ -9,7 +9,11 @@ import java.util.List;
 final public class TestData {
 
     private static final String BASE_BOARD_NAME = "Board for ";
-    public static Response response;
+    public static Response commonResponseBetweenSteps;
+    public static List universalListForResource;
+    public static final String emptyString = "[]";
+
+
 
     public final static class BoardTestData {
         public final static String BOARD_NAME = BASE_BOARD_NAME + "Board";
@@ -24,13 +28,12 @@ final public class TestData {
         public final static String PERMISSION_LEVEL_PUBLIC = "public";
 
         public static String boardId;
+        public static String secondBoardId;
         public static String DefiendPermissionBoardId;
         public static String labelId;
         public static String listId;
 
-        public static List universalListForResource;
 
-        public static Response commonResponseBetweenSteps;
     }
 
     public final static class ActionsTestData {
@@ -67,7 +70,6 @@ final public class TestData {
         public static final String valueForAFieldToBeUpdated = "New name for checklist";
         public static final String expectedPosOfAChecklist = "16384";
         public static final String fieldToGetBackFromTheChecklist = "/pos";
-        public static final String emptyString = "[]";
         public static final String expectedStringResult = "[:]";
         public static final String nameForNewCheckItem = "Mark";
         public static String boardId;
@@ -106,6 +108,7 @@ final public class TestData {
         public static String toDoListId;
         public static String newCreatedListId;
         public static boolean subscribeValue = true;
+
     }
 
     public final static class MembersTestData {

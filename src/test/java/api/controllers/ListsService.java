@@ -29,6 +29,29 @@ public class ListsService extends BaseService {
         return response;
     }
 
+    @Step("Update a {optionName} for the list with id {listId} value = {newValueForAnOption}")
+    public Response updateAnOptionsOfAList(String listId, String[] optionNames, String[] optionValues) {
+
+        for (int i = 0; i < optionNames.length; i++) {
+            requestSpecification.queryParam(optionNames[i], optionValues[i]);
+        }
+
+        Response response = apiClient.put(LISTS_BASE_PATH + listId, requestSpecification);
+        initRequestSpecification();
+
+        return response;
+    }
+
+    @Step("Update a neme for the list with value = {newNameForTheList}")
+    public Response updateAList(String listId, String optionName, String newValueForAnOption) {
+        requestSpecification.queryParam(optionName, newValueForAnOption);
+        Response response = apiClient.put(LISTS_BASE_PATH + listId, requestSpecification);
+
+        initRequestSpecification();
+
+        return response;
+    }
+
     @Step("Get the list with id = {listId}")
     public Response getAList(String listId) {
         Response response = apiClient.get(LISTS_BASE_PATH + listId, requestSpecification);
@@ -79,8 +102,8 @@ public class ListsService extends BaseService {
     }
 
     @Step("Get a cards from a list with id {idOfTheList}")
-    public Response getCardsOnAList(String idOfTheList) {
-        Response response = apiClient.get(LISTS_BASE_PATH + idOfTheList + cardsEndPoint, requestSpecification);
+    public Response getResourcesOfAList(String idOfTheList, String requestedObject) {
+        Response response = apiClient.get(LISTS_BASE_PATH + idOfTheList + requestedObject, requestSpecification);
 
         initRequestSpecification();
 

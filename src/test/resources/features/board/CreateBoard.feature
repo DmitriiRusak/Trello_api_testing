@@ -6,11 +6,11 @@ Feature: Create a board
 
   Background:
     Given I am registered user in the Trello app
-    Then Since the scenario is for testing purpose only I delete the board to keep workspace clean
 
   Rule: Create a board with default options
 
     @createDefaultBoard
+    @Smoke
       Scenario: Create a board with 3 default lists on it.
         When I create a board with default options
         Then A board is created
@@ -18,7 +18,7 @@ Feature: Create a board
 
   Rule: Create a board with specific options
 
-      Scenario Outline: Create a board with public access.
+      Scenario Outline: Create a board with with specific options.
         When I create a board using "<optionName>" option with value "<value>"
         Then A board is created
         And a board has "<optionName>" option set wth value "<value>"
@@ -33,4 +33,3 @@ Feature: Create a board
         When I create a board using "defaultLists" option with value "false"
         Then A board is created
         And 0 number of lists presented on the board
-        And Since the scenario is for testing purpose only I delete the board to keep workspace clean

@@ -178,7 +178,7 @@ public class BoardService extends BaseService {
     }
 
     @Step("Get resource of a board")
-    public Response getResourceOfABoard(String boardId, String resourceEndPoint){
+    public Response getOptionOfABoard(String boardId, String resourceEndPoint){
         Response response = apiClient.get(BoardEndPoints.BOARDS_BASE_PATH + boardId + resourceEndPoint, requestSpecification);
         initRequestSpecification();
         return response;

@@ -1,6 +1,16 @@
 package api.base;
 
-final public class PathParameters {
+import java.util.HashMap;
+
+public class PathParameters {
+
+    public static HashMap<String, String> endPoints = new HashMap<>();
+    static {
+        endPoints.put("board", "/board/");
+        endPoints.put("list", "/lists/");
+        endPoints.put("cards", "/cards");
+        endPoints.put("actions", "/actions");
+    }
 
     public final static class BoardEndPoints {
 

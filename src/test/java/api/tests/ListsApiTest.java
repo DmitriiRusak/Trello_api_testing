@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static api.base.PathParameters.ListsPath.cardsEndPoint;
 import static api.base.TestData.ListsTestData.*;
 
 @Epic("API Tests")
@@ -22,13 +23,13 @@ public class ListsApiTest extends BaseTest {
 
     @BeforeClass
     public void setUp() {
-        TestData.ListsTestData.boardId = getListsSteps().createABord(bordName);
-        TestData.ListsTestData.toDoListId = getListsSteps().getIdOfTheFirstListOnABoard(boardId);
+        TestData.ListsTestData.boardId = getListsService().createABord(bordName);
+        TestData.ListsTestData.toDoListId = getListsService().getIdOfTheFirstListOnABoard(boardId);
     }
 
     @AfterClass
     public void tearDown() {
-        getListsSteps().deleteBoard(boardId);
+        getListsService().deleteBoard(boardId);
     }
 
     @Test(priority = 0)
@@ -36,8 +37,8 @@ public class ListsApiTest extends BaseTest {
     @Description("Create a new List on a Board")
     @Severity(SeverityLevel.CRITICAL)
     public void testCreateNewList() {
-        Response response = getListsSteps().createList(nameOfTheList, boardId);
-        newCreatedListId = getListsSteps().getIdOfTheFirstListOnABoard(boardId);
+        Response response = getListsService().createList(nameOfTheList, boardId);
+        newCreatedListId = getListsService().getIdOfTheFirstListOnABoard(boardId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.path("name"), nameOfTheList);
@@ -48,7 +49,7 @@ public class ListsApiTest extends BaseTest {
     @Description("Update a name of the list")
     @Severity(SeverityLevel.CRITICAL)
     public void tesUpdateANameForToDoList() {
-        Response response = getListsSteps().updateANameForList(toDoListId, newNameForTheList);
+        Response response = getListsService().updateANameForList(toDoListId, newNameForTheList);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("name"), newNameForTheList);
@@ -59,7 +60,7 @@ public class ListsApiTest extends BaseTest {
     @Description("Get a list from a board with updated name (before 'ToDO' now it is 'Updated name for the list')")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetAList() {
-        Response response = getListsSteps().getAList(toDoListId);
+        Response response = getListsService().getAList(toDoListId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("name"), newNameForTheList);
@@ -74,9 +75,9 @@ public class ListsApiTest extends BaseTest {
         queryParametersForRequestSpec.put("idList", toDoListId);
         queryParametersForRequestSpec.put("name", "nameForCard");
 
-        getListsSteps().createACard(queryParametersForRequestSpec);
+        getListsService().createACard(queryParametersForRequestSpec);
 
-        Response response = getListsSteps().archiveAllCardOnTheList(toDoListId);
+        Response response = getListsService().archiveAllCardOnTheList(toDoListId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -90,10 +91,10 @@ public class ListsApiTest extends BaseTest {
         queryParametersForRequestSpec.put("idList", newCreatedListId);
         queryParametersForRequestSpec.put("name", "nameForCard");
 
-        getListsSteps().createACard(queryParametersForRequestSpec);
-        getListsSteps().createACard(queryParametersForRequestSpec);
+        getListsService().createACard(queryParametersForRequestSpec);
+        getListsService().createACard(queryParametersForRequestSpec);
 
-        Response response = getListsSteps().moveAllCardsFromOneListToAnother(newCreatedListId, boardId, toDoListId);
+        Response response = getListsService().moveAllCardsFromOneListToAnother(newCreatedListId, boardId, toDoListId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -103,7 +104,7 @@ public class ListsApiTest extends BaseTest {
     @Description("Archive a list on a board")
     @Severity(SeverityLevel.CRITICAL)
     public void testArchiveAList() {
-        Response response = getListsSteps().archiveAList(toDoListId);
+        Response response = getListsService().archiveAList(toDoListId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -113,7 +114,7 @@ public class ListsApiTest extends BaseTest {
     @Description("Unarchived a list on a board")
     @Severity(SeverityLevel.CRITICAL)
     public void testUnArchiveAList() {
-        Response response = getListsSteps().unArchiveAList(toDoListId);
+        Response response = getListsService().unArchiveAList(toDoListId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -123,7 +124,7 @@ public class ListsApiTest extends BaseTest {
     @Description("Get all cards available on a list")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetCardsInAList() {
-        Response response = getListsSteps().getCardsOnAList(toDoListId);
+        Response response = getListsService().getResourcesOfAList(toDoListId, cardsEndPoint);
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -135,12 +136,12 @@ public class ListsApiTest extends BaseTest {
     @Description("Move list from one board to another")
     @Severity(SeverityLevel.CRITICAL)
     public void testMoveListFromOneBoardToAnother() {
-        String idOfTheSecondBoard = getListsSteps().createABord(nameForSecondBoard);
+        String idOfTheSecondBoard = getListsService().createABord(nameForSecondBoard);
 
-        Response response = getListsSteps().moveListFromOneBoardToAnother(toDoListId, idOfTheSecondBoard);
+        Response response = getListsService().moveListFromOneBoardToAnother(toDoListId, idOfTheSecondBoard);
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        getListsSteps().deleteBoard(idOfTheSecondBoard);
+        getListsService().deleteBoard(idOfTheSecondBoard);
     }
 
     @Test(priority = 5)
@@ -148,7 +149,7 @@ public class ListsApiTest extends BaseTest {
     @Description("Update subscribed field of a list")
     @Severity(SeverityLevel.CRITICAL)
     public void testUpdateASubscribedFieldOfAList() {
-        Response response = getListsSteps().updateSubscribedFieldOfAList(newCreatedListId, subscribeValue);
+        Response response = getListsService().updateSubscribedFieldOfAList(newCreatedListId, subscribeValue);
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -158,7 +159,7 @@ public class ListsApiTest extends BaseTest {
     @Description("Update subscribed field of a list")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetActionsOfAList() {
-        Response response = getListsSteps().getActionsofAList(newCreatedListId);
+        Response response = getListsService().getActionsofAList(newCreatedListId);
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -170,7 +171,7 @@ public class ListsApiTest extends BaseTest {
     @Description("Get the Board a List is on")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetABoardAListIsOn() {
-        Response response = getListsSteps().getABoardAListIsOn(newCreatedListId);
+        Response response = getListsService().getABoardAListIsOn(newCreatedListId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("id"), boardId);

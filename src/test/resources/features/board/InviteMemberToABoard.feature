@@ -12,6 +12,5 @@ Feature: Invite member to a board
       And I create a board with default options
       When I invite a new member on a board
       Then A new member is added to a board
-      And Since the scenario is for testing purpose only I delete the board to keep workspace clean
 
 

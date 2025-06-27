@@ -1,6 +1,7 @@
 package api.tests;
 
 import api.base.BaseTest;
+import api.base.TestData;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -112,7 +113,7 @@ public class ChecklistsAPITest extends BaseTest {
         Response response = getChecklistsSteps().getCheckitemsOnAChecklist(checklistId);
         String adtualCheckItemsOnAChecklist = response.body().asString();
 
-        Assert.assertEquals(adtualCheckItemsOnAChecklist, emptyString);
+        Assert.assertEquals(adtualCheckItemsOnAChecklist, TestData.emptyString);
     }
 
     @Test(priority = 4)

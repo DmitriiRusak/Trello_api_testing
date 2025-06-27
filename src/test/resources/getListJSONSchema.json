@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "closed": {
+      "type": "boolean"
+    },
+    "color": {
+      "type": "null"
+    },
+    "idBoard": {
+      "type": "string"
+    },
+    "pos": {
+      "type": "integer"
+    },
+    "subscribed": {
+      "type": "boolean"
+    },
+    "softLimit": {
+      "type": "null"
+    },
+    "type": {
+      "type": "null"
+    },
+    "datasource": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "filter"
+      ]
+    },
+    "creationMethod": {
+      "type": "string"
+    },
+    "idOrganization": {
+      "type": "string"
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "cards": {
+          "type": "object",
+          "properties": {
+            "openPerList": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "disableAt": {
+                  "type": "integer"
+                },
+                "warnAt": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "status",
+                "disableAt",
+                "warnAt"
+              ]
+            },
+            "totalPerList": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "disableAt": {
+                  "type": "integer"
+                },
+                "warnAt": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "status",
+                "disableAt",
+                "warnAt"
+              ]
+            }
+          },
+          "required": [
+            "openPerList",
+            "totalPerList"
+          ]
+        }
+      },
+      "required": [
+        "cards"
+      ]
+    },
+    "nodeId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "closed",
+    "color",
+    "idBoard",
+    "pos",
+    "subscribed",
+    "softLimit",
+    "type",
+    "datasource",
+    "creationMethod",
+    "idOrganization",
+    "limits",
+    "nodeId"
+  ]
+}

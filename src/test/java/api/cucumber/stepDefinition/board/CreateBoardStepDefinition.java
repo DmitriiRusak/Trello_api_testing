@@ -19,13 +19,16 @@ public class CreateBoardStepDefinition extends BaseTest {
 
         Response response = getBoardService().createBoard(TestData.BoardTestData.BOARD_NAME);
         TestData.BoardTestData.boardId = response.jsonPath().getString("id");
+        TestData.ListsTestData.toDoListId = getBoardService().getIdOfTheFirstListOnABoard(TestData.BoardTestData.boardId);
 
     }
 
     @When("I create a board using {string} option with value {string}")
     public void i_create_a_board_using_option_with_value(String option, String optionValue) {
+
                 Response response = getBoardService().createABoardWithSpecificResource
-                (TestData.BoardTestData.BOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS, option, optionValue);
+                    (TestData.BoardTestData.BOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS, option, optionValue);
+
         TestData.BoardTestData.boardId = response.jsonPath().getString("id");
     }
 
@@ -62,10 +65,11 @@ public class CreateBoardStepDefinition extends BaseTest {
         Assert.assertEquals(currentOptionValue, newOptionValue);
     }
 
-    @Then("Since the scenario is for testing purpose only I delete the board to keep workspace clean")
-    public void since_the_scenario_is_for_testing_purpose_only_i_delete_the_board_to_keep_workspace_clean() {
-        getBoardService().deleteBoard(TestData.BoardTestData.boardId);
-    }
+    //This step I replace for hook @After
+//    @Then("Since the scenario is for testing purpose only I delete the board to keep workspace clean")
+//    public void since_the_scenario_is_for_testing_purpose_only_i_delete_the_board_to_keep_workspace_clean() {
+//        getBoardService().deleteBoard(TestData.BoardTestData.boardId);
+//    }
 
 
 }

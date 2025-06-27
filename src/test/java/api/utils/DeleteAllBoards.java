@@ -16,8 +16,8 @@ import static api.base.PathParameters.MembersPath.MEMBERS_BASE_PATH;
 public class DeleteAllBoards extends BaseService {
 
     public List getAllTheBoardsId(List list) {
-        Response response = apiClient.get(MEMBERS_BASE_PATH + "me/" + BoardEndPoints.BOARDS_BASE_PATH, requestSpecification);
-        list = apiClient.get(MEMBERS_BASE_PATH + "me/" + BoardEndPoints.BOARDS_BASE_PATH, requestSpecification).jsonPath().getList("id");
+        Response response = apiClient.get(MEMBERS_BASE_PATH + "me" + BoardEndPoints.BOARDS_BASE_PATH, requestSpecification);
+        list = response.jsonPath().getList("id");
         return list;
     }
 

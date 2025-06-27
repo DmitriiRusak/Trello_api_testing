@@ -6,7 +6,7 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
 
-import static api.base.TestData.BoardTestData.universalListForResource;
+import static api.base.TestData.universalListForResource;
 
 public class InviteMemberToABoard extends BaseTest {
 

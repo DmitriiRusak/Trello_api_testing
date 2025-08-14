@@ -1,0 +1,10 @@
+Cucumber HTML report is preset at each Runner level with aid of cucumberOptions and 'plugin' attribyt
+Report location is - target/cucumber.html
+
+With use of cucumber.properties file, located at - src/test/resources/cucumber.properties
+it is possible to view cloud report, link is available after each run.
+
+Cucumber and Allure report.
+In that paty of a project Allure report was not integrated with Cucumber.
+Since common practice for Allure report is using annotations in a tests, and as far as I can see tests in Cucumber represented by
+Scenario entity and technically located in a .feature files, annotations is not applicable in .feature file.

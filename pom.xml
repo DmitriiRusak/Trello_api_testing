@@ -12,9 +12,22 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  <!-- without that line same of the tests failed-->
         <allure.version>2.25.0</allure.version>
         <aspectj.version>1.9.20.1</aspectj.version>
-        <suite>testng</suite>
+<!--        <suite>BoardAPITest</suite>-->
+<!--        <suite>ActionsAPITest</suite>-->
+<!--        <suite>CardsApiTest</suite>-->
+<!--        <suite>ChecklistsAPITest</suite>-->
+<!--        <suite>LabelesAPITest</suite>-->
+<!--        <suite>ListsAPITest</suite>-->
+<!--        <suite>MembersAPITest</suite>-->
+        <suite>AllAPIModuleTests</suite>
+
+<!--        <suite>SmokeTest</suite>-->
+<!--        <suite>EndToEndBasicSetUp</suite>-->
+<!--        <suite>EndToEndCustomerEnvironment</suite>-->
+
     </properties>
 
     <dependencies>
@@ -33,7 +46,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.14.1</version>
+            <version>2.15.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -78,11 +91,18 @@
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.17.1</version>
+            <version>2.23.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.23.1</version>
+        </dependency>
+
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
@@ -111,8 +131,10 @@
                 <version>3.1.2</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/${suite}.xml</suiteXmlFile>
+                        <suiteXmlFile>src/test/resources/testNGXmlRunners/restAssured/${suite}.xml</suiteXmlFile>
+<!--                        <suiteXmlFile>src/test/resources/testNGXmlRunners/cucumberRunners/${suite}.xml</suiteXmlFile>-->
                     </suiteXmlFiles>
+<!--                    <test>runners.SmokeTest</test>-->
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>

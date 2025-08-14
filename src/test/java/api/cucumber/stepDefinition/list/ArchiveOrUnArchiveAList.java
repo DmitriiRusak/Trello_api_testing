@@ -1,33 +1,32 @@
 package api.cucumber.stepDefinition.list;
 
-import api.base.BaseTest;
-import api.base.TestData;
+import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.services.ServiceWorkShop;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
 
-public class ArchiveOrUnArchiveAList extends BaseTest {
+public class ArchiveOrUnArchiveAList extends ServiceWorkShop {
 
     @When("I archive a list")
     public void iArchiveAList() {
-        TestData.commonResponseBetweenSteps = getListsService().archiveAList(TestData.ListsTestData.toDoListId);
+        ConfigurationDataForApiTests.commonResponseBetweenSteps = getListsService().archiveAList(ConfigurationDataForApiTests.ListsTestData.toDoListId);
     }
 
     @And("Un archive a list")
     public void unArchiveAList() {
-        TestData.commonResponseBetweenSteps = getListsService().unArchiveAList(TestData.ListsTestData.toDoListId);
+        ConfigurationDataForApiTests.commonResponseBetweenSteps = getListsService().unArchiveAList(ConfigurationDataForApiTests.ListsTestData.toDoListId);
     }
 
     @Then("A list is archived")
     public void aListIsArchived() {
-        String actualListUrchiveStatus = getListsService().getAList(TestData.ListsTestData.toDoListId).jsonPath().getString("closed");
+        String actualListUrchiveStatus = getListsService().getAList(ConfigurationDataForApiTests.ListsTestData.toDoListId).jsonPath().getString("closed");
 
         Assert.assertEquals(actualListUrchiveStatus, "true");
-
     }
 
     @Then("A list is presented on a board")
     public void aListIsPresentedOnABoard() {
-        String actualListUrchiveStatus = getListsService().getAList(TestData.ListsTestData.toDoListId).jsonPath().getString("closed");
+        String actualListUrchiveStatus = getListsService().getAList(ConfigurationDataForApiTests.ListsTestData.toDoListId).jsonPath().getString("closed");
 
         Assert.assertEquals(actualListUrchiveStatus, "false");
     }

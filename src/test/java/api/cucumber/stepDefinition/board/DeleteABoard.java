@@ -1,20 +1,20 @@
 package api.cucumber.stepDefinition.board;
 
-import api.base.BaseTest;
-import api.base.TestData;
+import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.services.ServiceWorkShop;
 import io.cucumber.java.en.*;
-import io.restassured.response.Response;
 import org.testng.Assert;
 
-public class DeleteABoard extends BaseTest {
+public class DeleteABoard extends ServiceWorkShop {
 
     @When("I delete the board")
     public void i_delete_the_board() {
-        getBoardService().deleteBoard(TestData.BoardTestData.boardId);
+        getBoardService().deleteBoard(ConfigurationDataForApiTests.BoardTestData.boardId);
     }
+
     @Then("Board is deleted")
     public void board_is_deleted() {
-        TestData.commonResponseBetweenSteps = getBoardService().getBoard(TestData.BoardTestData.boardId);
-        Assert.assertEquals(TestData.commonResponseBetweenSteps.asPrettyString(), "The requested resource was not found.");
+        ConfigurationDataForApiTests.commonResponseBetweenSteps = getBoardService().getBoard(ConfigurationDataForApiTests.BoardTestData.boardId);
+        Assert.assertEquals(ConfigurationDataForApiTests.commonResponseBetweenSteps.asPrettyString(), "The requested resource was not found.");
     }
 }

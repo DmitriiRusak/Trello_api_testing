@@ -1,0 +1,66 @@
+For that project was used:
+- TestNG
+- Rest Assured
+- Service object model
+- Allure
+
+Application under test (aut) is a Trello.com.
+
+Type of testing - module testing
+The main modules correspond to main features of aut, and are:
+-Board, link for api -> https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-group-boards
+-List, link for api -> https://developer.atlassian.com/cloud/trello/rest/api-group-lists/#api-group-lists
+-Card, link for api -> https://developer.atlassian.com/cloud/trello/rest/api-group-cards/#api-group-cards
+-Checklist, link for api -> https://developer.atlassian.com/cloud/trello/rest/api-group-checklists/#api-group-checklists
+-Labels, link for api -> https://developer.atlassian.com/cloud/trello/rest/api-group-labels/#api-group-labels
+-Members, link for api -> https://developer.atlassian.com/cloud/trello/rest/api-group-members/#api-group-members
+-Actions, link for api -> https://developer.atlassian.com/cloud/trello/rest/api-group-actions/#api-group-actions
+
+For the API + Rest Assured + TestNG project please do not consider package named as cucumber.
+
+Package resourcesForTests contains:
+PathParameters - class that contains common endPonits that are used by all services, and nested static classes
+each of them has a name related to a feature it represents and consist of an edpoints related to API of that feature.
+ConfigurationDataForApiTests - class that mostly consist of common static variables that are being used by test classes,
+for non Cucumber part of a projec, and static nested classes that are named accordingly to a tests classes for which
+they hold variables.
+Enums: CardFields, CheckListsFields, ListFields, MemberFields - are all holds valid names of a fields presented in coresponding
+Trello object (Card, CheckList, List, MemberFields) and exist to use them as a fields to retrieve or to do assertion in a tests.
+
+Package services:
+The BaseService - class which has entity of: Apiclient, which makes HTTP request/responses, sets the RequestSpecification
+that is required for test run, and has methods that are used by ancestors across all the services.
+The ...Service classes that inherit from BaseService are represent specific util classes for corresponded feature.
+For example: feature - Board, service - BoardService... And contains methods related to specific feature.
+The ServiceWorkShop - class that contains all the entities of all existed services in a project, getters/setters for
+them
+
+Package tests:
+The API tests, each class represents appropriate module (feature)
+
+Package utils:
+-The ApiClent class is the only one entity that makes HTTP request/response
+-The ConfigLoader class is responsible for retrieving properties variables, stored in a config.properties file
+-The DeleteAllBoards class is an util class that programmatically delete all boards from Trello workSpace, that
+might be left for debug purpose. By using it one do not need to delete board manually, all you need is run the class.
+-LogFactory - class that is responsible for integration logs in a both RestAssured and Cucumber parts of a project.
+-MyRestAssured - class that represents Rest Assured filter, created in order to use it for logs. Curently not in use,
+was left for training porpose only.
+-The specification - class represents util class that is used for setUp RestAssured request specification.
+-TestListener - class exist for logging and Allure report integration.
+
+Package resources.testNGXmlRunners.restAssured:
+Contains classes that are TestNG.xml runners, each of them, accordingly by name, represents module/feature of aut
+and responsible for execution corresponding feature. The exception is only AllAPIModuleTest.xml class, that is
+responsible for execution all tests of RestAssured part of a project, in other words, in order to run all tests
+execute this class.
+
+allure.properties - responsible for allure integration
+config.properties - holds the variables (key, token) that are necessary for correct API requests.
+cucumber.properties - is a config file for cucumber, and set to display additional information after each execution
+and to store HTML report in a cucumber report cloud for 24 ours.
+ForCreateAttachmentOnCard.txt - file that is used as an attachment for a test CardsApiTest.testCreateAttachmentOnCard(), line - 140.
+getBoardJSONSchema.json/getCardsJSONSchema.json/getListJsonSchem.json - files that holds json schema of a responses with accordance
+to its names, wich are being asserted in a tests with aid of JsonSchema validator. In other words each of these files holds response
+converted to JsonSchema, and that JsonSchema is being asserted in a tests.
+log4j2.xml - is a config file for logs

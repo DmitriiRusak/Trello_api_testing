@@ -1,0 +1,37 @@
+package api.resourcesForTests;
+
+public enum CardFields {
+
+    address,
+    badges,
+    checkItemStates,
+    closed,
+    coordinates,
+    creationMethod,
+    dueComplete,
+    dateLastActivity,
+    desc,
+    descData,
+    due,
+    dueReminder,
+    idBoard,
+    idChecklists,
+    idLabels,
+    idList,
+    idMembers,
+    idMembersVoted,
+    idShort,
+    idAttachmentCover,
+    labels,
+    limits,
+    locationName,
+    manualCoverAttachment,
+    name,
+    pos,
+    shortLink,
+    shortUrl,
+    subscribed,
+    url,
+    cover,
+    isTemplate
+}

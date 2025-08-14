@@ -1,0 +1,26 @@
+
+The application for testing is - Trello.com
+The example mapping was done with help of Miro, refer to - https://miro.com/app/board/uXjVIjAyXL0=/
+
+The use of cucumber in a project starts with module testing.
+For that very basic functional parts (feature) of aut (AUT - application under test) was considered as:
+- Board
+- List
+- Card
+
+Each feature (module) is represented with appropriate directory with feature files in it
+location is - src/test/resources/cucumberFeatures
+
+Accordingly to example mapping one feature (module) of uat is processed with several user stories.
+Each user story is represented on separate .feature file, and might consist of one or several Scenario (test cases)
+
+Step definition are located at - src/test/java/api/cucumber/stepDefinition, and mostly presented in an appropriate to
+feature (module) package, with similar name.
+
+After module testing is done, and with all the stepdefinition classes that was created for that, it is possible, with help
+of cucumber tags, to reorganize the order in which to run the scenarios. So was created separate runner classes for Smoke
+testing, and EndToEnd testing.
+The location of all runners in a project - src/test/java/api/cucumber/runners
+The logic, and scenarios that was included in a specific runner (with help of cucumber tags),
+see matrix, refer to - https://docs.google.com/spreadsheets/d/1DUbiyQ5LOpycLbh3UpXPpV653Kjts6JMXgRDnro3ZDI/edit?gid=0#gid=0
+

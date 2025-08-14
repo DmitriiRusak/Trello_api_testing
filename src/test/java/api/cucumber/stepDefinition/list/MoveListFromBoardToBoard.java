@@ -1,27 +1,27 @@
 package api.cucumber.stepDefinition.list;
 
-import api.base.BaseTest;
-import api.base.TestData;
+import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.services.ServiceWorkShop;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
 
-public class MoveListFromBoardToBoard extends BaseTest {
+public class MoveListFromBoardToBoard extends ServiceWorkShop {
 
     @And("I create one more board")
     public void iCreateOneMoreBoard() {
-        TestData.BoardTestData.secondBoardId = getBoardService().createBoard("One more board").jsonPath().getString("id");
+        ConfigurationDataForApiTests.BoardTestData.secondBoardId = getBoardService().createBoard("One more board").jsonPath().getString("id");
     }
 
     @When("I move to do list, from one board, to another")
     public void iMoveToDoListFromOneBoardToAnother() {
-        TestData.commonResponseBetweenSteps = getListsService().
-                moveListFromOneBoardToAnother(TestData.ListsTestData.toDoListId, TestData.BoardTestData.secondBoardId);
+        ConfigurationDataForApiTests.commonResponseBetweenSteps = getListsService().
+                moveListFromOneBoardToAnother(ConfigurationDataForApiTests.ListsTestData.toDoListId, ConfigurationDataForApiTests.BoardTestData.secondBoardId);
     }
 
     @Then("I see to do list being moved from one board, to another")
     public void iSeeToDoListBeingMovedFromOneBoardToAnother() {
-        String boardIdTheListisOn = getListsService().getABoardAListIsOn(TestData.ListsTestData.toDoListId).jsonPath().getString("id");
+        String boardIdTheListisOn = getListsService().getABoardAListIsOn(ConfigurationDataForApiTests.ListsTestData.toDoListId).jsonPath().getString("id");
 
-        Assert.assertEquals(TestData.BoardTestData.secondBoardId, boardIdTheListisOn);
+        Assert.assertEquals(ConfigurationDataForApiTests.BoardTestData.secondBoardId, boardIdTheListisOn);
     }
 }

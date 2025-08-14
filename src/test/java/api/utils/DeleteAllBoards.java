@@ -1,14 +1,13 @@
 package api.utils;
 
-import api.base.PathParameters;
-import api.base.PathParameters.*;
-import api.controllers.BaseService;
+import api.resourcesForTests.PathParameters.*;
+import api.services.BaseService;
 import io.restassured.response.Response;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static api.base.PathParameters.MembersPath.MEMBERS_BASE_PATH;
+import static api.resourcesForTests.PathParameters.MembersPath.MEMBERS_BASE_PATH;
 
 /// this class deletes all the board on a workspace.
 // If you commented out deleteBoard() method in any of the steps for debug purpose, and found a lot of boards created

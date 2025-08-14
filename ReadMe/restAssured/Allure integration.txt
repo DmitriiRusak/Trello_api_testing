@@ -1,0 +1,6 @@
+The Allure report is created and maintained with allure annotations in tests itself and with @Step annotation
+on a service layer.
+Each method in any service class has annotation @Step with well described actions being done at that point,
+which gives the execution tracking of any test that was executed even if it was in a precondition methods.
+
+For the attachments as request and response was added AllureRestAssured filter

@@ -1,3 +1,4 @@
 This file is just an example as an attachment for a card
 
-Here might be information regarding the topic of card.
+To add an attachment you need to use multi-part form data uploading while use the requestSpecification.
+See CardsService, line 62

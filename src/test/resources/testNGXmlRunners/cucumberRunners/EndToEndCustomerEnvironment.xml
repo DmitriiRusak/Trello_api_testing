@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="End to end testing" >
+    <test name="Customer environment">
+        <classes>
+            <class name="api.cucumber.runners.EndToEndCustomerEnvironmentTest"/>
+        </classes>
+    </test>
+
+</suite>

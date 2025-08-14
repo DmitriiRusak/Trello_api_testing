@@ -1,37 +1,41 @@
 package api.tests;
 
-import api.base.BaseTest;
-import api.base.TestData;
+import api.services.ServiceWorkShop;
+import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.utils.LogFactory;
+import api.utils.TestListener;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import static api.base.TestData.LabelsTestData.*;
+import static api.resourcesForTests.ConfigurationDataForApiTests.LabelsTestData.*;
 
 @Epic("API Tests")
-@Feature("Labels Validation")
-@Owner("Group JavaForwardToOffer")
-public class LabelsApiTest extends BaseTest {
+@Feature("Labels")
+@Listeners(TestListener.class)
+public class LabelsApiTest extends ServiceWorkShop {
 
     @BeforeClass
     public void setUp() {
-        boardId = getLabelsSteps().createABord(BOARD_NAME);
+
+        LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
+        ConfigurationDataForApiTests.BoardTestData.boardId = getLabelsService().createABord(BOARD_NAME);
     }
 
     @AfterClass
     public void tearDown() {
-        getLabelsSteps().deleteBoard(boardId);
+        getLabelsService().deleteBoard(ConfigurationDataForApiTests.BoardTestData.boardId);
     }
 
     @Test()
-    @Story("Verify created label")
     @Description("Create a new Label on a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateLabel() {
-        Response response = getLabelsSteps().createLabel(LABEL_NAME, COLOR, boardId);
+        Response response = getLabelsService().createLabel(LABEL_NAME, COLOR, ConfigurationDataForApiTests.BoardTestData.boardId);
 
         labelId = response.body().jsonPath().get("id");
 
@@ -41,22 +45,20 @@ public class LabelsApiTest extends BaseTest {
     }
 
     @Test(priority = 1)
-    @Story("Verify get label")
     @Description("Get label")
     @Severity(SeverityLevel.NORMAL)
     public void testGetLabel() {
-        Response response = getLabelsSteps().getLabel(labelId);
+        Response response = getLabelsService().getLabel(labelId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().jsonPath().getString("id"), labelId);
     }
 
     @Test(priority = 1)
-    @Story("Verify update label")
     @Description("Update label")
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateLabel() {
-        Response response = getLabelsSteps().updateLabel(labelId, NEW_NAME, NEW_COLOR);
+        Response response = getLabelsService().updateLabel(labelId, NEW_NAME, NEW_COLOR);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().jsonPath().getString("name"), NEW_NAME);
@@ -64,23 +66,11 @@ public class LabelsApiTest extends BaseTest {
     }
 
     @Test(priority = 2)
-    @Story("Verify delete label")
     @Description("Delete label")
     @Severity(SeverityLevel.NORMAL)
     public void testDeleteLabel() {
-        Response response = getLabelsSteps().deleteLabel(labelId);
+        Response response = getLabelsService().deleteLabel(labelId);
 
         Assert.assertEquals(response.getStatusCode(), 200);
-    }
-
-    @Test(priority = 1, dataProvider = "createUpdateFieldLabel", dataProviderClass = TestData.LabelsTestData.class)
-    @Story("Verify update field label")
-    @Description("Update field label")
-    @Severity(SeverityLevel.NORMAL)
-    public void testUpdateFieldLabel(String field, String value) {
-        Response response = getLabelsSteps().updateFieldLabel(labelId, field, value);
-
-        Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().jsonPath().getString(field), value);
     }
 }

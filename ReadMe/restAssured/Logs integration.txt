@@ -1,0 +1,16 @@
+For logs integration in a RestAssured part of a project was used:
+
+- TestNG Test listener concept - utils.TestListener class
+- Method that marked with annotation @BeforeSuite in services.ServiceWorkShop.projectSetUp().
+- Additional logs in an ApiClient class - utils.ApiClint.restAssuredLogsIntegration()
+
+All logs are stored in a file - logs/app.log
+
+The strategy for storing logs in a file was accomplished with use of RollingFile appender, and SizeBasedTriggeringPolicy which converts
+log file in a chosen archive file when .log file size exceeds the specified limit. In other words when .log file will grow to big, it
+will be converted, archived and stored in the same directory as .log file.
+
+The reason for adding additional logs in an ApiClient class - some test classes contains methods with @BeforeClass annotation in which it is used
+the same HTTP request/response mechanism as in a tests, but since those methods technically not a tests, TestNG TestListener concept do
+not listen for the events in them, so in case of an error/failure in them, there is no way to represent logs for debug purpose.
+

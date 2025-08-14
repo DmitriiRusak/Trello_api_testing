@@ -1,0 +1,2 @@
+This file is used as an attachment for
+Scenario: Get specific attachment on a card

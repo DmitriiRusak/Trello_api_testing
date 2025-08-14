@@ -1,0 +1,10 @@
+For additional logs in a project was used library Log4j2.
+The config file log4j2.xml is located at - src/test/resources/log4j2.xml
+It is set to store logs in a file: logs/cucumber/app.log.
+
+For realization was used:
+- cucumber event listener approach, class is located at - src/test/java/api/utils/CucumberEventListener.java,
+- Cucumber hooks, stored in a Cucumber runners.
+- additional logs, preset in a ApiClient class, that is responsible for HTTP calls.
+
+

@@ -2,11 +2,8 @@ package api.utils;
 
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,29 +19,26 @@ public class Specification {
             key = ConfigLoader.getProperty("key");
             token = ConfigLoader.getProperty("token");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            System.out.println("Something wrong with key and token for Trello API");
         }
     }
 
     public static RequestSpecification installRequest() {
+
         Map<String, String> authoriazing = new HashMap<>();
         authoriazing.put("key", key);
         authoriazing.put("token", token);
 
         return new RequestSpecBuilder()
-                .log(LogDetail.ALL)
                 .addFilter(new AllureRestAssured())
+//                .addFilter(new MyRestAssuredFilter())
                 .setContentType(ContentType.JSON)
                 .addQueryParams(authoriazing)
                 .setBaseUri("https://api.trello.com/1/")
                 .build();
     }
 
-//    public static ResponseSpecification installResponse() {
-//        return new ResponseSpecBuilder()
-//                .log(LogDetail.ALL)
-//                .build();
-//    }
 }
 
 

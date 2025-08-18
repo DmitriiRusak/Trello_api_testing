@@ -1,6 +1,6 @@
 package api.cucumber.stepDefinition.list;
 
-import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.cucumber.continer.ConfigTestDataHolder;
 import api.resourcesForTests.ListFields;
 import api.services.ServiceWorkShop;
 import api.resourcesForTests.PathParameters;
@@ -11,21 +11,28 @@ import org.testng.Assert;
 
 public class OptionsOfAList extends ServiceWorkShop {
 
+    private ConfigTestDataHolder configTestDataHolder;
+
+    public OptionsOfAList(ConfigTestDataHolder configTestDataHolder) {
+        this.configTestDataHolder = configTestDataHolder;
+    }
+
     @When("I request the lists information")
     public void iRequestTheListsInformation() {
 
-        ConfigurationDataForApiTests.commonResponseBetweenSteps = getListsService().
-                getOptionOfAnObject(PathParameters.endPoints.get("list"),
-                ConfigurationDataForApiTests.ListsTestData.toDoListId,
-    "all");
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
+                getListsService().getOptionOfAnObject(PathParameters.endPoints.get("list"),
+                configTestDataHolder.getListTestData().getToDoListId(),
+    "all"));
     }
 
     @Then("I got back requested {string} of a list")
     public void iGotBackRequestedOfA(String optionName, String resourceName) throws InterruptedException {
 
-        Response actualList = getListsService().getAList(ConfigurationDataForApiTests.ListsTestData.toDoListId);
+        Response actualList = getListsService().getAList(configTestDataHolder.getListTestData().getToDoListId());
 
-        Assert.assertEquals(actualList.jsonPath().getString(optionName), ConfigurationDataForApiTests.commonResponseBetweenSteps.jsonPath().getString(optionName));
+        Assert.assertEquals(actualList.jsonPath().getString(optionName),
+                configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString(optionName));
     }
 
     @When("I do request to get {string} of a {string}")
@@ -33,23 +40,26 @@ public class OptionsOfAList extends ServiceWorkShop {
 
         String tempResourceId = "";
         switch (resourceName){
-            case "list": tempResourceId = ConfigurationDataForApiTests.ListsTestData.toDoListId;
+            case "list": tempResourceId = configTestDataHolder.getListTestData().getToDoListId();
                 break;
-            case "board": tempResourceId = ConfigurationDataForApiTests.BoardTestData.boardId;
+            case "board": tempResourceId = configTestDataHolder.getBoardTestData().getBoardId();
                 break;
-            case "card": tempResourceId = ConfigurationDataForApiTests.CardsTestData.cardId;
+            case "card": tempResourceId = configTestDataHolder.getCardTestData().getCardId();
                 break;
         }
 
-        ConfigurationDataForApiTests.commonResponseBetweenSteps = getBoardService().
-                getOptionOfAnObject(PathParameters.endPoints.get(resourceName),tempResourceId, optionName);
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getBoardService().
+                getOptionOfAnObject(PathParameters.endPoints.get(resourceName),tempResourceId, optionName));
 
     }
 
     @When("I update a list name {string} with new name {string}")
     public void iUpdateAListWithNewName(String listName, String newNameForTheList) {
 
-       String idOfTheListToChangeTheName = getListsService().getIdOfAListByName(listName);
+       String idOfTheListToChangeTheName = getListsService().getIdOfAListByName(
+               listName, configTestDataHolder.getBoardTestData().getBoardId(),
+               configTestDataHolder.getListTestData());
+
        getListsService().updateAFieldOfAList(idOfTheListToChangeTheName, ListFields.name, newNameForTheList);
     }
 
@@ -58,7 +68,7 @@ public class OptionsOfAList extends ServiceWorkShop {
         String[] optionNames = names.split(" ");
         String[] optionValues = values.split(" ");
 
-        getListsService().updateAFieldsOfAList(ConfigurationDataForApiTests.ListsTestData.toDoListId, optionNames,optionValues);
+        getListsService().updateAFieldsOfAList(configTestDataHolder.getListTestData().getToDoListId(), optionNames,optionValues);
 
     }
 
@@ -69,7 +79,7 @@ public class OptionsOfAList extends ServiceWorkShop {
 
         Response currentResponse = getListsService().
                 getOptionOfAnObject(PathParameters.endPoints.get("list"),
-                        ConfigurationDataForApiTests.ListsTestData.toDoListId,
+                        configTestDataHolder.getListTestData().getToDoListId(),
                         "all");
         System.out.println(currentResponse.asPrettyString());
         System.out.println(currentResponse.statusCode());
@@ -84,7 +94,10 @@ public class OptionsOfAList extends ServiceWorkShop {
     @Then("A name of the list {string} is changed to {string}")
     public void aNameOfTheListIsChangedTo(String oldNameOfTheList, String newNameOfTheList) {
 
-        String idOfTheListWithChangedName = getListsService().getIdOfAListByName(newNameOfTheList);
+        String idOfTheListWithChangedName = getListsService().getIdOfAListByName(
+                newNameOfTheList,
+                configTestDataHolder.getBoardTestData().getBoardId(),
+                configTestDataHolder.getListTestData());
 
         String actualNameOfTheListOnBoard = getListsService().getAList(idOfTheListWithChangedName).jsonPath().getString("name");
 

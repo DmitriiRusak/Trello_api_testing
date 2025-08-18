@@ -1,14 +1,10 @@
 package api.utils;
 
-import api.cucumber.runners.EndToEndCustomerEnvironmentTest;
-import api.resourcesForTests.ConfigurationDataForApiTests;
 import io.restassured.filter.Filter;
 import io.restassured.filter.FilterContext;
 import io.restassured.response.Response;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class MyRestAssuredFilter implements Filter {
 
@@ -36,7 +32,7 @@ public class MyRestAssuredFilter implements Filter {
 //        LogFactory.getLogger().info("Response credentials:");
 //        LogFactory.getLogger().info("response statusCode - " + response.getStatusCode());
 //        if(response.getStatusCode() < 200 || response.getStatusCode() > 299){
-//            ConfigurationDataForApiTests.urlForCucumberEventListener = filterableRequestSpecification.getURI();
+//            CommonConfigData.urlForCucumberEventListener = filterableRequestSpecification.getURI();
 //        }
     }
 }

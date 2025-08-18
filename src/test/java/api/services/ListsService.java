@@ -1,7 +1,8 @@
 package api.services;
 
-import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.resourcesForTests.configurationData.CommonConfigData;
 import api.resourcesForTests.ListFields;
+import api.resourcesForTests.configurationData.ListTestData;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
@@ -141,20 +142,20 @@ public class ListsService extends BaseService {
         return response;
     }
 
-    private void matchTheNamesOfTheListsWithId(){
+    private void matchTheNamesOfTheListsWithId(String boardId, ListTestData listTestData){
 
-        List idOfAllLists = getListOfIdOfAllListsOnABoard(ConfigurationDataForApiTests.BoardTestData.boardId);
+        List idOfAllLists = getListOfIdOfAllListsOnABoard(boardId);
 
         for(int i = 0; i<idOfAllLists.size(); i++){
             String temp = getAList((String) idOfAllLists.get(i)).jsonPath().getString("name");
-            ConfigurationDataForApiTests.ListsTestData.namesAndIdsOfLists.put(temp, (String) idOfAllLists.get(i));
+            listTestData.getNamesAndIdsOfLists().put(temp, (String) idOfAllLists.get(i));
 
         }
     }
 
-    public String getIdOfAListByName(String listName) {
-        matchTheNamesOfTheListsWithId();
+    public String getIdOfAListByName(String listName, String boardId, ListTestData listTestData) {
+        matchTheNamesOfTheListsWithId(boardId, listTestData);
 
-        return ConfigurationDataForApiTests.ListsTestData.namesAndIdsOfLists.get(listName);
+        return listTestData.getNamesAndIdsOfLists().get(listName);
     }
 }

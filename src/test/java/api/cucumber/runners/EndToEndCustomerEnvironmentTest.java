@@ -1,6 +1,7 @@
 package api.cucumber.runners;
 
-import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.cucumber.continer.ConfigTestDataHolder;
+import api.resourcesForTests.configurationData.CommonConfigData;
 import api.services.ServiceWorkShop;
 import api.utils.LogFactory;
 import io.cucumber.java.*;
@@ -14,8 +15,10 @@ import io.cucumber.testng.CucumberOptions;
 public class EndToEndCustomerEnvironmentTest extends AbstractTestNGCucumberTests {
 
     private static final ServiceWorkShop serviceWorkShop = new ServiceWorkShop();
-
+    private static ConfigTestDataHolder configTestDataHolder;
     public static boolean stepStatusPassed = true;
+    private static String boardIdToDelete = configTestDataHolder.getBoardTestData().getBoardId();
+
 
     @Before
     public void logsConfigurationBeforeScenario(Scenario scenario){
@@ -42,7 +45,7 @@ public class EndToEndCustomerEnvironmentTest extends AbstractTestNGCucumberTests
     //clean workSpace after all scenarios passed (delete the board that was used for tests)
     @AfterAll
     public static void afterAllExecution(){
-        serviceWorkShop.getBoardService().deleteBoard(ConfigurationDataForApiTests.BoardTestData.boardId);
+        serviceWorkShop.getBoardService().deleteBoard(boardIdToDelete);
     }
 
 }

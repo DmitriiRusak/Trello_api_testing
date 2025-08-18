@@ -1,6 +1,7 @@
 package api.cucumber.stepDefinition.card;
 
-import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.cucumber.continer.ConfigTestDataHolder;
+import api.resourcesForTests.configurationData.CommonConfigData;
 import api.services.ServiceWorkShop;
 import api.resourcesForTests.PathParameters;
 import io.cucumber.java.en.*;
@@ -9,23 +10,30 @@ import org.testng.Assert;
 import java.util.HashMap;
 import java.util.Map;
 
-import static api.resourcesForTests.ConfigurationDataForApiTests.ListsTestData.toDoListId;
-
 public class CreateCard extends ServiceWorkShop {
+
+    private ConfigTestDataHolder configTestDataHolder;
+
+    public CreateCard(ConfigTestDataHolder configTestDataHolder) {
+        this.configTestDataHolder = configTestDataHolder;
+    }
 
     @When("I create a card using {string} option with value {string}")
     public void iCreateACardUsingOptionWithValue(String optionName, String optionValue) {
         Map<String, String> queryParametersForRequestSpec = new HashMap<>();
-        queryParametersForRequestSpec.put("idList", toDoListId);
+        queryParametersForRequestSpec.put("idList", configTestDataHolder.getBoardTestData().getToDoListId());
         queryParametersForRequestSpec.put(optionName, optionValue);
 
-        ConfigurationDataForApiTests.CardsTestData.cardId = getBoardService().createACard(queryParametersForRequestSpec).jsonPath().getString("id");
+        configTestDataHolder.getCardTestData().setCardId(getBoardService().createACard(queryParametersForRequestSpec).jsonPath().getString("id"));
     }
 
     @When("I create a card using {string} option with value {string} on a list with name {string}")
     public void iCreateACardUsingOptionWithValueOnAListWithName(String optionName, String optionValue, String listName) {
 
-        String idOfAList = getListsService().getIdOfAListByName(listName);
+        String idOfAList = getListsService().getIdOfAListByName(
+                listName,
+                configTestDataHolder.getBoardTestData().getBoardId(),
+                configTestDataHolder.getListTestData());
 
         Map<String, String> queryParametersForRequestSpec = new HashMap<>();
         queryParametersForRequestSpec.put("idList", idOfAList);
@@ -36,9 +44,9 @@ public class CreateCard extends ServiceWorkShop {
     @Then("A card is created")
     public void a_card_is_created() {
 
-        String idOfTheCardThatWasRecivedAfterCardIsCreated = ConfigurationDataForApiTests.CardsTestData.cardId;
+        String idOfTheCardThatWasRecivedAfterCardIsCreated = configTestDataHolder.getCardTestData().getCardId();
 
-        String cardIdPresentedOnAToDoList = getListsService().getResourcesOfAList(ConfigurationDataForApiTests.ListsTestData.toDoListId,
+        String cardIdPresentedOnAToDoList = getListsService().getResourcesOfAList(configTestDataHolder.getListTestData().getToDoListId(),
                 PathParameters.endPoints.get("card")).jsonPath().getString("id");
 
         cardIdPresentedOnAToDoList = cardIdPresentedOnAToDoList.substring(1, cardIdPresentedOnAToDoList.length()-1);
@@ -49,8 +57,8 @@ public class CreateCard extends ServiceWorkShop {
 
     @And("a card has {string} option set wth value {string}")
     public void aCardHasOptionSetWthValue(String optionName, String expectedOptionValue) {
-        ConfigurationDataForApiTests.commonResponseBetweenSteps = getCardsService().getCard(ConfigurationDataForApiTests.CardsTestData.cardId);
-        String actualOptionValue = (ConfigurationDataForApiTests.commonResponseBetweenSteps.jsonPath().getString(optionName));
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getCardsService().getCard(configTestDataHolder.getCardTestData().getCardId()));
+        String actualOptionValue = (configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString(optionName));
 
         Assert.assertEquals(actualOptionValue, expectedOptionValue);
 

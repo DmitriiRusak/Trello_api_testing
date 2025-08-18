@@ -5,7 +5,7 @@ Feature: Get resources of a board
   I want to get access to resources of a board
   So that I am able to track and control current progress.
 
-#  Сработает только если в workspace есть доска
+#  Сработает только если в workspace есть доска.
   Scenario: Get the board available for user
     When I request to get available board
     Then I got back available board

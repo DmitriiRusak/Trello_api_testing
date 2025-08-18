@@ -1,7 +1,8 @@
 package api.cucumber.runners;
 
+import api.cucumber.continer.ConfigTestDataHolder;
+import api.resourcesForTests.configurationData.CommonConfigData;
 import api.services.ServiceWorkShop;
-import api.resourcesForTests.ConfigurationDataForApiTests;
 import api.utils.LogFactory;
 import io.cucumber.java.*;
 import io.cucumber.java.Scenario;
@@ -16,6 +17,9 @@ import io.cucumber.testng.CucumberOptions;
 public class SmokeTest extends AbstractTestNGCucumberTests {
 
     private final ServiceWorkShop serviceWorkShop = new ServiceWorkShop();
+    private static ConfigTestDataHolder configTestDataHolder;
+    public static boolean stepStatusPassed = true;
+    private static String boardIdToDelete = configTestDataHolder.getBoardTestData().getBoardId();
 
     @BeforeAll
     public static void beforeAll(){
@@ -30,7 +34,7 @@ public class SmokeTest extends AbstractTestNGCucumberTests {
     @After("@Smoke or @EndToEndBasicSetUp")
     public void deleteTheBoardAfterEveryScenario(Scenario scenario) {
 
-        serviceWorkShop.getBoardService().deleteBoard(ConfigurationDataForApiTests.BoardTestData.boardId);
+        serviceWorkShop.getBoardService().deleteBoard(boardIdToDelete);
     }
 
 

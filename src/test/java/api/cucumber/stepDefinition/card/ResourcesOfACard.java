@@ -1,6 +1,7 @@
 package api.cucumber.stepDefinition.card;
 
-import api.resourcesForTests.ConfigurationDataForApiTests;
+import api.cucumber.continer.ConfigTestDataHolder;
+import api.resourcesForTests.configurationData.CommonConfigData;
 import api.services.ServiceWorkShop;
 import api.resourcesForTests.PathParameters;
 import api.utils.LogFactory;
@@ -12,62 +13,70 @@ import java.util.List;
 
 public class ResourcesOfACard extends ServiceWorkShop {
 
+    private ConfigTestDataHolder configTestDataHolder;
+
+    public ResourcesOfACard(ConfigTestDataHolder configTestDataHolder) {
+        this.configTestDataHolder = configTestDataHolder;
+    }
+
     @When("I do create a comment {string} on a card")
     public void iDoCreateACommentOnACard(String comment) {
-        ConfigurationDataForApiTests.commonResponseBetweenSteps = getCardsService().addNewComentToACard(ConfigurationDataForApiTests.CardsTestData.cardId,
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getCardsService().addNewComentToACard(configTestDataHolder.getCardTestData().getCardId(),
                 comment,
-                PathParameters.CardsEndPoints.COMMENTS_ENDPOINT);
+                PathParameters.CardsEndPoints.COMMENTS_ENDPOINT));
     }
 
     @When("I delete an attachment on a card")
     public void iDeleteAnAttachmentOnACard() {
-        ConfigurationDataForApiTests.commonResponseBetweenSteps = getCardsService().
-                deleteAnAttachmentOnACard(ConfigurationDataForApiTests.CardsTestData.cardId, ConfigurationDataForApiTests.CardsTestData.createdAttachmentId);
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getCardsService().
+                deleteAnAttachmentOnACard(configTestDataHolder.getCardTestData().getCardId(), configTestDataHolder.getCardTestData().getCreatedAttachmentId()));
     }
 
     @When("I do create a checklist on a card")
     public void iDoCreateAChecklistOnACard() {
-        ConfigurationDataForApiTests.commonResponseBetweenSteps = getCardsService().createAChecklist(
-                ConfigurationDataForApiTests.CardsTestData.cardId,
-                ConfigurationDataForApiTests.CheckListsTestData.nameOfAChecklistCreated);
-        ConfigurationDataForApiTests.CheckListsTestData.checklistId = ConfigurationDataForApiTests.commonResponseBetweenSteps.jsonPath().getString("id");
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getCardsService().createAChecklist(
+                configTestDataHolder.getCardTestData().getCardId(),
+                configTestDataHolder.getCheckListTestData().NAME_OF_CHECKLIST_CREATED));
+        configTestDataHolder.getCheckListTestData().setChecklistId(
+                configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString("id"));
     }
 
     @When("I do create a label")
     public void iDoCreateALabel() {
-        ConfigurationDataForApiTests.LabelsTestData.labelId = getLabelsService().
-                                                createLabel(ConfigurationDataForApiTests.LabelsTestData.LABEL_NAME,
+        configTestDataHolder.getLabelTestData().setLabelId(getLabelsService().
+                                                createLabel(configTestDataHolder.getLabelTestData().LABEL_NAME,
                                                         "green",
-                                                        ConfigurationDataForApiTests.BoardTestData.boardId).jsonPath().getString("id");
+                                                        configTestDataHolder.getBoardTestData().getBoardId()).jsonPath().getString("id"));
     }
 
     @And("I delete a checklist off the card")
     public void iDeleteAChecklistOffTheCard() {
 
-        ConfigurationDataForApiTests.commonResponseBetweenSteps = getChecklistsService().deleteAChecklist(ConfigurationDataForApiTests.CheckListsTestData.checklistId);
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
+                getChecklistsService().deleteAChecklist(configTestDataHolder.getCheckListTestData().getChecklistId()));
     }
 
 
     @When("I do request to get resource {string} of a {string}")
     public void iDoRequestToGetResourceOfA(String resourceName, String objectType) {
-        ConfigurationDataForApiTests.commonResponseBetweenSteps =
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
                 getBoardService().getResourceOfAnObject(PathParameters.endPoints.get(objectType),
-                        ConfigurationDataForApiTests.CardsTestData.cardId,
-                        resourceName);
+                        configTestDataHolder.getCardTestData().getCardId(),
+                        resourceName));
     }
 
     @When("I add an attachment {string} to the card")
     public void iAddAnAttachmentToTheCard(String pathForAnAttachment) {
-        ConfigurationDataForApiTests.CardsTestData.createdAttachmentId = getCardsService().createAttachmentOnCard(
-                ConfigurationDataForApiTests.CardsTestData.cardId,
-                pathForAnAttachment).jsonPath().getString("id");
+        configTestDataHolder.getCardTestData().setCreatedAttachmentId(getCardsService().createAttachmentOnCard(
+                configTestDataHolder.getCardTestData().getCardId(),
+                pathForAnAttachment).jsonPath().getString("id"));
     }
 
 
     @Then("attachment {string} on a card is presented")
     public void attachmentOnACardIsPresented(String pathToAttachment) {
-        String actualAttachmentsName = getCardsService().getAnAttachmentOnACard(ConfigurationDataForApiTests.CardsTestData.cardId,
-                ConfigurationDataForApiTests.CardsTestData.createdAttachmentId).jsonPath().getString("name");
+        String actualAttachmentsName = getCardsService().getAnAttachmentOnACard(configTestDataHolder.getCardTestData().getCardId(),
+                configTestDataHolder.getCardTestData().getCreatedAttachmentId()).jsonPath().getString("name");
         File fileThatWasUsedToCreateAnAttachment = new File(pathToAttachment);
         String filesName = fileThatWasUsedToCreateAnAttachment.getName();
 
@@ -76,37 +85,38 @@ public class ResourcesOfACard extends ServiceWorkShop {
 
     @Then("CheckList is created")
     public void checklistIsCreated() {
-        String actualNameOfChecklist = ConfigurationDataForApiTests.commonResponseBetweenSteps.jsonPath().getString("name");
-        String expectedNameOfChecklist = ConfigurationDataForApiTests.CheckListsTestData.nameOfAChecklistCreated;
+        String actualNameOfChecklist = configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString("name");
+        String expectedNameOfChecklist = configTestDataHolder.getCheckListTestData().NAME_OF_CHECKLIST_CREATED;
 
         Assert.assertEquals(actualNameOfChecklist, expectedNameOfChecklist);
     }
 
     @Then("Resource is deleted from a card")
     public void resourceIsDeletedFromACard() {
-        String jsonResponseAfterResourceIsDeleted = (ConfigurationDataForApiTests.commonResponseBetweenSteps.jsonPath().getString("limits"));
+        String jsonResponseAfterResourceIsDeleted = (configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString("limits"));
 
-        Assert.assertEquals(jsonResponseAfterResourceIsDeleted, ConfigurationDataForApiTests.EXPECTED_EMPTY_STRING_RESULT);
+        Assert.assertEquals(jsonResponseAfterResourceIsDeleted, CommonConfigData.EXPECTED_EMPTY_STRING_RESULT);
     }
 
     @Then("Comment {string} is created")
     public void commentIsCreated(String comment) {
-        String actualTextOfComment = ConfigurationDataForApiTests.commonResponseBetweenSteps.jsonPath().getString("data.text");
+        String actualTextOfComment = configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString("data.text");
 
         Assert.assertEquals(actualTextOfComment, comment);
     }
 
     @And("Add a label to a card")
     public void addALabelToACard() {
-        ConfigurationDataForApiTests.commonResponseBetweenSteps =
-                getLabelsService().addALabelToACard(ConfigurationDataForApiTests.CardsTestData.cardId, ConfigurationDataForApiTests.LabelsTestData.labelId);
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
+                getLabelsService().addALabelToACard(configTestDataHolder.getCardTestData().getCardId(),
+                        configTestDataHolder.getLabelTestData().getLabelId()));
     }
 
     @Then("A label is presented on a card")
     public void aLabelIsPresentedOnACard() {
-        String actualIdOfALabel = ConfigurationDataForApiTests.LabelsTestData.labelId;
+        String actualIdOfALabel = configTestDataHolder.getLabelTestData().getLabelId();
 
-        String expectedIdOfAList = getLabelsService().getLabel(ConfigurationDataForApiTests.LabelsTestData.labelId).jsonPath().getString("id");
+        String expectedIdOfAList = getLabelsService().getLabel(configTestDataHolder.getLabelTestData().getLabelId()).jsonPath().getString("id");
 
         Assert.assertEquals(actualIdOfALabel, expectedIdOfAList);
     }
@@ -114,9 +124,13 @@ public class ResourcesOfACard extends ServiceWorkShop {
     @Then("{int} Cards are presented on a list {string}")
     public void cardsArePresentedOnAList(int numberOfCards, String listName) {
 
-        String litsIdTheCardsIsOn = getListsService().getIdOfAListByName(listName);
-        ConfigurationDataForApiTests.commonResponseBetweenSteps = getListsService().getResourcesOfAList(litsIdTheCardsIsOn, PathParameters.endPoints.get("card"));
-        List namesOfACardsPresentedOnAList = ConfigurationDataForApiTests.commonResponseBetweenSteps.jsonPath().getList("name");
+        String litsIdTheCardsIsOn = getListsService().getIdOfAListByName(
+                listName,
+                configTestDataHolder.getBoardTestData().getBoardId(),
+                configTestDataHolder.getListTestData());
+        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
+                getListsService().getResourcesOfAList(litsIdTheCardsIsOn, PathParameters.endPoints.get("card")));
+        List namesOfACardsPresentedOnAList = configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getList("name");
 
         LogFactory.getLogger().info("Number of cards presented on a list " + namesOfACardsPresentedOnAList.size());
         LogFactory.getLogger().info("Number of cards expected " + numberOfCards);

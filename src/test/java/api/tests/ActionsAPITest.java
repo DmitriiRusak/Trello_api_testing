@@ -68,6 +68,8 @@ public class ActionsAPITest extends ServiceWorkShop {
 
         actionTestData.setActionIdAfterCreatingACard(getActionsService().addNewComentToACard(actionTestData.getCardId(), commentForAnAction, ActionsEndPoints.COMMENTS_ENDPOINT).jsonPath().getString("id"));
 
+        System.out.println("----------------------------------------> " + actionTestData.getActionIdAfterCreatingACard());
+
         Response response = getActionsService().updateACommentOfTheAction(actionTestData.getActionIdAfterCreatingACard(), updatedCommentForAnAction);
         //Для ассерта надо достать обновлённый комент респонса и сверить с updatedCommentForAnAction
     }
@@ -197,10 +199,16 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testDeleteAnAction() {
         String responseMessageForDeletedAction = "The requested resource was not found.";
+        System.out.println("----------------------------------------> " + actionTestData.getActionIdAfterCreatingACard());
         Response response = getActionsService().deleteAnAction(actionTestData.getActionIdAfterCreatingACard());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(getActionsService().getAnAction(actionTestData.getActionIdAfterCreatingACard()).asPrettyString(),
+
+        String actualMessage = getActionsService().getAnAction(actionTestData.getActionIdAfterCreatingACard()).asPrettyString();
+
+        System.out.println(actualMessage + " " + responseMessageForDeletedAction);
+
+        Assert.assertEquals(actualMessage,
                 responseMessageForDeletedAction);
 
     }

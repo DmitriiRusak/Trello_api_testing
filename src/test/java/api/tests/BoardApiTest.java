@@ -2,7 +2,7 @@ package api.tests;
 
 import api.resourcesForTests.configurationData.BoardTestData;
 import api.resourcesForTests.configurationData.CommonConfigData;
-import api.services.ServiceWorkShop;
+import api.services.BoardService;
 import api.utils.LogFactory;
 import api.utils.TestListener;
 import io.qameta.allure.*;
@@ -17,9 +17,10 @@ import java.util.List;
 @Feature("Board")
 @Tag("api")
 @Listeners(TestListener.class)
-public class BoardApiTest extends ServiceWorkShop {
+public class BoardApiTest{
 
     private BoardTestData boardTestData = new BoardTestData();
+    private BoardService boardService = new BoardService();
 
     @BeforeClass
     public void setUp(){
@@ -29,17 +30,17 @@ public class BoardApiTest extends ServiceWorkShop {
 
     @AfterClass
     public void tearDown(){
-        getBoardService().deleteBoard(boardTestData.getBoardId());
+        boardService.deleteBoard(boardTestData.getBoardId(), boardService.getBoardRequestSpecification());
     }
 
     @Test(priority = 0)
     @Description("Create a bord with default options")
     @Severity(SeverityLevel.CRITICAL)
     public void testCreateABoardWithDefaultOptions() {
-        Response response = getBoardService().createBoard(BoardTestData.BOARD_NAME);
+        Response response = boardService.createBoard(boardTestData.getBOARD_NAME());
         boardTestData.setBoardId(response.jsonPath().getString("id"));
 
-        Assert.assertTrue(!response.jsonPath().getString("id").isEmpty());
+        Assert.assertFalse(response.jsonPath().getString("id").isEmpty());
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 
@@ -48,54 +49,57 @@ public class BoardApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testCreateABoardWithPublicAccess() {
 
-        Response response = getBoardService().createABoardWithDefinedPermissionLevel(BoardTestData.BOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS, boardTestData.PERMISSION_LEVEL_PUBLIC);
+        Response response = boardService.createABoardWithDefinedPermissionLevel(boardTestData.getBOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS(), boardTestData.getPERMISSION_LEVEL_PUBLIC());
+
         boardTestData.setDefiendPermissionBoardId(response.jsonPath().getString("id"));
 
         Assert.assertFalse(response.jsonPath().getString("id").isEmpty());
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.jsonPath().getString("prefs.permissionLevel"), boardTestData.PERMISSION_LEVEL_PUBLIC);
+        Assert.assertEquals(response.jsonPath().getString("prefs.permissionLevel"), boardTestData.getPERMISSION_LEVEL_PUBLIC());
+        boardService.deleteBoard(response.jsonPath().getString("id"), boardService.getBoardRequestSpecification());
+        boardService.reSetBoardRequestSpecification();
     }
 
     @Test(priority = 2)
     @Description("Get a board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetBoard() {
-        Response response = getBoardService().getBoard(boardTestData.getBoardId());
+        Response response = boardService.getBoard(boardTestData.getBoardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().jsonPath().get("id").toString(), boardTestData.getBoardId());
-        Assert.assertEquals(response.body().jsonPath().get("name").toString(), BoardTestData.BOARD_NAME);
+        Assert.assertEquals(response.body().jsonPath().get("name").toString(), boardTestData.getBOARD_NAME());
     }
 
     @Test(priority = 3)
     @Description("Create a List on a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateAListOnABoard() {
-        Response response = getBoardService().createListOnBoard(boardTestData.getBoardId(), boardTestData.NAME_FOR_LIST);
+        Response response = boardService.createListOnBoard(boardTestData.getBoardId(), boardTestData.getNAME_FOR_LIST());
         boardTestData.setListId(response.path("id"));
         String actualNameOfTheList = response.jsonPath().getString("name");
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(actualNameOfTheList, boardTestData.NAME_FOR_LIST);
+        Assert.assertEquals(actualNameOfTheList, boardTestData.getNAME_FOR_LIST());
     }
 
     @Test(priority = 4)
     @Description("Create a Label on a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateALabelOnABoard() {
-        Response response = getBoardService().createLabelOnBoard(boardTestData.getBoardId(), boardTestData.NAME_FOR_A_LABEL, boardTestData.COLOR_OF_A_LABEL);
+        Response response = boardService.createLabelOnBoard(boardTestData.getBoardId(), boardTestData.getNAME_FOR_A_LABEL(), boardTestData.getCOLOR_OF_A_LABEL());
         boardTestData.setLabelId(response.path("id").toString());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().path("name"), boardTestData.NAME_FOR_A_LABEL);
-        Assert.assertEquals(response.body().path("color"), boardTestData.COLOR_OF_A_LABEL);
+        Assert.assertEquals(response.body().path("name"), boardTestData.getNAME_FOR_A_LABEL());
+        Assert.assertEquals(response.body().path("color"), boardTestData.getCOLOR_OF_A_LABEL());
     }
 
     @Test(priority = 5)
     @Description("Get Labels on a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetLabelsOnABoard() {
-        Response response = getBoardService().getLabelsOnBoard(boardTestData.getBoardId());
+        Response response = boardService.getLabelsOnBoard(boardTestData.getBoardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -104,9 +108,9 @@ public class BoardApiTest extends ServiceWorkShop {
     @Description("Get specific field from a board")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetAFieldOnABord() {
-        Response response = getBoardService().getAField(boardTestData.getBoardId(), CommonConfigData.FIELD_NAME);
+        Response response = boardService.getAField(boardTestData.getBoardId(), CommonConfigData.FIELD_NAME);
 
-        Assert.assertEquals(response.jsonPath().getString("_value"), BoardTestData.BOARD_NAME);
+        Assert.assertEquals(response.jsonPath().getString("_value"), boardTestData.getBOARD_NAME());
     }
 
     @Test(priority = 5)
@@ -114,7 +118,7 @@ public class BoardApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetActionsOfABoard() {
 
-        Response response = getBoardService().getActionsOfABoard(boardTestData.getBoardId());
+        Response response = boardService.getActionsOfABoard(boardTestData.getBoardId());
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(arrayList.size(), 3);
@@ -124,47 +128,47 @@ public class BoardApiTest extends ServiceWorkShop {
     @Description("Get checklists from a board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetChecklistsOnABoard() {
-        Response response = getBoardService().getChecklists(boardTestData.getBoardId());
+        Response response = boardService.getChecklists(boardTestData.getBoardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().asString(), boardTestData.EXPECTED_RESULT);
+        Assert.assertEquals(response.body().asString(), boardTestData.getEXPECTED_RESULT());
     }
 
     @Test(priority = 5)
     @Description("Get all existed cards from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetCardsOnABoard() {
-        Response response = getBoardService().getCardsOfABoard(boardTestData.getBoardId());
+        Response response = boardService.getCardsOfABoard(boardTestData.getBoardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().asString(), boardTestData.EXPECTED_RESULT);
+        Assert.assertEquals(response.body().asString(), boardTestData.getEXPECTED_RESULT());
     }
 
     @Test(priority = 5)
     @Description("Get all existed filtered cards from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetFilteredCardsOnABoard() {
-        Response response = getBoardService().getFilteredCardsOfABoard(boardTestData.getBoardId(), "all");
+        Response response = boardService.getFilteredCardsOfABoard(boardTestData.getBoardId(), "all");
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().asString(), boardTestData.EXPECTED_RESULT);
+        Assert.assertEquals(response.body().asString(), boardTestData.getEXPECTED_RESULT());
     }
 
     @Test(priority = 5)
     @Description("Get all existed custom fields from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetCustomFieldsForBoard() {
-        Response response = getBoardService().getCustomFieldsOfAABoard(boardTestData.getBoardId());
+        Response response = boardService.getCustomFieldsOfAABoard(boardTestData.getBoardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().asString(), boardTestData.EXPECTED_RESULT);
+        Assert.assertEquals(response.body().asString(), boardTestData.getEXPECTED_RESULT());
     }
 
     @Test(priority = 5)
     @Description("Get all existed lists from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetListsOnABoard() {
-        Response response = getBoardService().getListsOfABoard(boardTestData.getBoardId());
+        Response response = boardService.getListsOfABoard(boardTestData.getBoardId());
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -175,17 +179,17 @@ public class BoardApiTest extends ServiceWorkShop {
     @Description("Get closed lists from a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetFilteredListsOnABoard() {
-        Response response = getBoardService().getFilteredListsOfABoard(boardTestData.getBoardId(), boardTestData.NAME_OF_A_FILTER);
+        Response response = boardService.getFilteredListsOfABoard(boardTestData.getBoardId(), boardTestData.getNAME_OF_A_FILTER());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().asString(), boardTestData.EXPECTED_RESULT);
+        Assert.assertEquals(response.body().asString(), boardTestData.getEXPECTED_RESULT());
     }
 
     @Test(priority = 5)
     @Description("Get members of a bord")
     @Severity(SeverityLevel.NORMAL)
     public void testGetTheMembersOfABoard() {
-        Response response = getBoardService().getTheMembersOfABoard(boardTestData.getBoardId());
+        Response response = boardService.getTheMembersOfABoard(boardTestData.getBoardId(), boardService.getBoardRequestSpecification());
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -196,7 +200,7 @@ public class BoardApiTest extends ServiceWorkShop {
     @Description("Invite Member to a Board via email")
     @Severity(SeverityLevel.NORMAL)
     public void testInviteMemberToBoardViaEmail() {
-        Response response = getBoardService().inviteMemberToBoardViaEmail(boardTestData.getBoardId());
+        Response response = boardService.inviteMemberToBoardViaEmail(boardTestData.getBoardId());
         List listOfMembers = response.jsonPath().getList("members.id");
 
         Assert.assertTrue(listOfMembers.size() == 2);
@@ -206,17 +210,17 @@ public class BoardApiTest extends ServiceWorkShop {
     @Description("Update a board by giving a new name")
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateABoard() {
-        Response response = getBoardService().updateBoard(boardTestData.getBoardId(), CommonConfigData.FIELD_NAME, boardTestData.NEW_NAME_FOR_A_BOARD);
+        Response response = boardService.updateBoard(boardTestData.getBoardId(), CommonConfigData.FIELD_NAME, boardTestData.getNEW_NAME_FOR_A_BOARD());
 
         Assert.assertEquals(response.body().jsonPath().get("id").toString(), boardTestData.getBoardId());
-        Assert.assertEquals(response.jsonPath().get("name").toString(), boardTestData.NEW_NAME_FOR_A_BOARD);
+        Assert.assertEquals(response.jsonPath().get("name").toString(), boardTestData.getNEW_NAME_FOR_A_BOARD());
     }
 
     @Test(priority = 6)
     @Description("Get boardStars on a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetBoardStarsOnABoard() {
-        Response response = getBoardService().getBoardStarsOfABoard(boardTestData.getBoardId());
+        Response response = boardService.getBoardStarsOfABoard(boardTestData.getBoardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -225,7 +229,7 @@ public class BoardApiTest extends ServiceWorkShop {
     @Description("Get memberships of a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetMembershipsOfABoard() {
-        Response response = getBoardService().getMembershipsOfABoard(boardTestData.getBoardId());
+        Response response = boardService.getMembershipsOfABoard(boardTestData.getBoardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -234,10 +238,10 @@ public class BoardApiTest extends ServiceWorkShop {
     @Description("Remove member from a board")
     @Severity(SeverityLevel.NORMAL)
     public void testRemoveMemberFromBoard() {
-        Response membersResponse = getBoardService().getTheMembersOfABoard(boardTestData.getBoardId());
+        Response membersResponse = boardService.getTheMembersOfABoard(boardTestData.getBoardId(), boardService.getBoardRequestSpecification());
         List<String> memberIds = membersResponse.jsonPath().getList("id"); // ИЛИ "members.id"
         String memberIdToRemove = memberIds.get(1);
-        Response response = getBoardService().removeMemberFromBoard(boardTestData.getBoardId(), memberIdToRemove);
+        Response response = boardService.removeMemberFromBoard(boardTestData.getBoardId(), memberIdToRemove);
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -246,7 +250,7 @@ public class BoardApiTest extends ServiceWorkShop {
     @Description("Delete board")
     @Severity(SeverityLevel.NORMAL)
     public void testDeleteABoard() {
-        Response response = getBoardService().deleteABoardFromService(boardTestData.getBoardId());
+        Response response = boardService.deleteABoardFromService(boardTestData.getBoardId());
         Assert.assertEquals(response.getStatusCode(), 200);
     }
 }

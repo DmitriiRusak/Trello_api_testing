@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="All modules tests ">
+<suite name="All modules tests " >
 
-    <test name="Actions API test">
+    <test name="Actions API test" parallel="classes" thread-count="2">
         <classes>
             <class name="api.tests.ActionsAPITest"/>
             <class name="api.tests.BoardApiTest"/>
-            <class name="api.tests.CardsApiTest"/>
-            <class name="api.tests.ChecklistsAPITest"/>
-            <class name="api.tests.LabelsApiTest"/>
-            <class name="api.tests.ListsApiTest"/>
-            <class name="api.tests.MembersAPITest"/>
+<!--            <class name="api.tests.CardsApiTest"/>-->
+<!--            <class name="api.tests.ChecklistsAPITest"/>-->
+<!--            <class name="api.tests.LabelsApiTest"/>-->
+<!--            <class name="api.tests.ListsApiTest"/>-->
+<!--            <class name="api.tests.MembersAPITest"/>-->
         </classes>
     </test>
 

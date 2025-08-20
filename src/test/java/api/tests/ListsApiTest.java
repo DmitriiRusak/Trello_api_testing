@@ -1,10 +1,9 @@
 package api.tests;
 
-import api.resourcesForTests.configurationData.CommonConfigData.*;
 import api.resourcesForTests.ListFields;
 import api.resourcesForTests.PathParameters;
 import api.resourcesForTests.configurationData.ListTestData;
-import api.services.ServiceWorkShop;
+import api.services.ListsService;
 import api.utils.LogFactory;
 import api.utils.TestListener;
 import io.qameta.allure.*;
@@ -24,29 +23,33 @@ import static api.resourcesForTests.PathParameters.ListsPath.cardsEndPoint;
 @Epic("API Tests")
 @Feature("Lists")
 @Listeners(TestListener.class)
-public class ListsApiTest extends ServiceWorkShop {
+public class ListsApiTest{
 
-    private ListTestData listTestData = new ListTestData();
+    private final ListTestData listTestData = new ListTestData();
+    private final ListsService listsService = new ListsService();
 
     @BeforeClass
     public void setUp() {
 
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        listTestData.setBoardId(getListsService().createABord(listTestData.BOARD_NAME));
-        listTestData.setToDoListId(getListsService().getListOfIdOfAllListsOnABoard(listTestData.getBoardId()).get(0).toString());
+        listTestData.setBoardId(listsService.createABord(listTestData.BOARD_NAME, listsService.getListRequestSpecification()));
+        listsService.reSetListRequestSpecification();
+        listTestData.setToDoListId(listsService.getListOfIdOfAllListsOnABoard(listTestData.getBoardId(), listsService.getListRequestSpecification()).get(0).toString());
+        listsService.reSetListRequestSpecification();
     }
 
     @AfterClass
     public void tearDown() {
-        getListsService().deleteBoard(listTestData.getBoardId());
+        listsService.deleteBoard(listTestData.getBoardId(), listsService.getListRequestSpecification());
+        listsService.reSetListRequestSpecification();
     }
 
     @Test(priority = 0)
     @Description("Create a new List on a Board")
     @Severity(SeverityLevel.CRITICAL)
     public void testCreateNewList() {
-        Response response = getListsService().createList(listTestData.NAME_OF_THE_LIST, listTestData.getBoardId());
-        listTestData.setNewCreatedListId(getListsService().getListOfIdOfAllListsOnABoard(listTestData.getBoardId()).get(0).toString());
+        Response response = listsService.createList(ListTestData.NAME_OF_THE_LIST, listTestData.getBoardId());
+        listTestData.setNewCreatedListId(listsService.getListOfIdOfAllListsOnABoard(listTestData.getBoardId(), listsService.getListRequestSpecification()).get(0).toString());
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.path("name"), listTestData.NAME_OF_THE_LIST);
@@ -56,7 +59,7 @@ public class ListsApiTest extends ServiceWorkShop {
     @Description("Update a name of the list")
     @Severity(SeverityLevel.CRITICAL)
     public void tesUpdateANameForToDoList() {
-        Response response = getListsService().updateAFieldOfAList(listTestData.getToDoListId(), ListFields.name, listTestData.NEW_NAME_FOR_THE_LIST);
+        Response response = listsService.updateAFieldOfAList(listTestData.getToDoListId(), ListFields.name, listTestData.NEW_NAME_FOR_THE_LIST);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("name"), listTestData.NEW_NAME_FOR_THE_LIST);
@@ -66,7 +69,7 @@ public class ListsApiTest extends ServiceWorkShop {
     @Description("Get a list from a board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetAList() {
-        Response response = getListsService().getAList(listTestData.getToDoListId());
+        Response response = listsService.getAList(listTestData.getToDoListId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("name"), listTestData.NEW_NAME_FOR_THE_LIST);
@@ -80,16 +83,16 @@ public class ListsApiTest extends ServiceWorkShop {
         Map<String, String> queryParametersForRequestSpec = new HashMap<>();
         queryParametersForRequestSpec.put("idList", listTestData.getToDoListId());
         queryParametersForRequestSpec.put("name", "nameForCard");
-        getListsService().createACard(queryParametersForRequestSpec);
+        listsService.createACard(queryParametersForRequestSpec, listsService.getListRequestSpecification());
 
         //make sure that list has 1 card
-        Response response = getListsService().getResourcesOfAList(listTestData.getToDoListId(), PathParameters.endPoints.get("card"));
+        Response response = listsService.getResourcesOfAList(listTestData.getToDoListId(), PathParameters.endPoints.get("card"));
         List <String> numberOfCardsPresentedOnAList = response.jsonPath().getList("name");
         Assert.assertEquals(numberOfCardsPresentedOnAList.size(), 1);
 
         //archive all cards on a list
-        getListsService().archiveAllCardOnTheList(listTestData.getToDoListId());
-        response = getListsService().getResourcesOfAList(listTestData.getToDoListId(), PathParameters.endPoints.get("card"));
+        listsService.archiveAllCardOnTheList(listTestData.getToDoListId());
+        response = listsService.getResourcesOfAList(listTestData.getToDoListId(), PathParameters.endPoints.get("card"));
         numberOfCardsPresentedOnAList = response.jsonPath().getList("name");
 
         //make sure that list do not have any cards
@@ -105,14 +108,16 @@ public class ListsApiTest extends ServiceWorkShop {
         Map<String, String> queryParametersForRequestSpec = new HashMap<>();
         queryParametersForRequestSpec.put("idList", listTestData.getNewCreatedListId());
         queryParametersForRequestSpec.put("name", "nameForCard");
-        getListsService().createACard(queryParametersForRequestSpec);
-        getListsService().createACard(queryParametersForRequestSpec);
+        listsService.createACard(queryParametersForRequestSpec, listsService.getListRequestSpecification());
+        listsService.reSetListRequestSpecification();
+        listsService.createACard(queryParametersForRequestSpec, listsService.getListRequestSpecification());
+        listsService.reSetListRequestSpecification();
 
         //move all cards from the list that has 2 cards to another list that do not have cards at all
-        Response response = getListsService().moveAllCardsFromOneListToAnother(listTestData.getNewCreatedListId(), listTestData.getBoardId(), listTestData.getToDoListId());
+        Response response = listsService.moveAllCardsFromOneListToAnother(listTestData.getNewCreatedListId(), listTestData.getBoardId(), listTestData.getToDoListId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        response = getListsService().getResourcesOfAList(listTestData.getToDoListId(), PathParameters.endPoints.get("card"));
+        response = listsService.getResourcesOfAList(listTestData.getToDoListId(), PathParameters.endPoints.get("card"));
         List <String> allCardsPresentedOnAList = response.jsonPath().getList("name");
 
         //make sure that all cards moved to toDo list, and that toDo list has 2 cards now.
@@ -124,12 +129,12 @@ public class ListsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testArchiveAList() {
 
-        List numberOfListPresentedOnABoard = getListsService().getListOfIdOfAllListsOnABoard(listTestData.getBoardId());
+        List numberOfListPresentedOnABoard = listsService.getListOfIdOfAllListsOnABoard(listTestData.getBoardId(), listsService.getListRequestSpecification());
         int numberOfListBeforeArchive = numberOfListPresentedOnABoard.size();
 
-        Response response = getListsService().archiveAList(listTestData.getToDoListId());
+        Response response = listsService.archiveAList(listTestData.getToDoListId());
 
-        numberOfListPresentedOnABoard = getListsService().getListOfIdOfAllListsOnABoard(listTestData.getBoardId());
+        numberOfListPresentedOnABoard = listsService.getListOfIdOfAllListsOnABoard(listTestData.getBoardId(), listsService.getListRequestSpecification());
         int numberOfListAfterArchive = numberOfListPresentedOnABoard.size();
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -143,11 +148,12 @@ public class ListsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testUnArchiveAList() {
 
-        List numberOfListPresentedOnABoard = getListsService().getListOfIdOfAllListsOnABoard(listTestData.getBoardId());
+        List numberOfListPresentedOnABoard = listsService.getListOfIdOfAllListsOnABoard(listTestData.getBoardId(), listsService.getListRequestSpecification());
+        listsService.reSetListRequestSpecification();
         int numberOfListBeforeAnArchive = numberOfListPresentedOnABoard.size();
 
-        Response response = getListsService().unArchiveAList(listTestData.getToDoListId());
-        numberOfListPresentedOnABoard = getListsService().getListOfIdOfAllListsOnABoard(listTestData.getBoardId());
+        Response response = listsService.unArchiveAList(listTestData.getToDoListId());
+        numberOfListPresentedOnABoard = listsService.getListOfIdOfAllListsOnABoard(listTestData.getBoardId(), listsService.getListRequestSpecification());
         int numberOfListAfterArchive = numberOfListPresentedOnABoard.size();
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -159,7 +165,7 @@ public class ListsApiTest extends ServiceWorkShop {
     @Description("Get all cards available on a list")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetCardsInAList() {
-        Response response = getListsService().getResourcesOfAList(listTestData.getToDoListId(), cardsEndPoint);
+        Response response = listsService.getResourcesOfAList(listTestData.getToDoListId(), cardsEndPoint);
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -171,22 +177,22 @@ public class ListsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testMoveListFromOneBoardToAnother() {
         //create one more board in a workspace in order to move list on it
-        String tempIdOfTheSecondBoard = getListsService().createABord(listTestData.NAME_FOR_SECOND_BOARD);
+        String tempIdOfTheSecondBoard = listsService.createABord(listTestData.NAME_FOR_SECOND_BOARD, listsService.getListRequestSpecification());
 
         //check what is current id of a board the list is on
-        String idOfABoardBeforeListBeingMoved = getListsService().getABoardAListIsOn(listTestData.getToDoListId()).jsonPath().getString("id");
+        String idOfABoardBeforeListBeingMoved = listsService.getABoardAListIsOn(listTestData.getToDoListId()).jsonPath().getString("id");
 
         //move list to another board
-        Response response = getListsService().moveListFromOneBoardToAnother(listTestData.getToDoListId(), tempIdOfTheSecondBoard);
+        Response response = listsService.moveListFromOneBoardToAnother(listTestData.getToDoListId(), tempIdOfTheSecondBoard);
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        String idOfABoardAfterListBeingBoved = getListsService().getABoardAListIsOn(listTestData.getToDoListId()).jsonPath().getString("id");
+        String idOfABoardAfterListBeingBoved = listsService.getABoardAListIsOn(listTestData.getToDoListId()).jsonPath().getString("id");
 
         //make sure that id of a board, the list is on, changed ofter list being moved
         Assert.assertNotEquals(idOfABoardBeforeListBeingMoved, idOfABoardAfterListBeingBoved);
         Assert.assertEquals(idOfABoardAfterListBeingBoved, tempIdOfTheSecondBoard);
 
-        getListsService().deleteBoard(tempIdOfTheSecondBoard);
+        listsService.deleteBoard(tempIdOfTheSecondBoard, listsService.getListRequestSpecification());
     }
 
     @Test(priority = 5)
@@ -194,11 +200,11 @@ public class ListsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testUpdateASubscribedFieldOfAList() {
 
-        String subscribedValueBeforeUpdate = getListsService().getAFieldOfAList(listTestData.getNewCreatedListId(), "subscribed").jsonPath().getString("subscribed");
+        String subscribedValueBeforeUpdate = listsService.getAFieldOfAList(listTestData.getNewCreatedListId(), "subscribed").jsonPath().getString("subscribed");
 
-        Response response = getListsService().updateAFieldOfAList(listTestData.getNewCreatedListId(), ListFields.subscribed, "true");
+        Response response = listsService.updateAFieldOfAList(listTestData.getNewCreatedListId(), ListFields.subscribed, "true");
 
-        String subscribedValueAfterUpdate = getListsService().getAFieldOfAList(listTestData.getNewCreatedListId(), "subscribed").jsonPath().getString("subscribed");
+        String subscribedValueAfterUpdate = listsService.getAFieldOfAList(listTestData.getNewCreatedListId(), "subscribed").jsonPath().getString("subscribed");
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(subscribedValueAfterUpdate, "true");
@@ -209,7 +215,7 @@ public class ListsApiTest extends ServiceWorkShop {
     @Description("Update subscribed field of a list")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetActionsOfAList() {
-        Response response = getListsService().getActionsofAList(listTestData.getNewCreatedListId());
+        Response response = listsService.getActionsofAList(listTestData.getNewCreatedListId());
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -220,7 +226,7 @@ public class ListsApiTest extends ServiceWorkShop {
     @Description("Get the Board a List is on")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetABoardAListIsOn() {
-        Response response = getListsService().getABoardAListIsOn(listTestData.getNewCreatedListId());
+        Response response = listsService.getABoardAListIsOn(listTestData.getNewCreatedListId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("id"), listTestData.getBoardId());

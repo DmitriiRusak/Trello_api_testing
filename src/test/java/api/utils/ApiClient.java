@@ -1,7 +1,7 @@
 package api.utils;
 
-import api.cucumber.runners.EndToEndBasicSetUpTest;
-import api.cucumber.runners.EndToEndCustomerEnvironmentTest;
+//import api.cucumber.runners.EndToEndBasicSetUpTest;
+//import api.cucumber.runners.EndToEndCustomerEnvironmentTest;
 import io.restassured.response.Response;
 import io.restassured.specification.QueryableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
@@ -90,17 +90,17 @@ public class ApiClient {
     }
 
     public void cucumberLogsIntegration(QueryableRequestSpecification queryableRequestSpecification, Response response){
-        LogFactory.getLogger().info("URL - " + queryableRequestSpecification.getURI());
-        LogFactory.getLogger().info("HTTP method - " + queryableRequestSpecification.getMethod());
-
-        if (response.getStatusCode() < 200 || response.getStatusCode() > 299) {
-            LogFactory.getLogger().error("Body response - " + response.asPrettyString());
-            LogFactory.getLogger().error("status code " +  String.valueOf(response.getStatusCode()));
-            EndToEndCustomerEnvironmentTest.stepStatusPassed = false;
-//            LogFactory.getLogger().error("❌");
-        }else {
-            LogFactory.getLogger().info("status code " +  String.valueOf(response.getStatusCode()));
-//            LogFactory.getLogger().info("✔\uFE0F");
-        }
+//        LogFactory.getLogger().info("URL - " + queryableRequestSpecification.getURI());
+//        LogFactory.getLogger().info("HTTP method - " + queryableRequestSpecification.getMethod());
+//
+//        if (response.getStatusCode() < 200 || response.getStatusCode() > 299) {
+//            LogFactory.getLogger().error("Body response - " + response.asPrettyString());
+//            LogFactory.getLogger().error("status code " +  String.valueOf(response.getStatusCode()));
+//            EndToEndCustomerEnvironmentTest.stepStatusPassed = false;
+////            LogFactory.getLogger().error("❌");
+//        }else {
+//            LogFactory.getLogger().info("status code " +  String.valueOf(response.getStatusCode()));
+////            LogFactory.getLogger().info("✔\uFE0F");
+//        }
     }
 }

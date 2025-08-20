@@ -2,7 +2,7 @@ package api.resourcesForTests.configurationData;
 
 public class ActionTestData {
 
-    public final static String BOARD_NAME = "Board_for_Actions";
+    private final String BOARD_NAME = "Board_for_Actions";
 
     private String boardId;
     private String actiontId;
@@ -75,5 +75,9 @@ public class ActionTestData {
 
     public void setIdOfReaction(String idOfReaction) {
         this.idOfReaction = idOfReaction;
+    }
+
+    public String getBOARD_NAME() {
+        return BOARD_NAME;
     }
 }

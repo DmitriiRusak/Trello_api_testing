@@ -24,7 +24,7 @@ public class Specification {
         }
     }
 
-    public static RequestSpecification installRequest() {
+    public RequestSpecification installRequest() {
 
         Map<String, String> authoriazing = new HashMap<>();
         authoriazing.put("key", key);

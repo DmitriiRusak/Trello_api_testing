@@ -3,8 +3,7 @@ package api.tests;
 import api.resourcesForTests.CardFields;
 import api.resourcesForTests.configurationData.CardTestData;
 import api.resourcesForTests.configurationData.CommonConfigData;
-import api.services.ServiceWorkShop;
-import api.resourcesForTests.configurationData.CommonConfigData.*;
+import api.services.CardsService;
 import api.utils.LogFactory;
 import api.utils.TestListener;
 import io.qameta.allure.*;
@@ -26,21 +25,25 @@ import static api.resourcesForTests.configurationData.CommonConfigData.EXPECTED_
 @Epic("API Tests")
 @Feature("Cards")
 @Listeners(TestListener.class)
-public class CardsApiTest extends ServiceWorkShop {
+public class CardsApiTest{
 
-    private CardTestData cardTestData = new CardTestData();
+    private final CardTestData cardTestData = new CardTestData();
+    private final CardsService cardsService = new CardsService();
 
     @BeforeClass
     public void setUp() {
 
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        cardTestData.setBoardId(getCardsService().createABord(cardTestData.BOARD_NAME_FOR_CARDS));
-        cardTestData.setToDoListId(getActionsService().getListOfIdOfAllListsOnABoard(cardTestData.getBoardId()).get(0).toString());
+        cardTestData.setBoardId(cardsService.createABord(cardTestData.BOARD_NAME_FOR_CARDS, cardsService.getCardRequestSpecification()));
+        cardsService.reSetCardRequestSpecification();
+        cardTestData.setToDoListId(cardsService.getListOfIdOfAllListsOnABoard(cardTestData.getBoardId(), cardsService.getCardRequestSpecification()).get(0).toString());
+        cardsService.reSetCardRequestSpecification();
     }
 
     @AfterClass
     public void tearDown() {
-        getCardsService().deleteBoard(cardTestData.getBoardId());
+        cardsService.deleteBoard(cardTestData.getBoardId(), cardsService.getCardRequestSpecification());
+        cardsService.reSetCardRequestSpecification();
     }
 
     @Test(priority = 0)
@@ -50,12 +53,12 @@ public class CardsApiTest extends ServiceWorkShop {
         Map<String, String> queryParametersForRequestSpec = new HashMap<>();
         queryParametersForRequestSpec.put("idList", cardTestData.getToDoListId());
 
-        Response response = getCardsService().createACard(queryParametersForRequestSpec);
+        Response response = cardsService.createACard(queryParametersForRequestSpec, cardsService.getCardRequestSpecification());
 
         cardTestData.setCardId(response.jsonPath().get("id"));
         Assert.assertEquals(response.getStatusCode(), 200);
 
-        cardTestData.setListIdTheCardIsOn(getCardsService().getTheListOfACard(cardTestData.getCardId()).jsonPath().getString("id"));
+        cardTestData.setListIdTheCardIsOn(cardsService.getTheListOfACard(cardTestData.getCardId()).jsonPath().getString("id"));
 
         Assert.assertEquals(cardTestData.getListIdTheCardIsOn(), cardTestData.getToDoListId());
     }
@@ -65,7 +68,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetACard() {
 
-        Response response = getCardsService().getCard(cardTestData.getCardId());
+        Response response = cardsService.getCard(cardTestData.getCardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -76,7 +79,7 @@ public class CardsApiTest extends ServiceWorkShop {
     public void testUpdateACard() {
 
         String newCardName = "NewCardName";
-        Response response = getCardsService().updateCard(cardTestData.getCardId(),"name", newCardName);
+        Response response = cardsService.updateCard(cardTestData.getCardId(),"name", newCardName);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.path("name"), newCardName);
@@ -86,7 +89,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Description("Get a field on a card")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetAFieldOnACard() {
-        Response response = getCardsService().getAFieldOfTheCard(cardTestData.getCardId(), CardFields.name);
+        Response response = cardsService.getAFieldOfTheCard(cardTestData.getCardId(), CardFields.name);
         String expectedName = "NewCardName";
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -98,7 +101,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Description("Get an actions on a card")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetActionsOnACard() {
-        Response response = getCardsService().getActionsOnACard(cardTestData.getCardId());
+        Response response = cardsService.getActionsOnACard(cardTestData.getCardId());
         List arrayList = response.jsonPath().getList("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -111,7 +114,7 @@ public class CardsApiTest extends ServiceWorkShop {
 
         String emptyString = "[]";
 
-        Response response = getCardsService().getAttachmentsOnACard(cardTestData.getCardId());
+        Response response = cardsService.getAttachmentsOnACard(cardTestData.getCardId());
         String actualResponseBody = response.body().asString();
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -123,7 +126,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Description("Get the stickers on a card")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetStickersOnACard() {
-        Response response = getCardsService().getStickersOnACard(cardTestData.getCardId());
+        Response response = cardsService.getStickersOnACard(cardTestData.getCardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }
@@ -134,7 +137,7 @@ public class CardsApiTest extends ServiceWorkShop {
     public void testCreateAttachmentOnCard() {
         String nameOfCreatedAttachment = "ForCreateAttachmentOnCardTest.txt";
 
-        Response response = getCardsService().createAttachmentOnCard(cardTestData.getCardId(), "src/test/resources/ForCreateAttachmentOnCardTest.txt");
+        Response response = cardsService.createAttachmentOnCard(cardTestData.getCardId(), "src/test/resources/ForCreateAttachmentOnCardTest.txt");
         cardTestData.setCreatedAttachmentId(response.jsonPath().getString("id"));
         String nameOfAttachmentReceivedBack = response.jsonPath().getString("name");
 
@@ -147,7 +150,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testGetAnAttachmentOnACard() {
 
-        Response response = getCardsService().getAnAttachmentOnACard(cardTestData.getCardId(), cardTestData.getCreatedAttachmentId());
+        Response response = cardsService.getAnAttachmentOnACard(cardTestData.getCardId(), cardTestData.getCreatedAttachmentId());
         String attachmentIdReceivedBack = response.jsonPath().getString("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -159,7 +162,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testDeleteAnAttachmentOnACard() {
 
-        Response response = getCardsService().deleteAnAttachmentOnACard(cardTestData.getCardId(), cardTestData.getCreatedAttachmentId());
+        Response response = cardsService.deleteAnAttachmentOnACard(cardTestData.getCardId(), cardTestData.getCreatedAttachmentId());
 
         String actualStringresponse = response.jsonPath().getString("limits");
 
@@ -171,11 +174,11 @@ public class CardsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testGetTheBoardTheCardIsOn() {
 
-        Response response = getCardsService().getTheBoardTheCardIsOn(cardTestData.getCardId());
+        Response response = cardsService.getTheBoardTheCardIsOn(cardTestData.getCardId());
         String actualNameOfTheBoardReceived = response.jsonPath().getString("name");
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(actualNameOfTheBoardReceived, cardTestData.BOARD_NAME_FOR_CARDS);
+        Assert.assertEquals(actualNameOfTheBoardReceived, CardTestData.BOARD_NAME_FOR_CARDS);
     }
 
     @Test(priority = 8)
@@ -183,7 +186,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testGetCheckItemsOnACard() {
 
-        Response response = getCardsService().getCheckItemsOnACard(cardTestData.getCardId());
+        Response response = cardsService.getCheckItemsOnACard(cardTestData.getCardId());
 
         String actualCheckItemsOnACard = response.body().asString();
 
@@ -196,7 +199,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testGetChecklistsOnACard() {
 
-        Response response = getCardsService().getChecklistsOnACard(cardTestData.getCardId());
+        Response response = cardsService.getChecklistsOnACard(cardTestData.getCardId());
 
         String actualChecklistsOnACard = response.body().asString();
 
@@ -211,7 +214,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testCreateChecklistOnACard() {
 
-        Response response = getCardsService().createAChecklist(cardTestData.getCardId(), cardTestData.NAME_FOR_CHECKLIST_CREATED);
+        Response response = cardsService.createAChecklistForACard(cardTestData.getCardId(), cardTestData.NAME_FOR_CHECKLIST_CREATED, cardsService.getCardRequestSpecification());
         String checklistNameReceivedBack = response.jsonPath().getString("name");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -223,7 +226,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Description("Get the List of a Card")
     @Severity(SeverityLevel.CRITICAL)
     public void testGetTheListOfACard() {
-        Response response = getCardsService().getTheListOfACard(cardTestData.getCardId());
+        Response response = cardsService.getTheListOfACard(cardTestData.getCardId());
 
         String IdOfReceivedList = response.jsonPath().getString("id");
 
@@ -236,7 +239,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Severity(SeverityLevel.CRITICAL)
     public void testGetTheMembersOfACard() {
 
-        Response response = getCardsService().getTheMembersOfACard(cardTestData.getCardId());
+        Response response = cardsService.getTheMembersOfACard(cardTestData.getCardId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().asString(), CommonConfigData.EMPTY_STRING);
@@ -246,7 +249,7 @@ public class CardsApiTest extends ServiceWorkShop {
     @Description("Delete a card")
     @Severity(SeverityLevel.CRITICAL)
     public void testDeleteACard() {
-        Response response = getCardsService().deleteACard(cardTestData.getCardId());
+        Response response = cardsService.deleteACard(cardTestData.getCardId());
 
         Assert.assertEquals(response.getStatusCode(),200);
     }

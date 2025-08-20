@@ -2,7 +2,7 @@ package api.tests;
 
 import api.resourcesForTests.configurationData.CommonConfigData;
 import api.resourcesForTests.configurationData.LabelTestData;
-import api.services.ServiceWorkShop;
+import api.services.LabelsService;
 import api.utils.LogFactory;
 import api.utils.TestListener;
 import io.qameta.allure.*;
@@ -16,27 +16,28 @@ import org.testng.annotations.Test;
 @Epic("API Tests")
 @Feature("Labels")
 @Listeners(TestListener.class)
-public class LabelsApiTest extends ServiceWorkShop {
+public class LabelsApiTest{
 
-    private LabelTestData labelTestData = new LabelTestData();
+    private final LabelTestData labelTestData = new LabelTestData();
+    private final LabelsService labelsService = new LabelsService();
 
     @BeforeClass
     public void setUp() {
 
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        labelTestData.setBoardId(getLabelsService().createABord(labelTestData.BOARD_NAME));
+        labelTestData.setBoardId(labelsService.createABord(labelTestData.BOARD_NAME, labelsService.getLabelRequestSpecification()));
     }
 
     @AfterClass
     public void tearDown() {
-        getLabelsService().deleteBoard(labelTestData.getBoardId());
+        labelsService.deleteBoard(labelTestData.getBoardId(), labelsService.getLabelRequestSpecification());
     }
 
     @Test()
     @Description("Create a new Label on a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateLabel() {
-        Response response = getLabelsService().createLabel(labelTestData.LABEL_NAME, labelTestData.COLOR, labelTestData.getBoardId());
+        Response response = labelsService.createLabel(labelTestData.LABEL_NAME, labelTestData.COLOR, labelTestData.getBoardId());
 
         labelTestData.setLabelId(response.body().jsonPath().get("id"));
 
@@ -49,7 +50,7 @@ public class LabelsApiTest extends ServiceWorkShop {
     @Description("Get label")
     @Severity(SeverityLevel.NORMAL)
     public void testGetLabel() {
-        Response response = getLabelsService().getLabel(labelTestData.getLabelId());
+        Response response = labelsService.getLabel(labelTestData.getLabelId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().jsonPath().getString("id"), labelTestData.getLabelId());
@@ -59,7 +60,7 @@ public class LabelsApiTest extends ServiceWorkShop {
     @Description("Update label")
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateLabel() {
-        Response response = getLabelsService().updateLabel(labelTestData.getLabelId(), labelTestData.NEW_NAME, labelTestData.NEW_COLOR);
+        Response response = labelsService.updateLabel(labelTestData.getLabelId(), labelTestData.NEW_NAME, labelTestData.NEW_COLOR);
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().jsonPath().getString("name"), labelTestData.NEW_NAME);
@@ -70,7 +71,7 @@ public class LabelsApiTest extends ServiceWorkShop {
     @Description("Delete label")
     @Severity(SeverityLevel.NORMAL)
     public void testDeleteLabel() {
-        Response response = getLabelsService().deleteLabel(labelTestData.getLabelId());
+        Response response = labelsService.deleteLabel(labelTestData.getLabelId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
     }

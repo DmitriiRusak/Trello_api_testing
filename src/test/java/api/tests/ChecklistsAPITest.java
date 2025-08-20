@@ -2,7 +2,8 @@ package api.tests;
 
 import api.resourcesForTests.CheckListFields;
 import api.resourcesForTests.configurationData.CheckListTestData;
-import api.services.ServiceWorkShop;
+import api.resourcesForTests.configurationData.CommonConfigData;
+import api.services.ChecklistsService;
 import api.utils.LogFactory;
 import api.utils.TestListener;
 import io.qameta.allure.*;
@@ -20,47 +21,53 @@ import static api.resourcesForTests.configurationData.CommonConfigData.EXPECTED_
 @Epic("API Tests")
 @Feature("Checklist")
 @Listeners(TestListener.class)
-public class ChecklistsAPITest extends ServiceWorkShop {
+public class ChecklistsAPITest{
 
-    CheckListTestData checkListTestData = new CheckListTestData();
+    private final CheckListTestData checkListTestData = new CheckListTestData();
+    private final ChecklistsService checklistsService = new ChecklistsService();
+
 
     @BeforeClass
     public void setUp() {
 
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        checkListTestData.setBoardId(getChecklistsService().createABord(checkListTestData.BOARD_NAME_FOR_CHECKLIST));
-        checkListTestData.setToDoListId(getChecklistsService().getListOfIdOfAllListsOnABoard(checkListTestData.getBoardId()).get(0).toString());
+        checkListTestData.setBoardId(checklistsService.createABord(CheckListTestData.BOARD_NAME_FOR_CHECKLIST, checklistsService.getChecklistRequestSpecification()));
+        checklistsService.reSetChecklistRequestSpecification();
+        checkListTestData.setToDoListId(checklistsService.getListOfIdOfAllListsOnABoard(checkListTestData.getBoardId(), checklistsService.getChecklistRequestSpecification()).get(0).toString());
+        checklistsService.reSetChecklistRequestSpecification();
 
-        checkListTestData.setCardId(getChecklistsService().
+        checkListTestData.setCardId(checklistsService.
                 createACard(new HashMap<>() {{
                     put("idList", checkListTestData.getToDoListId());
                     put("name", "card");
-                }})
+                }}, checklistsService.getChecklistRequestSpecification())
                 .jsonPath().getString("id"));
+        checklistsService.reSetChecklistRequestSpecification();
     }
 
     @AfterClass
     public void tearDown() {
-        getChecklistsService().deleteBoard(checkListTestData.getBoardId());
+        checklistsService.deleteBoard(checkListTestData.getBoardId(), checklistsService.getChecklistRequestSpecification());
+        checklistsService.reSetChecklistRequestSpecification();
     }
 
     @Test(priority = 0)
     @Description("Create a checklist on a card")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateAChecklist() {
-        Response response = getChecklistsService().createAChecklist(checkListTestData.getCardId(), checkListTestData.NAME_OF_CHECKLIST_CREATED);
+        Response response = checklistsService.createChecklistFromCheckListService(checkListTestData.getCardId(), CheckListTestData.NAME_OF_CHECKLIST_CREATED, checklistsService.getChecklistRequestSpecification());
 
         String actualNameOfChecklistReceived = response.jsonPath().getString("name");
         checkListTestData.setChecklistId(response.jsonPath().getString("id"));
 
-        Assert.assertEquals(actualNameOfChecklistReceived, checkListTestData.NAME_OF_CHECKLIST_CREATED);
+        Assert.assertEquals(actualNameOfChecklistReceived, CheckListTestData.NAME_OF_CHECKLIST_CREATED);
     }
 
     @Test(priority = 1)
     @Description("Get a checklist on a card")
     @Severity(SeverityLevel.NORMAL)
     public void testGetAChecklist() {
-        Response response = getChecklistsService().getCheckList(checkListTestData.getChecklistId());
+        Response response = checklistsService.getCheckList(checkListTestData.getChecklistId());
         String actualIdOfChecklistReceived = response.jsonPath().getString("id");
 
         Assert.assertEquals(actualIdOfChecklistReceived, checkListTestData.getChecklistId());
@@ -70,7 +77,7 @@ public class ChecklistsAPITest extends ServiceWorkShop {
     @Description("Update a name of a checklist")
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateAChecklist() {
-        Response response = getChecklistsService().updateAFieldOfCheckList(checkListTestData.getChecklistId(),
+        Response response = checklistsService.updateAFieldOfCheckList(checkListTestData.getChecklistId(),
                 CheckListFields.name, checkListTestData.NEW_NAME_FOR_CHECKLIST);
 
         String actualNameOfChecklistReceived = response.jsonPath().getString("name");
@@ -82,7 +89,7 @@ public class ChecklistsAPITest extends ServiceWorkShop {
     @Description("Get a 'name' field on a checklist")
     @Severity(SeverityLevel.NORMAL)
     public void testGetANameOfAChecklist() {
-        Response response = getChecklistsService().getFieldOnAChecklist(checkListTestData.getChecklistId(), CheckListFields.name);
+        Response response = checklistsService.getFieldOnAChecklist(checkListTestData.getChecklistId(), CheckListFields.name);
         String actualNameOfAChecklistReceivedBack = response.jsonPath().getString("_value");
 
         Assert.assertEquals(actualNameOfAChecklistReceivedBack, checkListTestData.NEW_NAME_FOR_CHECKLIST);
@@ -93,7 +100,7 @@ public class ChecklistsAPITest extends ServiceWorkShop {
     @Description("Get a board checklist is on")
     @Severity(SeverityLevel.NORMAL)
     public void testGetABoardTheChecklistIsOn() {
-        Response response = getChecklistsService().getTheBoardTheChecklistIsOn(checkListTestData.getChecklistId());
+        Response response = checklistsService.getTheBoardTheChecklistIsOn(checkListTestData.getChecklistId());
         String actualIdOfABoardReceived = response.jsonPath().getString("id");
 
         Assert.assertEquals(actualIdOfABoardReceived, checkListTestData.getBoardId());
@@ -103,7 +110,7 @@ public class ChecklistsAPITest extends ServiceWorkShop {
     @Description("Get the card checklist is on")
     @Severity(SeverityLevel.NORMAL)
     public void testGetACardTheChecklistIsOn() {
-        Response response = getChecklistsService().getTheCardAChecklistIsOn(checkListTestData.getChecklistId());
+        Response response = checklistsService.getTheCardAChecklistIsOn(checkListTestData.getChecklistId());
         String actualIdOfACardReceived = response.jsonPath().getString("id");
         actualIdOfACardReceived = actualIdOfACardReceived.substring(1, actualIdOfACardReceived.length() - 1);  //have to remove square brackets
 
@@ -114,7 +121,7 @@ public class ChecklistsAPITest extends ServiceWorkShop {
     @Description("Get all checkItems presented on a checklist")
     @Severity(SeverityLevel.NORMAL)
     public void testGetCheckitemsOnAChecklist() {
-        Response response = getChecklistsService().getCheckitemsOnAChecklist(checkListTestData.getChecklistId());
+        Response response = checklistsService.getCheckitemsOnAChecklist(checkListTestData.getChecklistId());
         String adtualCheckItemsOnAChecklist = response.body().asString();
 
         Assert.assertEquals(adtualCheckItemsOnAChecklist, EMPTY_STRING);
@@ -124,18 +131,18 @@ public class ChecklistsAPITest extends ServiceWorkShop {
     @Description("Create new checkItem on a checklist")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateCheckitemOnChecklist() {
-        Response response = getChecklistsService().createCheckitemOnChecklist(checkListTestData.getChecklistId(), checkListTestData.NAME_FOR_NEW_CHECKITEM);
+        Response response = checklistsService.createCheckitemOnChecklist(checkListTestData.getChecklistId(), checkListTestData.NAME_FOR_NEW_CHECKITEM);
         String actualNameOfNewCheckItem = response.jsonPath().getString("name");
         checkListTestData.setCheckItemId(response.jsonPath().getString("id"));
 
-        Assert.assertEquals(actualNameOfNewCheckItem, checkListTestData.NAME_FOR_NEW_CHECKITEM);
+        Assert.assertEquals(actualNameOfNewCheckItem, CheckListTestData.NAME_FOR_NEW_CHECKITEM);
     }
 
     @Test(priority = 5)
     @Description("Get specific checkItem on a checklist")
     @Severity(SeverityLevel.NORMAL)
     public void testGetACheckitemOnAChecklist() {
-        Response response = getChecklistsService().getACheckitemOnAChecklist(checkListTestData.getChecklistId(), checkListTestData.getCheckItemId());
+        Response response = checklistsService.getACheckitemOnAChecklist(checkListTestData.getChecklistId(), checkListTestData.getCheckItemId());
         String actualCheckItemIdReceived = response.jsonPath().getString("id");
 
         Assert.assertEquals(actualCheckItemIdReceived, checkListTestData.getCheckItemId());
@@ -145,17 +152,17 @@ public class ChecklistsAPITest extends ServiceWorkShop {
     @Description("Delete specific checkItem from checklist")
     @Severity(SeverityLevel.NORMAL)
     public void testDeleteCheckitemFromChecklist() {
-        Response response = getChecklistsService().deleteCheckitemFromChecklist(checkListTestData.getChecklistId(), checkListTestData.getCheckItemId());
+        Response response = checklistsService.deleteCheckitemFromChecklist(checkListTestData.getChecklistId(), checkListTestData.getCheckItemId());
         String emptyBody = response.jsonPath().getString("limits");
 
-        Assert.assertEquals(emptyBody, EXPECTED_EMPTY_STRING_RESULT);
+        Assert.assertEquals(emptyBody, CommonConfigData.EXPECTED_EMPTY_STRING_RESULT);
     }
 
     @Test(priority = 7)
     @Description("Delete checklist")
     @Severity(SeverityLevel.NORMAL)
     public void testDeleteAChecklist() {
-        Response response = getChecklistsService().deleteAChecklist(checkListTestData.getChecklistId());
+        Response response = checklistsService.deleteAChecklist(checkListTestData.getChecklistId());
         String emptyBody = response.jsonPath().getString("limits");
 
         Assert.assertEquals(emptyBody, EXPECTED_EMPTY_STRING_RESULT);

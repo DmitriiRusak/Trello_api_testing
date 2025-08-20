@@ -1,9 +1,8 @@
 package api.tests;
 
 import api.resourcesForTests.configurationData.ActionTestData;
-import api.services.ServiceWorkShop;
+import api.services.ActionsService;
 import api.resourcesForTests.PathParameters.*;
-import api.resourcesForTests.configurationData.CommonConfigData.*;
 import api.utils.LogFactory;
 import api.utils.TestListener;
 import io.qameta.allure.*;
@@ -24,24 +23,28 @@ import java.util.Map;
 @Feature("Actions")
 @Tag("api")
 @Listeners(TestListener.class)
-public class ActionsAPITest extends ServiceWorkShop {
+public class ActionsAPITest {
 
-    private ActionTestData actionTestData = new ActionTestData();
+    private final ActionTestData actionTestData = new ActionTestData();
+    private final ActionsService actionsService = new ActionsService();
 
     @BeforeClass
     public void setUp() {
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        actionTestData.setBoardId(getActionsService().createABord(actionTestData.BOARD_NAME));
-        actionTestData.setToDoListId(getActionsService().getListOfIdOfAllListsOnABoard(actionTestData.getBoardId()).get(0).toString());
-        actionTestData.setActiontId(getActionsService().getIdOfTheFirestActionOnABoard(actionTestData.getBoardId()));
-        actionTestData.setIdMemberCreator(getActionsService().getAnAction(actionTestData.getActiontId()).jsonPath().getString("idMemberCreator"));
-        actionTestData.setIdOrganizationThatBelongToAnAction(getActionsService().getAnAction(actionTestData.getActiontId()).jsonPath().getString("data.organization.id"));
+        actionTestData.setBoardId(actionsService.createABord(actionTestData.getBOARD_NAME(), actionsService.getActionRequestSpecification()));
+        actionTestData.setToDoListId(actionsService.getListOfIdOfAllListsOnABoard(actionTestData.getBoardId(), actionsService.getActionRequestSpecification()).get(0).toString());
+        actionTestData.setActiontId(actionsService.getIdOfTheFirestActionOnABoard(actionTestData.getBoardId(), actionsService.getActionRequestSpecification()));
+
+        actionTestData.setIdMemberCreator(actionsService.getAnAction(actionTestData.getActiontId()).jsonPath().getString("idMemberCreator"));
+
+        actionTestData.setIdOrganizationThatBelongToAnAction(actionsService.getAnAction(actionTestData.getActiontId()).jsonPath().getString("data.organization.id"));
+
     }
 
     @AfterClass
     public void tearDown() {
 
-        getActionsService().deleteBoard(actionTestData.getBoardId());
+        actionsService.deleteBoard(actionTestData.getBoardId(), actionsService.getActionRequestSpecification());
 
     }
 
@@ -49,7 +52,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Description("Get the action from a board")
     @Severity(SeverityLevel.NORMAL)
     public void testGetAnAction() {
-        Response response = getActionsService().getAnAction(actionTestData.getActiontId());
+        Response response = actionsService.getAnAction(actionTestData.getActiontId());
 
         Assert.assertEquals(response.jsonPath().getString("id"), actionTestData.getActiontId());
     }
@@ -64,13 +67,11 @@ public class ActionsAPITest extends ServiceWorkShop {
         queryParametersForRequestSpec.put("idList",  actionTestData.getToDoListId());
         queryParametersForRequestSpec.put("name", "card for actions");
 
-        actionTestData.setCardId(getActionsService().createACard(queryParametersForRequestSpec).jsonPath().getString("id"));
+        actionTestData.setCardId(actionsService.createACard(queryParametersForRequestSpec, actionsService.getActionRequestSpecification()).jsonPath().getString("id"));
 
-        actionTestData.setActionIdAfterCreatingACard(getActionsService().addNewComentToACard(actionTestData.getCardId(), commentForAnAction, ActionsEndPoints.COMMENTS_ENDPOINT).jsonPath().getString("id"));
+        actionTestData.setActionIdAfterCreatingACard(actionsService.addNewComentToACard(actionTestData.getCardId(), commentForAnAction, ActionsEndPoints.COMMENTS_ENDPOINT, actionsService.getActionRequestSpecification()).jsonPath().getString("id"));
 
-        System.out.println("----------------------------------------> " + actionTestData.getActionIdAfterCreatingACard());
-
-        Response response = getActionsService().updateACommentOfTheAction(actionTestData.getActionIdAfterCreatingACard(), updatedCommentForAnAction);
+        Response response = actionsService.updateACommentOfTheAction(actionTestData.getActionIdAfterCreatingACard(), updatedCommentForAnAction);
         //Для ассерта надо достать обновлённый комент респонса и сверить с updatedCommentForAnAction
     }
 
@@ -80,7 +81,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     public void testGetASpecificFieldOnAnAction() {
 
         LocalDate currentDateTime = LocalDate.now();
-        Response response = getActionsService().getTheResourceOfAnAction(actionTestData.getActionIdAfterCreatingACard(), ActionsEndPoints.DATE_ENDPOINT);
+        Response response = actionsService.getTheResourceOfAnAction(actionTestData.getActionIdAfterCreatingACard(), ActionsEndPoints.DATE_ENDPOINT);
 
         String recivedDateOfAnAction = response.jsonPath().getString("_value").substring(0, 10);
 
@@ -93,11 +94,11 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetTheBoardForAnAction() {
 
-        Response response = getActionsService().getTheResourceOfAnAction(actionTestData.getActionIdAfterCreatingACard(), ActionsEndPoints.BOARD_ENDPOINT);
+        Response response = actionsService.getTheResourceOfAnAction(actionTestData.getActionIdAfterCreatingACard(), ActionsEndPoints.BOARD_ENDPOINT);
         String boardNameRecivedFromApiCall = response.jsonPath().getString("name");
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(boardNameRecivedFromApiCall, actionTestData.BOARD_NAME);
+        Assert.assertEquals(boardNameRecivedFromApiCall, actionTestData.getBOARD_NAME());
     }
 
     @Test(priority = 2)
@@ -105,7 +106,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetTheCardForAnAction() {
 
-        Response response = getActionsService().getTheResourceOfAnAction(actionTestData.getActionIdAfterCreatingACard(), ActionsEndPoints.CARD_ENDPOINT);
+        Response response = actionsService.getTheResourceOfAnAction(actionTestData.getActionIdAfterCreatingACard(), ActionsEndPoints.CARD_ENDPOINT);
         String cardIdRecivedFromApiCall = response.jsonPath().getString("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -117,7 +118,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetTheListForAnAction() {
 
-        Response response = getActionsService().getTheResourceOfAnAction(actionTestData.getActionIdAfterCreatingACard(), ActionsEndPoints.LIST_ENDPOINT);
+        Response response = actionsService.getTheResourceOfAnAction(actionTestData.getActionIdAfterCreatingACard(), ActionsEndPoints.LIST_ENDPOINT);
         String listIdRecivedFromApiCall = response.jsonPath().getString("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -129,7 +130,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetTheMemberCreatorOfAnAction() {
 
-        Response response = getActionsService().getTheResourceOfAnAction(actionTestData.getActiontId(), ActionsEndPoints.MEMBER_CREATOR_ENDPOINT);
+        Response response = actionsService.getTheResourceOfAnAction(actionTestData.getActiontId(), ActionsEndPoints.MEMBER_CREATOR_ENDPOINT);
         String memberCreatorIdRecivedFromApiCall = response.jsonPath().getString("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -141,7 +142,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetTheOrganizationOfAnAction() {
 
-        Response response = getActionsService().getTheResourceOfAnAction(actionTestData.getActiontId(), ActionsEndPoints.ORGANIZATION_ENDPOINT);
+        Response response = actionsService.getTheResourceOfAnAction(actionTestData.getActiontId(), ActionsEndPoints.ORGANIZATION_ENDPOINT);
 
         String idOfOrganizationRecivedFromApiCall = response.jsonPath().getString("id");
 
@@ -153,7 +154,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetActions_Reactions() {
 
-        Response response = getActionsService().getActions_Reactions(actionTestData.getActiontId());
+        Response response = actionsService.getActions_Reactions(actionTestData.getActiontId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.body().asString(), "[]");
@@ -165,7 +166,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     public void testCreateReactionForAction() {
 
         String expectedEmojiName = "GRINNING FACE";
-        Response response = getActionsService().createReactionForAction(actionTestData.getActionIdAfterCreatingACard());
+        Response response = actionsService.createReactionForAction(actionTestData.getActionIdAfterCreatingACard());
         String actualEmojiName = response.jsonPath().getString("emoji.name");
         actionTestData.setIdOfReaction(response.jsonPath().getString("id"));
 
@@ -177,7 +178,7 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testGetActionsReaction() {
 
-        Response response = getActionsService().getActionsReaction(actionTestData.getActionIdAfterCreatingACard(), actionTestData.getIdOfReaction());
+        Response response = actionsService.getActionsReaction(actionTestData.getActionIdAfterCreatingACard(), actionTestData.getIdOfReaction());
         String idOfReactionReceivedBack = response.jsonPath().getString("id");
 
         Assert.assertEquals(idOfReactionReceivedBack, actionTestData.getIdOfReaction());
@@ -190,7 +191,7 @@ public class ActionsAPITest extends ServiceWorkShop {
 
         JSONObject jsonObject = new JSONObject();
 
-        Response response = getActionsService().deleteActionsReaction(actionTestData.getActionIdAfterCreatingACard(), actionTestData.getIdOfReaction());
+        Response response = actionsService.deleteActionsReaction(actionTestData.getActionIdAfterCreatingACard(), actionTestData.getIdOfReaction());
         Assert.assertEquals(response.body().asString(), jsonObject.toString());
     }
 
@@ -199,14 +200,11 @@ public class ActionsAPITest extends ServiceWorkShop {
     @Severity(SeverityLevel.NORMAL)
     public void testDeleteAnAction() {
         String responseMessageForDeletedAction = "The requested resource was not found.";
-        System.out.println("----------------------------------------> " + actionTestData.getActionIdAfterCreatingACard());
-        Response response = getActionsService().deleteAnAction(actionTestData.getActionIdAfterCreatingACard());
+        Response response = actionsService.deleteAnAction(actionTestData.getActionIdAfterCreatingACard());
 
         Assert.assertEquals(response.getStatusCode(), 200);
 
-        String actualMessage = getActionsService().getAnAction(actionTestData.getActionIdAfterCreatingACard()).asPrettyString();
-
-        System.out.println(actualMessage + " " + responseMessageForDeletedAction);
+        String actualMessage = actionsService.getAnAction(actionTestData.getActionIdAfterCreatingACard()).asPrettyString();
 
         Assert.assertEquals(actualMessage,
                 responseMessageForDeletedAction);

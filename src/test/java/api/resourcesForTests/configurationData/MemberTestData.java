@@ -2,15 +2,31 @@ package api.resourcesForTests.configurationData;
 
 public class MemberTestData {
 
-    public static final String BOARD_NAME_FOR_MEMBERS = "Board_for_Members";
-    public static final String BOARD_STAR_NOT_FOUND_MESSAGE = "Board star not found";
-    public static final String POSITION = "top";
-    public static final String UPDATE_POSITION = "bottom";
+    private final String BOARD_NAME_FOR_MEMBERS = "Board_for_Members";
+    private final String BOARD_STAR_NOT_FOUND_MESSAGE = "Board star not found";
+    private final String POSITION = "top";
+    private final String UPDATE_POSITION = "bottom";
 
     private String firstMemberId;
     private String backgroundId;
     private String starId;
     private String boardId;
+
+    public String getBOARD_NAME_FOR_MEMBERS() {
+        return BOARD_NAME_FOR_MEMBERS;
+    }
+
+    public String getBOARD_STAR_NOT_FOUND_MESSAGE() {
+        return BOARD_STAR_NOT_FOUND_MESSAGE;
+    }
+
+    public String getPOSITION() {
+        return POSITION;
+    }
+
+    public String getUPDATE_POSITION() {
+        return UPDATE_POSITION;
+    }
 
     public String getFirstMemberId() {
         return firstMemberId;

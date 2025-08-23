@@ -4,24 +4,39 @@ import api.resourcesForTests.PathParameters;
 import api.utils.ApiClient;
 import api.utils.Specification;
 import io.qameta.allure.Step;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static api.resourcesForTests.PathParameters.LabelsPath.LABELS_BASE_PATH;
 
 public class LabelsService{
 
-    private Specification specification = new Specification();
-    private RequestSpecification labelRequestSpecification = RestAssured.given().spec(specification.installRequest());
-    private final ApiClient apiClient = new ApiClient();
+    private final Specification specification = new Specification();
+    private RequestSpecification labelRequestSpecification;
 
-    public RequestSpecification getLabelRequestSpecification() {
-        return labelRequestSpecification;
+    public LabelsService(){
+        reSetLabelRequestSpecification();
     }
 
     public void reSetLabelRequestSpecification() {
-        labelRequestSpecification = RestAssured.given().spec(specification.installRequest());
+        Map<String, String> authoriazing = new HashMap<>();
+        authoriazing.put("key", specification.getKey());
+        authoriazing.put("token", specification.getToken());
+
+        labelRequestSpecification = new RequestSpecBuilder().
+                addFilter(new AllureRestAssured()).
+//                .addFilter(new MyRestAssuredFilter())
+        setContentType(ContentType.JSON).
+                addQueryParams(authoriazing).
+                setBaseUri("https://api.trello.com/1/").
+                build();
     }
 
     @Step("Create a new Label: name = {name}, color = {color}, board id = {idBoard}")
@@ -30,7 +45,7 @@ public class LabelsService{
         labelRequestSpecification.queryParam("color", color);
         labelRequestSpecification.queryParam("idBoard", boardId);
 
-        Response response = apiClient.post(LABELS_BASE_PATH, labelRequestSpecification);
+        Response response = ApiClient.getInstance().post(LABELS_BASE_PATH, labelRequestSpecification);
         reSetLabelRequestSpecification();
         return response;
     }
@@ -38,7 +53,7 @@ public class LabelsService{
     public Response addALabelToACard(String cardId, String idOfALabel) {
 
         labelRequestSpecification.queryParam("value", idOfALabel);
-        Response response = apiClient.post(PathParameters.CardsEndPoints.CARDS_BASE_PATH +
+        Response response = ApiClient.getInstance().post(PathParameters.CardsEndPoints.CARDS_BASE_PATH +
                         cardId +
                         PathParameters.CardsEndPoints.ID_LABELS_ENDPOINT,
                 labelRequestSpecification);
@@ -49,7 +64,7 @@ public class LabelsService{
 
     @Step("Get a Label: id label = {labelId}")
     public Response getLabel(String labelId) {
-        Response response = apiClient.get(LABELS_BASE_PATH + labelId, labelRequestSpecification);
+        Response response = ApiClient.getInstance().get(LABELS_BASE_PATH + labelId, labelRequestSpecification);
         reSetLabelRequestSpecification();
         return response;
     }
@@ -59,7 +74,7 @@ public class LabelsService{
         labelRequestSpecification.queryParam("name", newName);
         labelRequestSpecification.queryParam("color", newColor);
 
-        Response response = apiClient.put(LABELS_BASE_PATH + labelId, labelRequestSpecification);
+        Response response = ApiClient.getInstance().put(LABELS_BASE_PATH + labelId, labelRequestSpecification);
         reSetLabelRequestSpecification();
         return response;
     }
@@ -76,26 +91,26 @@ public class LabelsService{
     @Step("Delete Label: label id = {labelId}")
     public Response deleteLabel(String labelId) {
 
-        Response response = apiClient.delete(LABELS_BASE_PATH + labelId, labelRequestSpecification);
+        Response response = ApiClient.getInstance().delete(LABELS_BASE_PATH + labelId, labelRequestSpecification);
         reSetLabelRequestSpecification();
         return response;
     }
 
     @Step("Create a board with a name {boardName}")
-    public String createABord(String boardName, RequestSpecification specificToTestClassRequestSpecification) {
+    public String createABord(String boardName) {
 
-        specificToTestClassRequestSpecification.queryParam("name", boardName);
+        labelRequestSpecification.queryParam("name", boardName);
 
-        Response response = apiClient.post(PathParameters.BoardEndPoints.BOARDS_BASE_PATH, specificToTestClassRequestSpecification);
+        Response response = ApiClient.getInstance().post(PathParameters.BoardEndPoints.BOARDS_BASE_PATH, labelRequestSpecification);
         reSetLabelRequestSpecification();
 
         return response.jsonPath().getString("id");
     }
 
     @Step("Delete a board with id = {boardId}")
-    public void deleteBoard(String boardId, RequestSpecification specificToTestClassRequestSpecification) {
+    public void deleteBoard(String boardId) {
 
-        apiClient.delete(PathParameters.BoardEndPoints.BOARDS_BASE_PATH + boardId, specificToTestClassRequestSpecification);
+        ApiClient.getInstance().delete(PathParameters.BoardEndPoints.BOARDS_BASE_PATH + boardId, labelRequestSpecification);
         reSetLabelRequestSpecification();
     }
 }

@@ -1,6 +1,5 @@
 package api.tests;
 
-import api.resourcesForTests.configurationData.CommonConfigData;
 import api.resourcesForTests.configurationData.LabelTestData;
 import api.services.LabelsService;
 import api.utils.LogFactory;
@@ -25,25 +24,25 @@ public class LabelsApiTest{
     public void setUp() {
 
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        labelTestData.setBoardId(labelsService.createABord(labelTestData.BOARD_NAME, labelsService.getLabelRequestSpecification()));
+        labelTestData.setBoardId(labelsService.createABord(labelTestData.getBOARD_NAME()));
     }
 
     @AfterClass
     public void tearDown() {
-        labelsService.deleteBoard(labelTestData.getBoardId(), labelsService.getLabelRequestSpecification());
+        labelsService.deleteBoard(labelTestData.getBoardId());
     }
 
     @Test()
     @Description("Create a new Label on a Board")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateLabel() {
-        Response response = labelsService.createLabel(labelTestData.LABEL_NAME, labelTestData.COLOR, labelTestData.getBoardId());
+        Response response = labelsService.createLabel(labelTestData.getLABEL_NAME(), labelTestData.getCOLOR(), labelTestData.getBoardId());
 
         labelTestData.setLabelId(response.body().jsonPath().get("id"));
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().jsonPath().get("name"), labelTestData.LABEL_NAME);
-        Assert.assertEquals(response.body().jsonPath().get("color"), labelTestData.COLOR);
+        Assert.assertEquals(response.body().jsonPath().get("name"), labelTestData.getLABEL_NAME());
+        Assert.assertEquals(response.body().jsonPath().get("color"), labelTestData.getCOLOR());
     }
 
     @Test(priority = 1)
@@ -60,11 +59,11 @@ public class LabelsApiTest{
     @Description("Update label")
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateLabel() {
-        Response response = labelsService.updateLabel(labelTestData.getLabelId(), labelTestData.NEW_NAME, labelTestData.NEW_COLOR);
+        Response response = labelsService.updateLabel(labelTestData.getLabelId(), labelTestData.getNEW_NAME(), labelTestData.getNEW_COLOR());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response.body().jsonPath().getString("name"), labelTestData.NEW_NAME);
-        Assert.assertEquals(response.body().jsonPath().getString("color"),labelTestData.NEW_COLOR);
+        Assert.assertEquals(response.body().jsonPath().getString("name"), labelTestData.getNEW_NAME());
+        Assert.assertEquals(response.body().jsonPath().getString("color"),labelTestData.getNEW_COLOR());
     }
 
     @Test(priority = 2)

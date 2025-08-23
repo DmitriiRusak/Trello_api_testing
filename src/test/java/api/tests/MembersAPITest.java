@@ -23,18 +23,14 @@ public class MembersAPITest{
     public void setUp() {
 
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        memberTestData.setBoardId(membersService.createABord(memberTestData.BOARD_NAME_FOR_MEMBERS, membersService.getMemberRequestSpecification()));
-        membersService.reSetMemberRequestSpecification();
-        memberTestData.setFirstMemberId(membersService.getTheMembersOfABoard(memberTestData.getBoardId(), membersService.getMemberRequestSpecification()).jsonPath().getString("id"));
-        membersService.reSetMemberRequestSpecification();
+        memberTestData.setBoardId(membersService.createABord(memberTestData.getBOARD_NAME_FOR_MEMBERS()));
+        memberTestData.setFirstMemberId(membersService.getTheMembersOfABoard(memberTestData.getBoardId()).jsonPath().getString("id"));
         memberTestData.setFirstMemberId(memberTestData.getFirstMemberId().substring(1, memberTestData.getFirstMemberId().length() - 1));
-        membersService.reSetMemberRequestSpecification();
     }
 
     @AfterClass
     public void tearDown() {
-        membersService.deleteBoard(memberTestData.getBoardId(), membersService.getMemberRequestSpecification());
-        membersService.reSetMemberRequestSpecification();
+        membersService.deleteBoard(memberTestData.getBoardId());
     }
 
     @Test(priority = 0)
@@ -76,7 +72,7 @@ public class MembersAPITest{
     @Severity(SeverityLevel.NORMAL)
     public void testCreateStarForBoard() {
 
-        Response response = membersService.createStarForABoard(memberTestData.getFirstMemberId(), memberTestData.getBoardId(), memberTestData.POSITION);
+        Response response = membersService.createStarForABoard(memberTestData.getFirstMemberId(), memberTestData.getBoardId(), memberTestData.getPOSITION());
         String idOfABoardTheStarIsOn = response.jsonPath().getString("idBoard");
         memberTestData.setStarId(response.body().jsonPath().getString("id"));
 
@@ -100,7 +96,7 @@ public class MembersAPITest{
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateThePositionOfABoardStarOfAMember() {
         String positionOfABoardStarBeforeUpdate = membersService.getBoardStarOfAMember(memberTestData.getFirstMemberId(), memberTestData.getStarId()).jsonPath().getString("pos");
-        Response response = membersService.updateThePositionOfABoardStarOfAMember(memberTestData.getFirstMemberId(), memberTestData.getStarId(), memberTestData.UPDATE_POSITION);
+        Response response = membersService.updateThePositionOfABoardStarOfAMember(memberTestData.getFirstMemberId(), memberTestData.getStarId(), memberTestData.getUPDATE_POSITION());
         String positionOfABoardStarAfterUpdate = response.jsonPath().getString("pos");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -116,7 +112,7 @@ public class MembersAPITest{
         Response response1 =  membersService.getBoardStarOfAMember(memberTestData.getFirstMemberId(), memberTestData.getStarId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response1.asPrettyString(), memberTestData.BOARD_STAR_NOT_FOUND_MESSAGE);
+        Assert.assertEquals(response1.asPrettyString(), memberTestData.getBOARD_STAR_NOT_FOUND_MESSAGE());
     }
 
     @Test(priority = 6)

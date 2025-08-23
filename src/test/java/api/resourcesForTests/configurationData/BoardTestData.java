@@ -11,6 +11,7 @@ public class BoardTestData {
     private final String NAME_OF_A_FILTER = "closed";
     private final String NEW_NAME_FOR_A_BOARD = "New BoardApiTest";
     private final String PERMISSION_LEVEL_PUBLIC = "public";
+    private final String FIELD_NAME = "name";
 
     private String boardId;
     private String secondBoardId;
@@ -21,6 +22,10 @@ public class BoardTestData {
 
     public String getToDoListId() {
         return toDoListId;
+    }
+
+    public String getFIELD_NAME() {
+        return FIELD_NAME;
     }
 
     public void setToDoListId(String toDoListId) {

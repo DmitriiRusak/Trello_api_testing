@@ -11,6 +11,8 @@ import java.util.List;
 
 public class CommonConfigData {
 
+    // I removed all variables from RestAssured part of the project, I left the class exist in case I want to rebuild cucumber part.
+
     public static final String EMPTY_STRING = "[]";
     public static final String EXPECTED_EMPTY_STRING_RESULT = "[:]";
     public static final String FIELD_NAME = "name";
@@ -20,10 +22,6 @@ public class CommonConfigData {
 
     public Response getCommonResponseBetweenSteps() {
         return commonResponseBetweenSteps;
-    }
-
-    public void setCommonResponseBetweenSteps(Response commonResponseBetweenSteps) {
-        commonResponseBetweenSteps = commonResponseBetweenSteps;
     }
 
     public List getUniversalListForResource() {

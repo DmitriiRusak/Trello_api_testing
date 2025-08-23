@@ -15,8 +15,6 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import java.util.HashMap;
 
-import static api.resourcesForTests.configurationData.CommonConfigData.EMPTY_STRING;
-import static api.resourcesForTests.configurationData.CommonConfigData.EXPECTED_EMPTY_STRING_RESULT;
 
 @Epic("API Tests")
 @Feature("Checklist")
@@ -31,36 +29,32 @@ public class ChecklistsAPITest{
     public void setUp() {
 
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        checkListTestData.setBoardId(checklistsService.createABord(CheckListTestData.BOARD_NAME_FOR_CHECKLIST, checklistsService.getChecklistRequestSpecification()));
-        checklistsService.reSetChecklistRequestSpecification();
-        checkListTestData.setToDoListId(checklistsService.getListOfIdOfAllListsOnABoard(checkListTestData.getBoardId(), checklistsService.getChecklistRequestSpecification()).get(0).toString());
-        checklistsService.reSetChecklistRequestSpecification();
+        checkListTestData.setBoardId(checklistsService.createABord(checkListTestData.getBOARD_NAME_FOR_CHECKLIST()));
+        checkListTestData.setToDoListId(checklistsService.getListOfIdOfAllListsOnABoard(checkListTestData.getBoardId()).get(0).toString());
 
         checkListTestData.setCardId(checklistsService.
                 createACard(new HashMap<>() {{
                     put("idList", checkListTestData.getToDoListId());
                     put("name", "card");
-                }}, checklistsService.getChecklistRequestSpecification())
+                }})
                 .jsonPath().getString("id"));
-        checklistsService.reSetChecklistRequestSpecification();
     }
 
     @AfterClass
     public void tearDown() {
-        checklistsService.deleteBoard(checkListTestData.getBoardId(), checklistsService.getChecklistRequestSpecification());
-        checklistsService.reSetChecklistRequestSpecification();
+        checklistsService.deleteBoard(checkListTestData.getBoardId());
     }
 
     @Test(priority = 0)
     @Description("Create a checklist on a card")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateAChecklist() {
-        Response response = checklistsService.createChecklistFromCheckListService(checkListTestData.getCardId(), CheckListTestData.NAME_OF_CHECKLIST_CREATED, checklistsService.getChecklistRequestSpecification());
+        Response response = checklistsService.createChecklistFromCheckListService(checkListTestData.getCardId(), checkListTestData.getNAME_OF_CHECKLIST_CREATED());
 
         String actualNameOfChecklistReceived = response.jsonPath().getString("name");
         checkListTestData.setChecklistId(response.jsonPath().getString("id"));
 
-        Assert.assertEquals(actualNameOfChecklistReceived, CheckListTestData.NAME_OF_CHECKLIST_CREATED);
+        Assert.assertEquals(actualNameOfChecklistReceived, checkListTestData.getNAME_OF_CHECKLIST_CREATED());
     }
 
     @Test(priority = 1)
@@ -78,11 +72,11 @@ public class ChecklistsAPITest{
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateAChecklist() {
         Response response = checklistsService.updateAFieldOfCheckList(checkListTestData.getChecklistId(),
-                CheckListFields.name, checkListTestData.NEW_NAME_FOR_CHECKLIST);
+                CheckListFields.name, checkListTestData.getNEW_NAME_FOR_CHECKLIST());
 
         String actualNameOfChecklistReceived = response.jsonPath().getString("name");
 
-        Assert.assertEquals(actualNameOfChecklistReceived, checkListTestData.NEW_NAME_FOR_CHECKLIST);
+        Assert.assertEquals(actualNameOfChecklistReceived, checkListTestData.getNEW_NAME_FOR_CHECKLIST());
     }
 
     @Test(priority = 3)
@@ -92,7 +86,7 @@ public class ChecklistsAPITest{
         Response response = checklistsService.getFieldOnAChecklist(checkListTestData.getChecklistId(), CheckListFields.name);
         String actualNameOfAChecklistReceivedBack = response.jsonPath().getString("_value");
 
-        Assert.assertEquals(actualNameOfAChecklistReceivedBack, checkListTestData.NEW_NAME_FOR_CHECKLIST);
+        Assert.assertEquals(actualNameOfAChecklistReceivedBack, checkListTestData.getNEW_NAME_FOR_CHECKLIST());
 
     }
 
@@ -124,18 +118,18 @@ public class ChecklistsAPITest{
         Response response = checklistsService.getCheckitemsOnAChecklist(checkListTestData.getChecklistId());
         String adtualCheckItemsOnAChecklist = response.body().asString();
 
-        Assert.assertEquals(adtualCheckItemsOnAChecklist, EMPTY_STRING);
+        Assert.assertEquals(adtualCheckItemsOnAChecklist, checkListTestData.getEMPTY_STRING());
     }
 
     @Test(priority = 4)
     @Description("Create new checkItem on a checklist")
     @Severity(SeverityLevel.NORMAL)
     public void testCreateCheckitemOnChecklist() {
-        Response response = checklistsService.createCheckitemOnChecklist(checkListTestData.getChecklistId(), checkListTestData.NAME_FOR_NEW_CHECKITEM);
+        Response response = checklistsService.createCheckitemOnChecklist(checkListTestData.getChecklistId(), checkListTestData.getNAME_FOR_NEW_CHECKITEM());
         String actualNameOfNewCheckItem = response.jsonPath().getString("name");
         checkListTestData.setCheckItemId(response.jsonPath().getString("id"));
 
-        Assert.assertEquals(actualNameOfNewCheckItem, CheckListTestData.NAME_FOR_NEW_CHECKITEM);
+        Assert.assertEquals(actualNameOfNewCheckItem, checkListTestData.getNAME_FOR_NEW_CHECKITEM());
     }
 
     @Test(priority = 5)
@@ -155,7 +149,7 @@ public class ChecklistsAPITest{
         Response response = checklistsService.deleteCheckitemFromChecklist(checkListTestData.getChecklistId(), checkListTestData.getCheckItemId());
         String emptyBody = response.jsonPath().getString("limits");
 
-        Assert.assertEquals(emptyBody, CommonConfigData.EXPECTED_EMPTY_STRING_RESULT);
+        Assert.assertEquals(emptyBody, checkListTestData.getEXPECTED_EMPTY_STRING_RESULT());
     }
 
     @Test(priority = 7)
@@ -165,6 +159,6 @@ public class ChecklistsAPITest{
         Response response = checklistsService.deleteAChecklist(checkListTestData.getChecklistId());
         String emptyBody = response.jsonPath().getString("limits");
 
-        Assert.assertEquals(emptyBody, EXPECTED_EMPTY_STRING_RESULT);
+        Assert.assertEquals(emptyBody, checkListTestData.getEXPECTED_EMPTY_STRING_RESULT());
     }
 }

@@ -2,8 +2,10 @@ package api.resourcesForTests.configurationData;
 
 public class CardTestData {
 
-    public final static String BOARD_NAME_FOR_CARDS = "Board_for_Cards";
-    public final static String NAME_FOR_CHECKLIST_CREATED = "Checklist for CardsAPITest";
+    private final String BOARD_NAME_FOR_CARDS = "Board_for_Cards";
+    private final String NAME_FOR_CHECKLIST_CREATED = "Checklist for CardsAPITest";
+    private final String EMPTY_STRING = "[]";
+    private final String EXPECTED_EMPTY_STRING_RESULT = "[:]";
 
     private String boardId;
     private String cardId;
@@ -11,6 +13,22 @@ public class CardTestData {
     private String currentListId;
     private String createdAttachmentId;
     private String toDoListId;
+
+    public String getEMPTY_STRING() {
+        return EMPTY_STRING;
+    }
+
+    public String getBoardNameForCards() {
+        return BOARD_NAME_FOR_CARDS;
+    }
+
+    public String getNAME_FOR_CHECKLIST_CREATED() {
+        return NAME_FOR_CHECKLIST_CREATED;
+    }
+
+    public String getEXPECTED_EMPTY_STRING_RESULT() {
+        return EXPECTED_EMPTY_STRING_RESULT;
+    }
 
     public String getToDoListId() {
         return toDoListId;

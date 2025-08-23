@@ -1,17 +1,17 @@
 package api.utils;
 
-//import api.cucumber.runners.EndToEndBasicSetUpTest;
-//import api.cucumber.runners.EndToEndCustomerEnvironmentTest;
 import io.restassured.response.Response;
 import io.restassured.specification.QueryableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.SpecificationQuerier;
 
+import static io.restassured.RestAssured.given;
+
 public class ApiClient {
 
     private static ApiClient instance;
     private static QueryableRequestSpecification queryableRequestSpecification;
-    private static Response response;
+//    private static Response response;
     public static ApiClient getInstance() {
 
         if (instance == null) {
@@ -24,7 +24,9 @@ public class ApiClient {
     public Response get(String path, RequestSpecification requestSpecification) {
 
         queryableRequestSpecification = SpecificationQuerier.query(requestSpecification);
-        response = requestSpecification.get(path);
+        Response response = given().
+                spec(requestSpecification).
+                get(path);
 
         restAssuredLogsIntegration(queryableRequestSpecification, response);
         cucumberLogsIntegration(queryableRequestSpecification, response);
@@ -35,7 +37,10 @@ public class ApiClient {
     public Response post(String path, RequestSpecification requestSpecification) {
 
         queryableRequestSpecification = SpecificationQuerier.query(requestSpecification);
-        response = requestSpecification.post(path);
+
+        Response response = given().
+                spec(requestSpecification).
+                post(path);
 
         restAssuredLogsIntegration(queryableRequestSpecification, response);
         cucumberLogsIntegration(queryableRequestSpecification, response);
@@ -46,7 +51,9 @@ public class ApiClient {
     public Response put(String path, RequestSpecification requestSpecification) {
 
         queryableRequestSpecification = SpecificationQuerier.query(requestSpecification);
-        response = requestSpecification.put(path);
+        Response response = given().
+                spec(requestSpecification).
+                put(path);
 
         restAssuredLogsIntegration(queryableRequestSpecification, response);
         cucumberLogsIntegration(queryableRequestSpecification, response);
@@ -57,7 +64,10 @@ public class ApiClient {
     public Response delete(String path, RequestSpecification requestSpecification) {
 
         queryableRequestSpecification = SpecificationQuerier.query(requestSpecification);
-        response = requestSpecification.delete(path);
+
+        Response response = given().
+                spec(requestSpecification).
+                delete(path);
 
         restAssuredLogsIntegration(queryableRequestSpecification, response);
         cucumberLogsIntegration(queryableRequestSpecification, response);

@@ -26,15 +26,7 @@ public class Specification {
         }
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-        public RequestSpecification installRequest() {
+    public RequestSpecification installRequest() {
 
         Map<String, String> authoriazing = new HashMap<>();
         authoriazing.put("key", key);
@@ -42,7 +34,7 @@ public class Specification {
 
             return new RequestSpecBuilder().
                 addFilter(new AllureRestAssured()).
-//                .addFilter(new MyRestAssuredFilter())
+                addFilter(new MyRestAssuredFilter()).
                 setContentType(ContentType.JSON).
                 addQueryParams(authoriazing).
                 setBaseUri("https://api.trello.com/1/").

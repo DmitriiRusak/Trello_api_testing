@@ -1,3 +1,4 @@
+@DeleteACard
 Feature: Delete a card
 
   As an authorized user.

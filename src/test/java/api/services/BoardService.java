@@ -2,6 +2,7 @@ package api.services;
 
 import api.resourcesForTests.PathParameters;
 import api.resourcesForTests.PathParameters.BoardEndPoints;
+import api.resourcesForTests.configurationData.ListTestData;
 import api.utils.ApiClient;
 import api.utils.Specification;
 import io.qameta.allure.Step;
@@ -26,34 +27,14 @@ import static api.resourcesForTests.PathParameters.MembersPath.MY_WORK_SPACE_END
 public class BoardService{
 
     private final Specification specification = new Specification();
-    private RequestSpecification boardRequestSpecification;
-//    private final ApiClient apiClient = new ApiClient();
-
-    public BoardService(){
-        reSetBoardRequestSpecification();
-    }
-
-    public void reSetBoardRequestSpecification() {
-
-        Map<String, String> authoriazing = new HashMap<>();
-        authoriazing.put("key", specification.getKey());
-        authoriazing.put("token", specification.getToken());
-
-        boardRequestSpecification = new RequestSpecBuilder().
-                addFilter(new AllureRestAssured()).
-//                .addFilter(new MyRestAssuredFilter())
-                setContentType(ContentType.JSON).
-                addQueryParams(authoriazing).
-                setBaseUri("https://api.trello.com/1/").
-                build();
-    }
+    private RequestSpecification boardRequestSpecification = specification.installRequest();
 
     @Step("Create board with name: {nameOfTheBoard}")
     public Response createBoard(String nameOfTheBoard) {
 
         boardRequestSpecification.queryParam("name", nameOfTheBoard);
         Response response = ApiClient.getInstance().post(BoardEndPoints.BOARDS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -62,7 +43,7 @@ public class BoardService{
         boardRequestSpecification.queryParam("name", boardNameCreatedWithSpecificOptions);
         boardRequestSpecification.queryParam("prefs_permissionLevel", permissionLeve);
         Response response = ApiClient.getInstance().post(BoardEndPoints.BOARDS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -70,7 +51,7 @@ public class BoardService{
         boardRequestSpecification.queryParam("name", boardName);
         boardRequestSpecification.queryParam(resourceName, resourceValue);
         Response response = ApiClient.getInstance().post(BoardEndPoints.BOARDS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -78,7 +59,7 @@ public class BoardService{
     public Response deleteABoardFromService(String boardId) {
 
         Response response = ApiClient.getInstance().delete(BoardEndPoints.BOARDS_BASE_PATH + boardId, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -86,7 +67,7 @@ public class BoardService{
     public Response getBoard(String boardId) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -94,7 +75,7 @@ public class BoardService{
     public Response updateBoard(String boardId, String optionName, String optionValue) {
         boardRequestSpecification.param(optionName, optionValue);
         Response response = ApiClient.getInstance().put(BoardEndPoints.BOARDS_BASE_PATH + boardId, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -103,14 +84,14 @@ public class BoardService{
         boardRequestSpecification.queryParam("name", nameOfLabel);
         boardRequestSpecification.queryParam("color", color);
         Response response = ApiClient.getInstance().post(BoardEndPoints.BOARDS_BASE_PATH + boardId + LABELS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get Labels on a Board: id board = {boardId}")
     public Response getLabelsOnBoard(String boardId) {
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + LABELS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -118,14 +99,14 @@ public class BoardService{
     public Response createListOnBoard(String boardId, String nameForList) {
         boardRequestSpecification.queryParam("name", nameForList);
         Response response = ApiClient.getInstance().post(BoardEndPoints.BOARDS_BASE_PATH + boardId + LISTS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("getting a field - {fieldName}, from a bord which id is - {boardId}")
     public Response getAField(String boardId, String fieldName) {
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId +"/"+ fieldName, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -133,14 +114,14 @@ public class BoardService{
     public Response getActionsOfABoard(String boardId) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + PathParameters.ActionsEndPoints.ACTIONS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get checklists presented on a board with id - {'boardId'}")
     public Response getChecklists(String boardId) {
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + CHECKLISTS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -148,7 +129,7 @@ public class BoardService{
     public Response getCardsOfABoard(String boardId) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + CARDS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -156,7 +137,7 @@ public class BoardService{
     public Response getFilteredCardsOfABoard(String boardId, String filterName) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + CARDS_BASE_PATH + filterName, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -164,7 +145,7 @@ public class BoardService{
     public Response getCustomFieldsOfAABoard(String boardId) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + PathParameters.CUSTOM_FIELDS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -172,7 +153,7 @@ public class BoardService{
     public Response getListsOfABoard(String boardId) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + LISTS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -180,7 +161,7 @@ public class BoardService{
     public Response getFilteredListsOfABoard(String boardId, String filter) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + LISTS_BASE_PATH + filter, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -190,7 +171,7 @@ public class BoardService{
         boardRequestSpecification.param("email", "ironman-968-privet-test@ya.ru");
         boardRequestSpecification.param("allowBillableGuest", true);
         Response response = ApiClient.getInstance().put(BoardEndPoints.BOARDS_BASE_PATH + boardId + MEMBERS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -198,7 +179,7 @@ public class BoardService{
     public Response getBoardStarsOfABoard(String boardId) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + BoardEndPoints.boardStarsEnPoint, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -206,14 +187,15 @@ public class BoardService{
     public Response getMembershipsOfABoard(String boardId) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + BoardEndPoints.MEMBER_SHIPS_ENDPOINT, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get resource of a board")
     public Response getOptionOfABoard(String boardId, String resourceEndPoint){
+
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + resourceEndPoint, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -222,7 +204,7 @@ public class BoardService{
 
         Response response = ApiClient.getInstance().delete(BoardEndPoints.BOARDS_BASE_PATH + boardId +
                 MEMBERS_BASE_PATH + memberId, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
 
     }
@@ -235,14 +217,14 @@ public class BoardService{
 
         String tempIdThatWasRecivedBack = response.jsonPath().getString("id");
         tempIdThatWasRecivedBack = tempIdThatWasRecivedBack.substring(1, tempIdThatWasRecivedBack.length()-1);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return tempIdThatWasRecivedBack;
     }
 
     public Response getTheMembersOfABoard(String boardId) {
 
         Response response = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + MEMBERS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -250,7 +232,7 @@ public class BoardService{
     public Response createACard(Map queryParamMap) {
         boardRequestSpecification.queryParams(queryParamMap);
         Response response = ApiClient.getInstance().post(PathParameters.CardsEndPoints.CARDS_BASE_PATH, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -259,7 +241,7 @@ public class BoardService{
 
         Response resp = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + LISTS_BASE_PATH, boardRequestSpecification);
         List <String> list = resp.jsonPath().getList("id");
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return list;
     }
 
@@ -267,7 +249,7 @@ public class BoardService{
     public void deleteBoard(String boardId) {
 
         ApiClient.getInstance().delete(BoardEndPoints.BOARDS_BASE_PATH + boardId, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
     }
 
     @Step("Get resource of a board")
@@ -275,7 +257,7 @@ public class BoardService{
 
         boardRequestSpecification.queryParam("fields", optionName);
         Response response = ApiClient.getInstance().get(resourceEndPoint + resourceId, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -283,7 +265,7 @@ public class BoardService{
     public Response getResourceOfAnObject(String objectEndPoint, String resourceId, String resourceEndPoint){
 
         Response response = ApiClient.getInstance().get(objectEndPoint + resourceId + resourceEndPoint, boardRequestSpecification);
-        reSetBoardRequestSpecification();
+        boardRequestSpecification = specification.installRequest();
         return response;
     }
 

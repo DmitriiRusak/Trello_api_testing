@@ -30,7 +30,7 @@ Feature: Options of a board
 
   Rule: Update an option of a board
 
-      Scenario Outline: Update specific option of a board
+      Scenario Outline: Update option  "<option>" of a board with new value "<value>"
         When I change "<option>" of a board to "<value>"
         Then a board has "<option>" option set wth value "<value>"
 

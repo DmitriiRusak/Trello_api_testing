@@ -23,30 +23,12 @@ import static api.resourcesForTests.PathParameters.ListsPath.LISTS_BASE_PATH;
 public class ChecklistsService{
 
     private final Specification specification = new Specification();
-    private RequestSpecification checklistRequestSpecification;
-
-    public ChecklistsService (){
-        reSetChecklistRequestSpecification();
-    }
-
-    public void reSetChecklistRequestSpecification() {
-        Map<String, String> authoriazing = new HashMap<>();
-        authoriazing.put("key", specification.getKey());
-        authoriazing.put("token", specification.getToken());
-
-        checklistRequestSpecification = new RequestSpecBuilder().
-                addFilter(new AllureRestAssured()).
-//                .addFilter(new MyRestAssuredFilter())
-        setContentType(ContentType.JSON).
-                addQueryParams(authoriazing).
-                setBaseUri("https://api.trello.com/1/").
-                build();
-    }
+    private RequestSpecification checklistRequestSpecification = specification.installRequest();
 
     @Step("Get all fields of a checklist with id - {'checklistId'}")
     public Response getCheckList(String checklistId) {
         Response response = ApiClient.getInstance().get(CHECKLISTS_BASE_PATH + checklistId, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -54,28 +36,28 @@ public class ChecklistsService{
     public Response updateAFieldOfCheckList(String checklistId, CheckListFields nameOfAField, String newValueOfAField) {
         checklistRequestSpecification.queryParam(nameOfAField.toString(), newValueOfAField);
         Response response = ApiClient.getInstance().put(CHECKLISTS_BASE_PATH + checklistId, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get a field - {'fieldToGetBackFromTheChecklist'}, from a checklist with id - {checklistId}")
     public Response getFieldOnAChecklist(String checklistId, CheckListFields fieldToGetBackFromTheChecklist) {
         Response response = ApiClient.getInstance().get(CHECKLISTS_BASE_PATH + checklistId + "/" + fieldToGetBackFromTheChecklist, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get the board the checklist with id - {'checklistId'} is on")
     public Response getTheBoardTheChecklistIsOn(String checklistId) {
         Response response = ApiClient.getInstance().get(CHECKLISTS_BASE_PATH + checklistId + BOARD_ENDPOINT, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get the card the checklist with id - {'checklistId'}, is on.")
     public Response getTheCardAChecklistIsOn(String checklistId) {
         Response response = ApiClient.getInstance().get(CHECKLISTS_BASE_PATH + checklistId + CARDS_ENDPOINT, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -83,35 +65,35 @@ public class ChecklistsService{
     public Response createCheckitemOnChecklist(String checklistId, String nameOfNewCheckItem) {
         checklistRequestSpecification.queryParam("name", nameOfNewCheckItem);
         Response response = ApiClient.getInstance().post(CHECKLISTS_BASE_PATH + checklistId + CHECKITEMS_ENDPOINT, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get all checkItems that are currently available on a checklist")
     public Response getCheckitemsOnAChecklist(String checklistId) {
         Response response = ApiClient.getInstance().get(CHECKLISTS_BASE_PATH + checklistId + CHECKITEMS_ENDPOINT, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get a checkItem with id - {'checkItemId'}, on a checklist with id - {'checklistId'}")
     public Response getACheckitemOnAChecklist(String checklistId, String checkItemId) {
         Response response = ApiClient.getInstance().get(CHECKLISTS_BASE_PATH + checklistId + CHECKITEMS_ENDPOINT + checkItemId, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Delete checkItem with id - {'checkItemId'}, from checklist with id - {'checklistId'}")
     public Response deleteCheckitemFromChecklist(String checklistId, String checkItemId) {
         Response response = ApiClient.getInstance().delete(CHECKLISTS_BASE_PATH + checklistId + CHECKITEMS_ENDPOINT + checkItemId, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Delete a checklist")
     public Response deleteAChecklist(String checklistId) {
         Response response = ApiClient.getInstance().delete(CHECKLISTS_BASE_PATH + checklistId, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -120,7 +102,7 @@ public class ChecklistsService{
         checklistRequestSpecification.queryParam("idCard", idCard);
         checklistRequestSpecification.queryParam("name", nameOfAChecklistBeingCreated);
         Response response = ApiClient.getInstance().post(CHECKLISTS_BASE_PATH, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -128,7 +110,7 @@ public class ChecklistsService{
     public Response createACard(Map queryParamMap) {
         checklistRequestSpecification.queryParams(queryParamMap);
         Response response = ApiClient.getInstance().post(PathParameters.CardsEndPoints.CARDS_BASE_PATH, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -138,7 +120,7 @@ public class ChecklistsService{
         checklistRequestSpecification.queryParam("name", boardName);
 
         Response response = ApiClient.getInstance().post(PathParameters.BoardEndPoints.BOARDS_BASE_PATH, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
 
         return response.jsonPath().getString("id");
     }
@@ -147,7 +129,7 @@ public class ChecklistsService{
     public void deleteBoard(String boardId) {
 
         ApiClient.getInstance().delete(PathParameters.BoardEndPoints.BOARDS_BASE_PATH + boardId, checklistRequestSpecification);
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
     }
 
     @Step("Get id of the first list on a board")
@@ -155,7 +137,7 @@ public class ChecklistsService{
 
         Response resp = ApiClient.getInstance().get(PathParameters.BoardEndPoints.BOARDS_BASE_PATH + boardId + LISTS_BASE_PATH, checklistRequestSpecification);
         List <String> list = resp.jsonPath().getList("id");
-        reSetChecklistRequestSpecification();
+        checklistRequestSpecification = specification.installRequest();
         return list;
     }
 }

@@ -1,20 +1,15 @@
 package api.services;
 
+import api.resourcesForTests.CycymberConfigTestData;
 import api.resourcesForTests.PathParameters;
-import api.resourcesForTests.configurationData.CommonConfigData;
 import api.resourcesForTests.ListFields;
 import api.resourcesForTests.configurationData.ListTestData;
 import api.utils.ApiClient;
 import api.utils.Specification;
 import io.qameta.allure.Step;
-import io.qameta.allure.restassured.AllureRestAssured;
-import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,25 +18,7 @@ import static api.resourcesForTests.PathParameters.ListsPath.*;
 public class ListsService{
 
     private final Specification specification = new Specification();
-    private RequestSpecification listRequestSpecification;
-
-    public ListsService(){
-        reSetListRequestSpecification();
-    }
-
-    public void reSetListRequestSpecification( ) {
-        Map<String, String> authoriazing = new HashMap<>();
-        authoriazing.put("key", specification.getKey());
-        authoriazing.put("token", specification.getToken());
-
-        listRequestSpecification = new RequestSpecBuilder().
-                addFilter(new AllureRestAssured()).
-//                .addFilter(new MyRestAssuredFilter())
-        setContentType(ContentType.JSON).
-                addQueryParams(authoriazing).
-                setBaseUri("https://api.trello.com/1/").
-                build();
-    }
+    private RequestSpecification listRequestSpecification = specification.installRequest();
 
     @Step("Create a new List: name = {name}")
     public Response createList(String nameOfTheList, String boardId) {
@@ -49,7 +26,7 @@ public class ListsService{
         listRequestSpecification.queryParam("idBoard", boardId);
         Response response = ApiClient.getInstance().post(LISTS_BASE_PATH, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
 
         return response;
     }
@@ -63,7 +40,7 @@ public class ListsService{
         }
 
         Response response = ApiClient.getInstance().put(LISTS_BASE_PATH + listId, listRequestSpecification);
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
 
         return response;
     }
@@ -73,7 +50,7 @@ public class ListsService{
         listRequestSpecification.queryParam(fieldName.toString(), newValueForAField);
         Response response = ApiClient.getInstance().put(LISTS_BASE_PATH + listId, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -81,7 +58,7 @@ public class ListsService{
     public Response getAList(String listId) {
         Response response = ApiClient.getInstance().get(LISTS_BASE_PATH + listId, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -90,7 +67,7 @@ public class ListsService{
         listRequestSpecification.queryParam("fields", fieldName);
         Response response = ApiClient.getInstance().get(LISTS_BASE_PATH + listId, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -98,7 +75,7 @@ public class ListsService{
     public Response archiveAllCardOnTheList(String listId) {
         Response response = ApiClient.getInstance().post(LISTS_BASE_PATH + listId + archiveEndPoint, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -108,7 +85,7 @@ public class ListsService{
         listRequestSpecification.queryParam("idList", IdOfTheListThatTheCardsShouldBeMovedTo);
         Response response = ApiClient.getInstance().post(LISTS_BASE_PATH + newCreatedListId + moveAllCardsEndPoint, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -117,7 +94,7 @@ public class ListsService{
         listRequestSpecification.queryParam("value", "true");
         Response response = ApiClient.getInstance().put(LISTS_BASE_PATH + idOfTheListToArchive + archiveAListEndPoint, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -126,7 +103,7 @@ public class ListsService{
         listRequestSpecification.queryParam("value", "false");
         Response response = ApiClient.getInstance().put(LISTS_BASE_PATH + idOfTheListToUnArchive + archiveAListEndPoint, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -134,7 +111,7 @@ public class ListsService{
     public Response getResourcesOfAList(String idOfTheList, String requestedObject) {
         Response response = ApiClient.getInstance().get(LISTS_BASE_PATH + idOfTheList + requestedObject, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -143,7 +120,7 @@ public class ListsService{
         listRequestSpecification.queryParam("value", idOfABoardToMoveListTo);
         Response response = ApiClient.getInstance().put(LISTS_BASE_PATH + idOfTheList + idBoardEndPoint, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -151,7 +128,7 @@ public class ListsService{
     public Response getActionsofAList(String idOfTheList) {
         Response response = ApiClient.getInstance().get(LISTS_BASE_PATH + idOfTheList + actionsEndPoint, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -159,24 +136,24 @@ public class ListsService{
     public Response getABoardAListIsOn(String idOfTheList) {
         Response response = ApiClient.getInstance().get(LISTS_BASE_PATH + idOfTheList + boardEndPoint, listRequestSpecification);
 
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
-    private void matchTheNamesOfTheListsWithId(String boardId, ListTestData listTestData){
+    private void matchTheNamesOfTheListsWithId(String boardId, CycymberConfigTestData cycymberConfigTestData){
 
         List idOfAllLists = getListOfIdOfAllListsOnABoard(boardId);
 
         for(int i = 0; i<idOfAllLists.size(); i++){
             String temp = getAList((String) idOfAllLists.get(i)).jsonPath().getString("name");
-            listTestData.getNamesAndIdsOfLists().put(temp, (String) idOfAllLists.get(i));
+            cycymberConfigTestData.getNamesAndIdsOfLists().put(temp, (String) idOfAllLists.get(i));
         }
     }
 
-    public String getIdOfAListByName(String listName, String boardId, ListTestData listTestData) {
-        matchTheNamesOfTheListsWithId(boardId, listTestData);
+    public String getIdOfAListByName(String listName, String boardId, CycymberConfigTestData cycymberConfigTestData) {
+        matchTheNamesOfTheListsWithId(boardId, cycymberConfigTestData);
 
-        return listTestData.getNamesAndIdsOfLists().get(listName);
+        return cycymberConfigTestData.getNamesAndIdsOfLists().get(listName);
     }
 
     @Step("Get id of the first list on a board")
@@ -184,7 +161,7 @@ public class ListsService{
 
         Response resp = ApiClient.getInstance().get(PathParameters.BoardEndPoints.BOARDS_BASE_PATH + boardId + LISTS_BASE_PATH, listRequestSpecification);
         List <String> list = resp.jsonPath().getList("id");
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return list;
     }
 
@@ -194,7 +171,7 @@ public class ListsService{
         listRequestSpecification.queryParam("name", boardName);
 
         Response response = ApiClient.getInstance().post(PathParameters.BoardEndPoints.BOARDS_BASE_PATH, listRequestSpecification);
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
 
         return response.jsonPath().getString("id");
     }
@@ -203,14 +180,14 @@ public class ListsService{
     public void deleteBoard(String boardId) {
 
         ApiClient.getInstance().delete(PathParameters.BoardEndPoints.BOARDS_BASE_PATH + boardId, listRequestSpecification);
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
     }
 
     @Step("Create a card for list with id = {listIdTheCardIsOn}")
     public Response createACard(Map queryParamMap) {
         listRequestSpecification.queryParams(queryParamMap);
         Response response = ApiClient.getInstance().post(PathParameters.CardsEndPoints.CARDS_BASE_PATH, listRequestSpecification);
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -219,7 +196,7 @@ public class ListsService{
 
         listRequestSpecification.queryParam("fields", optionName);
         Response response = ApiClient.getInstance().get(resourceEndPoint + resourceId, listRequestSpecification);
-        reSetListRequestSpecification();
+        listRequestSpecification = specification.installRequest();
         return response;
     }
 

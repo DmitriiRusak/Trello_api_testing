@@ -1,23 +1,35 @@
-//package api.cucumber.stepDefinition.board;
-//
-//import api.cucumber.continer.ConfigTestDataHolder;
-//import io.cucumber.java.en.*;
-//import org.testng.Assert;
-//
-//public class InviteMemberToABoard{
-//
-//    private ConfigTestDataHolder configTestDataHolder;
-//
-//    @When("I invite a new member on a board")
-//    public void i_invite_a_new_member_on_a_board() {
-//        getBoardService().inviteMemberToBoardViaEmail(configTestDataHolder.getBoardTestData().getBoardId());
-//    }
-//
-//    @Then("A new member is added to a board")
-//    public void aNewMemberIsAddedToABoard() {
-//
-//        configTestDataHolder.getCommonConfigData().setUniversalListForResource(getBoardService().getMembershipsOfABoard(configTestDataHolder.getBoardTestData().getBoardId()).jsonPath().getList("."));
-//        Assert.assertEquals(configTestDataHolder.getCommonConfigData().getUniversalListForResource().size(), 2);
-//    }
-//
-//}
+package api.cucumber.stepDefinition.board;
+
+import api.cucumber.continer.ConfigTestDataHolder;
+import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.configurationData.BoardTestData;
+import api.services.BoardService;
+import io.cucumber.java.en.*;
+import io.restassured.response.Response;
+import org.testng.Assert;
+
+public class InviteMemberToABoard{
+
+    private CycymberConfigTestData cycymberConfigTestData;
+    private BoardService boardService;
+
+    public InviteMemberToABoard(CycymberConfigTestData cycymberConfigTestData, BoardService boardService){
+        this.cycymberConfigTestData = cycymberConfigTestData;
+        this.boardService = boardService;
+    }
+
+    @When("I invite a new member on a board")
+    public void i_invite_a_new_member_on_a_board() {
+        boardService.inviteMemberToBoardViaEmail(cycymberConfigTestData.getBoardId());
+    }
+
+    @Then("A new member is added to a board")
+    public void aNewMemberIsAddedToABoard() {
+
+//        Response response = boardService.getMembershipsOfABoard(boardTestData.getBoardId()).jsonPath().getList("."));
+        int numberOfMembersPresented = boardService.getMembershipsOfABoard(cycymberConfigTestData.getBoardId()).jsonPath().getList(".").size();
+
+        Assert.assertEquals(numberOfMembersPresented, 2);
+    }
+
+}

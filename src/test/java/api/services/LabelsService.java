@@ -19,25 +19,7 @@ import static api.resourcesForTests.PathParameters.LabelsPath.LABELS_BASE_PATH;
 public class LabelsService{
 
     private final Specification specification = new Specification();
-    private RequestSpecification labelRequestSpecification;
-
-    public LabelsService(){
-        reSetLabelRequestSpecification();
-    }
-
-    public void reSetLabelRequestSpecification() {
-        Map<String, String> authoriazing = new HashMap<>();
-        authoriazing.put("key", specification.getKey());
-        authoriazing.put("token", specification.getToken());
-
-        labelRequestSpecification = new RequestSpecBuilder().
-                addFilter(new AllureRestAssured()).
-//                .addFilter(new MyRestAssuredFilter())
-        setContentType(ContentType.JSON).
-                addQueryParams(authoriazing).
-                setBaseUri("https://api.trello.com/1/").
-                build();
-    }
+    private RequestSpecification labelRequestSpecification = specification.installRequest();
 
     @Step("Create a new Label: name = {name}, color = {color}, board id = {idBoard}")
     public Response createLabel(String labelName, String color, String boardId) {
@@ -46,7 +28,7 @@ public class LabelsService{
         labelRequestSpecification.queryParam("idBoard", boardId);
 
         Response response = ApiClient.getInstance().post(LABELS_BASE_PATH, labelRequestSpecification);
-        reSetLabelRequestSpecification();
+        labelRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -58,14 +40,14 @@ public class LabelsService{
                         PathParameters.CardsEndPoints.ID_LABELS_ENDPOINT,
                 labelRequestSpecification);
 
-        reSetLabelRequestSpecification();
+        labelRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get a Label: id label = {labelId}")
     public Response getLabel(String labelId) {
         Response response = ApiClient.getInstance().get(LABELS_BASE_PATH + labelId, labelRequestSpecification);
-        reSetLabelRequestSpecification();
+        labelRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -75,7 +57,7 @@ public class LabelsService{
         labelRequestSpecification.queryParam("color", newColor);
 
         Response response = ApiClient.getInstance().put(LABELS_BASE_PATH + labelId, labelRequestSpecification);
-        reSetLabelRequestSpecification();
+        labelRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -92,7 +74,7 @@ public class LabelsService{
     public Response deleteLabel(String labelId) {
 
         Response response = ApiClient.getInstance().delete(LABELS_BASE_PATH + labelId, labelRequestSpecification);
-        reSetLabelRequestSpecification();
+        labelRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -102,7 +84,7 @@ public class LabelsService{
         labelRequestSpecification.queryParam("name", boardName);
 
         Response response = ApiClient.getInstance().post(PathParameters.BoardEndPoints.BOARDS_BASE_PATH, labelRequestSpecification);
-        reSetLabelRequestSpecification();
+        labelRequestSpecification = specification.installRequest();
 
         return response.jsonPath().getString("id");
     }
@@ -111,6 +93,6 @@ public class LabelsService{
     public void deleteBoard(String boardId) {
 
         ApiClient.getInstance().delete(PathParameters.BoardEndPoints.BOARDS_BASE_PATH + boardId, labelRequestSpecification);
-        reSetLabelRequestSpecification();
+        labelRequestSpecification = specification.installRequest();
     }
 }

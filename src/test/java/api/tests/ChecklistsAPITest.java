@@ -2,7 +2,6 @@ package api.tests;
 
 import api.resourcesForTests.CheckListFields;
 import api.resourcesForTests.configurationData.CheckListTestData;
-import api.resourcesForTests.configurationData.CommonConfigData;
 import api.services.ChecklistsService;
 import api.utils.LogFactory;
 import api.utils.TestListener;

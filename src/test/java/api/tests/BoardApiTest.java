@@ -1,7 +1,6 @@
 package api.tests;
 
 import api.resourcesForTests.configurationData.BoardTestData;
-import api.resourcesForTests.configurationData.CommonConfigData;
 import api.services.BoardService;
 import api.utils.LogFactory;
 import api.utils.TestListener;
@@ -21,6 +20,12 @@ public class BoardApiTest{
 
     private final BoardTestData boardTestData = new BoardTestData();
     private final BoardService boardService = new BoardService();
+
+    @BeforeSuite
+    public void setUpLogs(){
+        LogFactory.getLogger().info(" ");
+        LogFactory.getLogger().info("******************************  New run for RestAssured + TestNG framework has been initialized  *************************");
+    }
 
     @BeforeClass
     public void setUp(){

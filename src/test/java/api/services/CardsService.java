@@ -25,32 +25,13 @@ import static api.resourcesForTests.PathParameters.ListsPath.LISTS_BASE_PATH;
 public class CardsService{
 
     private final Specification specification = new Specification();
-    private RequestSpecification cardRequestSpecification;
-//    private final ApiClient apiClient = new ApiClient();
-
-    public CardsService(){
-        reSetCardRequestSpecification();
-    }
-
-    public void reSetCardRequestSpecification() {
-        Map<String, String> authoriazing = new HashMap<>();
-        authoriazing.put("key", specification.getKey());
-        authoriazing.put("token", specification.getToken());
-
-        cardRequestSpecification = new RequestSpecBuilder().
-                addFilter(new AllureRestAssured()).
-//                .addFilter(new MyRestAssuredFilter())
-        setContentType(ContentType.JSON).
-                addQueryParams(authoriazing).
-                setBaseUri("https://api.trello.com/1/").
-                build();
-    }
+    private RequestSpecification cardRequestSpecification = specification.installRequest();
 
     @Step("Get a card: id card = {cardId}")
     public Response getCard(String cardId) {
 
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -60,7 +41,7 @@ public class CardsService{
         cardRequestSpecification.queryParam(optionName, newOptionValue);
 
         Response response = ApiClient.getInstance().put(CardsEndPoints.CARDS_BASE_PATH + cardId, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -69,14 +50,14 @@ public class CardsService{
 
         cardRequestSpecification.body(new CoverC(new Cover(newColorForACard)));
         Response response = ApiClient.getInstance().put(CardsEndPoints.CARDS_BASE_PATH + cardId, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Delete a card with id - {'cardID'}")
     public Response deleteACard(String cardID) {
         Response response = ApiClient.getInstance().delete(CardsEndPoints.CARDS_BASE_PATH + cardID, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -95,7 +76,7 @@ public class CardsService{
     @Step("Get all attachments from a card with id - {'cardId'}}")
     public Response getAttachmentsOnACard(String cardId) {
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.ATTACHMENTS_BASE_PATH, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -106,41 +87,41 @@ public class CardsService{
         cardRequestSpecification.contentType("multipart/form-data");
 
         Response response = ApiClient.getInstance().post(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.ATTACHMENTS_ENDPOINT, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get an attachment with id - {'createdAttachmentId'}, from a card with id - {'cardId'} ")
     public Response getAnAttachmentOnACard(String cardId, String createdAttachmentId) {
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.ATTACHMENTS_ENDPOINT + createdAttachmentId, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get checklists on a card with id - {'cardId'}")
     public Response getChecklistsOnACard(String cardId) {
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.CHECKLISTS_ENDPOINT, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Delete an Attachment with id - {'attachmentId'}, from a card with id - {cardID}")
     public Response deleteAnAttachmentOnACard(String cardID, String attachmentId) {
         Response response = ApiClient.getInstance().delete(CardsEndPoints.CARDS_BASE_PATH + cardID + CardsEndPoints.ATTACHMENTS_BASE_PATH  + attachmentId, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
     @Step("Get the board the card with id - {'cardId'}, is on")
     public Response getTheBoardTheCardIsOn(String cardId) {
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.BOARD_ENDPOINT, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get checkItems on card: {cardId}, field = {field}")
     public Response getCheckItemsOnACard(String cardId) {
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.CHECKITEMSTATES_ENDPOINT, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -149,7 +130,7 @@ public class CardsService{
         cardRequestSpecification.queryParam("checkItems", "all");
         cardRequestSpecification.queryParam("checkItem_fields", "id,name,state");
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.CHECKLISTS_ENDPOINT, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -157,21 +138,21 @@ public class CardsService{
     @Step("Get list on a card with id - {'cardId'}")
     public Response getTheListOfACard(String cardId) {
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.LISTS_ENDPOINT, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get the members of a card with id - {'cardId'}")
     public Response getTheMembersOfACard(String cardId) {
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.MEMBERS_ENDPOINT, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
     @Step("Get stickers on a card with id - {'cardId'}")
     public Response getStickersOnACard(String cardId) {
         Response response = ApiClient.getInstance().get(CardsEndPoints.CARDS_BASE_PATH + cardId + CardsEndPoints.STICKERS_ENDPOINT, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -180,7 +161,7 @@ public class CardsService{
         cardRequestSpecification.queryParam("idCard", idCard);
         cardRequestSpecification.queryParam("name", nameOfAChecklistBeingCreated);
         Response response = ApiClient.getInstance().post(CHECKLISTS_BASE_PATH, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -188,7 +169,7 @@ public class CardsService{
     public Response addNewComentToACard(String cardId, String commentForAnAction, String commentsEnpoint) {
         cardRequestSpecification.queryParams("text", commentForAnAction);
         Response response = ApiClient.getInstance().post(CardsEndPoints.CARDS_BASE_PATH + cardId + ActionsEndPoints.ACTIONS_BASE_PATH + commentsEnpoint, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -196,7 +177,7 @@ public class CardsService{
     public Response createACard(Map queryParamMap) {
         cardRequestSpecification.queryParams(queryParamMap);
         Response response = ApiClient.getInstance().post(CardsEndPoints.CARDS_BASE_PATH, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return response;
     }
 
@@ -206,7 +187,7 @@ public class CardsService{
         cardRequestSpecification.queryParam("name", boardName);
 
         Response response = ApiClient.getInstance().post(BoardEndPoints.BOARDS_BASE_PATH, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
 
         return response.jsonPath().getString("id");
     }
@@ -215,7 +196,7 @@ public class CardsService{
     public void deleteBoard(String boardId) {
 
         ApiClient.getInstance().delete(BoardEndPoints.BOARDS_BASE_PATH + boardId, cardRequestSpecification);
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
     }
 
     @Step("Get id of the first list on a board")
@@ -223,7 +204,7 @@ public class CardsService{
 
         Response resp = ApiClient.getInstance().get(BoardEndPoints.BOARDS_BASE_PATH + boardId + LISTS_BASE_PATH, cardRequestSpecification);
         List <String> list = resp.jsonPath().getList("id");
-        reSetCardRequestSpecification();
+        cardRequestSpecification = specification.installRequest();
         return list;
     }
 }

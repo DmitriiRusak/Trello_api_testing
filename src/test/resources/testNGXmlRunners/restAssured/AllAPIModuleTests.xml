@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
+<!-- In case you want to run it in parallel, it is only 4 threads per time is safe and logs are bad readable at these settings.-->
+<!--<suite name="All modules tests " parallel="classes" thread-count="4">-->
 <suite name="All modules tests " parallel="classes" thread-count="4">
 
     <test name="All API test">

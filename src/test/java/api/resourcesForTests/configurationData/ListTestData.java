@@ -11,7 +11,6 @@ public class ListTestData {
     private final String NEW_NAME_FOR_THE_LIST = "List with Updated name";
 
     private String toDoListId;
-    private List idsOfAllListsPresentedOnABoard;
     private String newCreatedListId;
     private String boardId;
     private HashMap<String, String> namesAndIdsOfLists = new HashMap<>();
@@ -22,14 +21,6 @@ public class ListTestData {
 
     public void setToDoListId(String toDoListId) {
         this.toDoListId = toDoListId;
-    }
-
-    public List getIdsOfAllListsPresentedOnABoard() {
-        return idsOfAllListsPresentedOnABoard;
-    }
-
-    public void setIdsOfAllListsPresentedOnABoard(List idsOfAllListsPresentedOnABoard) {
-        this.idsOfAllListsPresentedOnABoard = idsOfAllListsPresentedOnABoard;
     }
 
     public String getNAME_OF_THE_LIST() {

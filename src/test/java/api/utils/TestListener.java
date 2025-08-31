@@ -5,8 +5,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.annotations.BeforeSuite;
 
 public class TestListener implements ITestListener {
+
+        @BeforeSuite
+    public void projectSetUp(){
+
+        LogFactory.getLogger().info("");
+        LogFactory.getLogger().info("******************************New run for Rest Assured framework started*************************");
+    }
 
     @Override
     public void onTestStart(ITestResult result) {

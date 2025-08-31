@@ -1,6 +1,12 @@
 package api.resourcesForTests.configurationData;
 
+import io.restassured.response.Response;
+import org.apache.groovy.json.internal.ReaderCharacterSource;
+
+import java.util.List;
+
 public class BoardTestData {
+
 
     private final String BOARD_NAME = "Board_for_Board";
     private final String BOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS ="Board_specific_options";
@@ -19,6 +25,43 @@ public class BoardTestData {
     private String labelId;
     private String listId;
     private String toDoListId;
+    private List idsOfAllListsPresentedOnABoard;
+    private String cardId;
+    private String listIdTheCardIsOn;
+    private String currentListId;
+    private Response boardsResponse;
+
+    public String getCurrentListId() {
+        return currentListId;
+    }
+
+    public Response getBoardsResponse() {
+        return boardsResponse;
+    }
+
+    public void setBoardsResponse(Response boardsResponse) {
+        this.boardsResponse = boardsResponse;
+    }
+
+    public void setCurrentListId(String currentListId) {
+        this.currentListId = currentListId;
+    }
+
+    public String getListIdTheCardIsOn() {
+        return listIdTheCardIsOn;
+    }
+
+    public void setListIdTheCardIsOn(String listIdTheCardIsOn) {
+        this.listIdTheCardIsOn = listIdTheCardIsOn;
+    }
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
 
     public String getToDoListId() {
         return toDoListId;
@@ -74,6 +117,14 @@ public class BoardTestData {
 
     public void setBoardId(String boardId) {
         this.boardId = boardId;
+    }
+
+    public List getIdsOfAllListsPresentedOnABoard() {
+        return idsOfAllListsPresentedOnABoard;
+    }
+
+    public void setIdsOfAllListsPresentedOnABoard(List idsOfAllListsPresentedOnABoard) {
+        this.idsOfAllListsPresentedOnABoard = idsOfAllListsPresentedOnABoard;
     }
 
     public String getSecondBoardId() {

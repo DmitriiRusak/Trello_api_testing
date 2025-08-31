@@ -5,10 +5,8 @@ import api.resourcesForTests.configurationData.*;
 public class ConfigTestDataHolder {
 
     private final ActionTestData actionTestData = new ActionTestData();
-    private final BoardTestData boardTestData = new BoardTestData();
     private final CardTestData cardTestData = new CardTestData();
     private final CheckListTestData checkListTestData = new CheckListTestData();
-    private final CommonConfigData commonConfigData = new CommonConfigData();
     private final LabelTestData labelTestData = new LabelTestData();
     private final ListTestData listTestData = new ListTestData();
     private final MemberTestData memberTestData = new MemberTestData();
@@ -17,9 +15,6 @@ public class ConfigTestDataHolder {
         return actionTestData;
     }
 
-    public BoardTestData getBoardTestData() {
-        return boardTestData;
-    }
 
     public CardTestData getCardTestData() {
         return cardTestData;
@@ -27,10 +22,6 @@ public class ConfigTestDataHolder {
 
     public CheckListTestData getCheckListTestData() {
         return checkListTestData;
-    }
-
-    public CommonConfigData getCommonConfigData() {
-        return commonConfigData;
     }
 
     public LabelTestData getLabelTestData() {

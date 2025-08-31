@@ -1,68 +1,72 @@
-//package api.cucumber.stepDefinition.card;
-//
-//import api.cucumber.continer.ConfigTestDataHolder;
-//import api.resourcesForTests.configurationData.CommonConfigData;
-//import api.services.ServiceWorkShop;
-//import api.resourcesForTests.PathParameters;
-//import io.cucumber.java.en.*;
-//import org.testng.Assert;
-//
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//public class CreateCard extends ServiceWorkShop {
-//
-//    private ConfigTestDataHolder configTestDataHolder;
-//
-//    public CreateCard(ConfigTestDataHolder configTestDataHolder) {
-//        this.configTestDataHolder = configTestDataHolder;
-//    }
-//
-//    @When("I create a card using {string} option with value {string}")
-//    public void iCreateACardUsingOptionWithValue(String optionName, String optionValue) {
-//        Map<String, String> queryParametersForRequestSpec = new HashMap<>();
-//        queryParametersForRequestSpec.put("idList", configTestDataHolder.getBoardTestData().getToDoListId());
-//        queryParametersForRequestSpec.put(optionName, optionValue);
-//
-//        configTestDataHolder.getCardTestData().setCardId(getBoardService().createACard(
-//                queryParametersForRequestSpec,
-//                getCardsService().getCardRequestSpecification()).jsonPath().getString("id"));
-//    }
-//
-//    @When("I create a card using {string} option with value {string} on a list with name {string}")
-//    public void iCreateACardUsingOptionWithValueOnAListWithName(String optionName, String optionValue, String listName) {
-//
-//        String idOfAList = getListsService().getIdOfAListByName(
-//                listName,
-//                configTestDataHolder.getBoardTestData().getBoardId(),
-//                configTestDataHolder.getListTestData());
-//
-//        Map<String, String> queryParametersForRequestSpec = new HashMap<>();
-//        queryParametersForRequestSpec.put("idList", idOfAList);
-//        queryParametersForRequestSpec.put(optionName, optionValue);
-//        getCardsService().createACard(queryParametersForRequestSpec, getCardsService().getCardRequestSpecification());
-//    }
-//
-//    @Then("A card is created")
-//    public void a_card_is_created() {
-//
-//        String idOfTheCardThatWasRecivedAfterCardIsCreated = configTestDataHolder.getCardTestData().getCardId();
-//
-//        String cardIdPresentedOnAToDoList = getListsService().getResourcesOfAList(configTestDataHolder.getListTestData().getToDoListId(),
-//                PathParameters.endPoints.get("card")).jsonPath().getString("id");
-//
-//        cardIdPresentedOnAToDoList = cardIdPresentedOnAToDoList.substring(1, cardIdPresentedOnAToDoList.length()-1);
-//
-//        Assert.assertEquals(idOfTheCardThatWasRecivedAfterCardIsCreated, cardIdPresentedOnAToDoList);
-//
-//    }
-//
-//    @And("a card has {string} option set wth value {string}")
-//    public void aCardHasOptionSetWthValue(String optionName, String expectedOptionValue) {
-//        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getCardsService().getCard(configTestDataHolder.getCardTestData().getCardId()));
-//        String actualOptionValue = (configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString(optionName));
-//
-//        Assert.assertEquals(actualOptionValue, expectedOptionValue);
-//
-//    }
-//}
+package api.cucumber.stepDefinition.card;
+
+import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.PathParameters;
+import api.services.CardsService;
+import api.services.ListsService;
+import io.cucumber.java.en.*;
+import org.testng.Assert;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class CreateCard{
+
+    private CycymberConfigTestData cycymberConfigTestData;
+    private ListsService listsService;
+    private CardsService cardsService;
+
+    public CreateCard(CardsService cardsService, CycymberConfigTestData cycymberConfigTestData, ListsService listsService) {
+        this.cardsService = cardsService;
+        this.cycymberConfigTestData = cycymberConfigTestData;
+        this.listsService = listsService;
+    }
+
+    @When("I create a card using {string} option with value {string}")
+    public void iCreateACardUsingOptionWithValue(String optionName, String optionValue) {
+
+        Map<String, String> queryParametersForRequestSpec = new HashMap<>();
+        queryParametersForRequestSpec.put("idList", cycymberConfigTestData.getToDoListId());
+        queryParametersForRequestSpec.put(optionName, optionValue);
+
+        cycymberConfigTestData.setCardId(cardsService.createACard(queryParametersForRequestSpec).jsonPath().getString("id"));
+    }
+
+    @When("I create a card using {string} option with value {string} on a list with name {string}")
+    public void iCreateACardUsingOptionWithValueOnAListWithName(String optionName, String optionValue, String listName) {
+
+        String idOfAList = listsService.getIdOfAListByName(
+                listName,
+                cycymberConfigTestData.getBoardId(),
+                cycymberConfigTestData);
+
+        Map<String, String> queryParametersForRequestSpec = new HashMap<>();
+        queryParametersForRequestSpec.put("idList", idOfAList);
+        queryParametersForRequestSpec.put(optionName, optionValue);
+        cardsService.createACard(queryParametersForRequestSpec);
+    }
+
+    @Then("A card is created")
+    public void a_card_is_created() {
+
+        String idOfTheCardThatWasRecivedAfterCardIsCreated = cycymberConfigTestData.getCardId();
+
+        String cardIdPresentedOnAToDoList = listsService.getResourcesOfAList(cycymberConfigTestData.getToDoListId(),
+                PathParameters.endPoints.get("cardEndPoint")).
+                jsonPath().getString("id");
+
+        cardIdPresentedOnAToDoList = cardIdPresentedOnAToDoList.substring(1, cardIdPresentedOnAToDoList.length()-1);
+
+        Assert.assertEquals(idOfTheCardThatWasRecivedAfterCardIsCreated, cardIdPresentedOnAToDoList);
+
+    }
+
+    @And("a card has {string} option set wth value {string}")
+    public void aCardHasOptionSetWthValue(String optionName, String expectedOptionValue) {
+        cycymberConfigTestData.setCommonResponse(cardsService.getCard(cycymberConfigTestData.getCardId()));
+        String actualOptionValue = (cycymberConfigTestData.getCommonResponse().jsonPath().getString(optionName));
+
+        Assert.assertEquals(actualOptionValue, expectedOptionValue);
+
+    }
+}

@@ -2,7 +2,6 @@ package api.tests;
 
 import api.resourcesForTests.CardFields;
 import api.resourcesForTests.configurationData.CardTestData;
-import api.resourcesForTests.configurationData.CommonConfigData;
 import api.services.CardsService;
 import api.utils.LogFactory;
 import api.utils.TestListener;

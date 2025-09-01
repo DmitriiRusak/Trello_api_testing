@@ -1,9 +1,9 @@
 package api.cucumber.stepDefinition.card;
 
 import api.cucumber.continer.ConfigTestDataHolder;
-import api.resourcesForTests.configurationData.CommonConfigData;
-import api.services.ServiceWorkShop;
+import api.resourcesForTests.CycymberConfigTestData;
 import api.resourcesForTests.PathParameters;
+import api.services.*;
 import api.utils.LogFactory;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
@@ -11,75 +11,97 @@ import org.testng.Assert;
 import java.io.File;
 import java.util.List;
 
-public class ResourcesOfACard extends ServiceWorkShop {
+public class ResourcesOfACard{
 
-    private ConfigTestDataHolder configTestDataHolder;
+    private CycymberConfigTestData cycymberConfigTestData;
+    private CardsService cardsService;
+    private ChecklistsService checklistsService;
+    private LabelsService labelsService;
+    private BoardService boardService;
+    private ListsService listsService;
 
-    public ResourcesOfACard(ConfigTestDataHolder configTestDataHolder) {
-        this.configTestDataHolder = configTestDataHolder;
+    public ResourcesOfACard(CycymberConfigTestData cycymberConfigTestData,
+                            CardsService cardsService,
+                            ChecklistsService checklistsService,
+                            LabelsService labelsService,
+                            BoardService boardService,
+                            ListsService listsService) {
+
+        this.cycymberConfigTestData = cycymberConfigTestData;
+        this.cardsService = cardsService;
+        this.checklistsService = checklistsService;
+        this.labelsService = labelsService;
+        this.boardService = boardService;
+        this.listsService = listsService;
     }
 
     @When("I do create a comment {string} on a card")
     public void iDoCreateACommentOnACard(String comment) {
-        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getCardsService().addNewComentToACard(configTestDataHolder.getCardTestData().getCardId(),
-                comment,
-                PathParameters.CardsEndPoints.COMMENTS_ENDPOINT,
-                getChecklistsService().getChecklistRequestSpecification()));
+        cycymberConfigTestData.setCommonResponse(
+                cardsService.addNewComentToACard(cycymberConfigTestData.getCardId(), comment));
     }
 
     @When("I delete an attachment on a card")
     public void iDeleteAnAttachmentOnACard() {
-        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getCardsService().
-                deleteAnAttachmentOnACard(configTestDataHolder.getCardTestData().getCardId(), configTestDataHolder.getCardTestData().getCreatedAttachmentId()));
+        cycymberConfigTestData.setCommonResponse(
+                cardsService.deleteAnAttachmentOnACard(
+                    cycymberConfigTestData.getCardId(),
+                    cycymberConfigTestData.getCreatedAttachmentId()));
     }
 
     @When("I do create a checklist on a card")
     public void iDoCreateAChecklistOnACard() {
-        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(getCardsService().createAChecklistForACard(
-                configTestDataHolder.getCardTestData().getCardId(),
-                configTestDataHolder.getCheckListTestData().NAME_OF_CHECKLIST_CREATED,
-                getChecklistsService().getChecklistRequestSpecification()));
-        configTestDataHolder.getCheckListTestData().setChecklistId(
-                configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString("id"));
+        cycymberConfigTestData.setCommonResponse(
+                cardsService.createAChecklistForACard(
+                    cycymberConfigTestData.getCardId(),
+                    cycymberConfigTestData.NAME_OF_CHECKLIST_CREATED));
+
+        cycymberConfigTestData.setChecklistId(
+                cycymberConfigTestData.getCommonResponse().jsonPath().getString("id"));
     }
 
     @When("I do create a label")
     public void iDoCreateALabel() {
-        configTestDataHolder.getLabelTestData().setLabelId(getLabelsService().
-                                                createLabel(configTestDataHolder.getLabelTestData().LABEL_NAME,
-                                                        "green",
-                                                        configTestDataHolder.getBoardTestData().getBoardId()).jsonPath().getString("id"));
+        cycymberConfigTestData.setLabelId(
+                labelsService.createLabel(
+                    cycymberConfigTestData.LABEL_NAME,
+                    "green",
+                    cycymberConfigTestData.getBoardId()).jsonPath().getString("id"));
     }
 
     @And("I delete a checklist off the card")
     public void iDeleteAChecklistOffTheCard() {
 
-        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
-                getChecklistsService().deleteAChecklist(configTestDataHolder.getCheckListTestData().getChecklistId()));
+        cycymberConfigTestData.setCommonResponse(
+                checklistsService.deleteAChecklist(cycymberConfigTestData.getChecklistId()));
     }
 
-
+//Возможно здесь упадёт из-зи неправильного вызова ендпоинте стр.83, если да то надо поправить сценарий
     @When("I do request to get resource {string} of a {string}")
     public void iDoRequestToGetResourceOfA(String resourceName, String objectType) {
-        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
-                getBoardService().getResourceOfAnObject(PathParameters.endPoints.get(objectType),
-                        configTestDataHolder.getCardTestData().getCardId(),
-                        resourceName,
-                        getChecklistsService().getChecklistRequestSpecification()));
+        cycymberConfigTestData.setCommonResponse(
+                boardService.getResourceOfAnObject(
+                    PathParameters.endPoints.get(objectType),
+                    cycymberConfigTestData.getCardId(),
+                    resourceName));
     }
 
     @When("I add an attachment {string} to the card")
     public void iAddAnAttachmentToTheCard(String pathForAnAttachment) {
-        configTestDataHolder.getCardTestData().setCreatedAttachmentId(getCardsService().createAttachmentOnCard(
-                configTestDataHolder.getCardTestData().getCardId(),
-                pathForAnAttachment).jsonPath().getString("id"));
+        cycymberConfigTestData.setCreatedAttachmentId(
+                cardsService.createAttachmentOnCard(
+                    cycymberConfigTestData.getCardId(),
+                    pathForAnAttachment).jsonPath().getString("id"));
     }
 
 
     @Then("attachment {string} on a card is presented")
     public void attachmentOnACardIsPresented(String pathToAttachment) {
-        String actualAttachmentsName = getCardsService().getAnAttachmentOnACard(configTestDataHolder.getCardTestData().getCardId(),
-                configTestDataHolder.getCardTestData().getCreatedAttachmentId()).jsonPath().getString("name");
+
+        String actualAttachmentsName = cardsService.getAnAttachmentOnACard(
+                cycymberConfigTestData.getCardId(),
+                cycymberConfigTestData.getCreatedAttachmentId()).jsonPath().getString("name");
+
         File fileThatWasUsedToCreateAnAttachment = new File(pathToAttachment);
         String filesName = fileThatWasUsedToCreateAnAttachment.getName();
 
@@ -88,38 +110,40 @@ public class ResourcesOfACard extends ServiceWorkShop {
 
     @Then("CheckList is created")
     public void checklistIsCreated() {
-        String actualNameOfChecklist = configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString("name");
-        String expectedNameOfChecklist = configTestDataHolder.getCheckListTestData().NAME_OF_CHECKLIST_CREATED;
+
+        String actualNameOfChecklist = cycymberConfigTestData.getCommonResponse().jsonPath().getString("name");
+        String expectedNameOfChecklist = cycymberConfigTestData.NAME_OF_CHECKLIST_CREATED;
 
         Assert.assertEquals(actualNameOfChecklist, expectedNameOfChecklist);
     }
 
     @Then("Resource is deleted from a card")
     public void resourceIsDeletedFromACard() {
-        String jsonResponseAfterResourceIsDeleted = (configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString("limits"));
+        String jsonResponseAfterResourceIsDeleted = (cycymberConfigTestData.getCommonResponse().jsonPath().getString("limits"));
 
-        Assert.assertEquals(jsonResponseAfterResourceIsDeleted, CommonConfigData.EXPECTED_EMPTY_STRING_RESULT);
+        Assert.assertEquals(jsonResponseAfterResourceIsDeleted, cycymberConfigTestData.EXPECTED_EMPTY_STRING_RESULT);
     }
 
     @Then("Comment {string} is created")
     public void commentIsCreated(String comment) {
-        String actualTextOfComment = configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getString("data.text");
+        String actualTextOfComment = cycymberConfigTestData.getCommonResponse().jsonPath().getString("data.text");
 
         Assert.assertEquals(actualTextOfComment, comment);
     }
 
     @And("Add a label to a card")
     public void addALabelToACard() {
-        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
-                getLabelsService().addALabelToACard(configTestDataHolder.getCardTestData().getCardId(),
-                        configTestDataHolder.getLabelTestData().getLabelId()));
+        cycymberConfigTestData.setCommonResponse(
+                labelsService.addALabelToACard(
+                    cycymberConfigTestData.getCardId(),
+                    cycymberConfigTestData.getLabelId()));
     }
 
     @Then("A label is presented on a card")
     public void aLabelIsPresentedOnACard() {
-        String actualIdOfALabel = configTestDataHolder.getLabelTestData().getLabelId();
+        String actualIdOfALabel = cycymberConfigTestData.getLabelId();
 
-        String expectedIdOfAList = getLabelsService().getLabel(configTestDataHolder.getLabelTestData().getLabelId()).jsonPath().getString("id");
+        String expectedIdOfAList = labelsService.getLabel(cycymberConfigTestData.getLabelId()).jsonPath().getString("id");
 
         Assert.assertEquals(actualIdOfALabel, expectedIdOfAList);
     }
@@ -127,16 +151,18 @@ public class ResourcesOfACard extends ServiceWorkShop {
     @Then("{int} Cards are presented on a list {string}")
     public void cardsArePresentedOnAList(int numberOfCards, String listName) {
 
-        String litsIdTheCardsIsOn = getListsService().getIdOfAListByName(
+        String litsIdTheCardsIsOn = listsService.getIdOfAListByName(
                 listName,
-                configTestDataHolder.getBoardTestData().getBoardId(),
-                configTestDataHolder.getListTestData());
-        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
-                getListsService().getResourcesOfAList(litsIdTheCardsIsOn, PathParameters.endPoints.get("card")));
-        List namesOfACardsPresentedOnAList = configTestDataHolder.getCommonConfigData().getCommonResponseBetweenSteps().jsonPath().getList("name");
+                cycymberConfigTestData.getBoardId(),
+                cycymberConfigTestData);
 
-        LogFactory.getLogger().info("Number of cards presented on a list " + namesOfACardsPresentedOnAList.size());
-        LogFactory.getLogger().info("Number of cards expected " + numberOfCards);
+        cycymberConfigTestData.setCommonResponse(
+                listsService.getResourcesOfAList(litsIdTheCardsIsOn, PathParameters.endPoints.get("card")));
+
+        List namesOfACardsPresentedOnAList = cycymberConfigTestData.getCommonResponse().jsonPath().getList("name");
+
+//        LogFactory.getLogger().info("Number of cards presented on a list " + namesOfACardsPresentedOnAList.size());
+//        LogFactory.getLogger().info("Number of cards expected " + numberOfCards);
 
         Assert.assertEquals(numberOfCards, namesOfACardsPresentedOnAList.size());
     }

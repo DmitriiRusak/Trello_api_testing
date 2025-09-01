@@ -1,3 +1,4 @@
+@All
 @Get_resources_of_a_board
 #  do not run these Scenarios in parallel mode, it is designed to be run in turns, one by one.
 Feature: Get resources of a board
@@ -33,7 +34,7 @@ Feature: Get resources of a board
       When I do request to get "cards" Of a board
       Then I got back requested resource
 
-    Scenario: Get all labels on the board
+    Scenario: Get all labels on the board.
       When I do request to get "labels" Of a board
       Then I got back requested resource
       And I delete the board

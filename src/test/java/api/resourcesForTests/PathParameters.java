@@ -10,7 +10,7 @@ public class PathParameters {
     static {
         endPoints.put("board", "/board/");
         endPoints.put("list", "/lists/");
-        endPoints.put("cardEndPoint", "/cards/");
+        endPoints.put("card", "/cards/");
         endPoints.put("actions", "/actions");
     }
 

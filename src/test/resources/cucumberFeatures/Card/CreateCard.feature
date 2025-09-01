@@ -1,3 +1,4 @@
+@All
 @CreateCard
 Feature: Create a card
 

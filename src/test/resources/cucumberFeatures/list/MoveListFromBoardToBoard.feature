@@ -1,3 +1,4 @@
+@All
 Feature: Move list from one board to another board
 
   As an authorized user
@@ -14,3 +15,4 @@ Feature: Move list from one board to another board
   Scenario: Move list from one board to another
     When I move to do list, from one board, to another
     Then I see to do list being moved from one board, to another
+    And I delete the additional board

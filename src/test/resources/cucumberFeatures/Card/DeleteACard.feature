@@ -1,3 +1,4 @@
+@All
 @DeleteACard
 Feature: Delete a card
 

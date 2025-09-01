@@ -1,3 +1,4 @@
+@All
 @GetAList
 Feature: Get options of a list
 

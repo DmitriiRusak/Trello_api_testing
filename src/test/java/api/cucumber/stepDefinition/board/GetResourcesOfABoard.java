@@ -65,7 +65,9 @@ public class GetResourcesOfABoard{
     @And("Board is presented on a workSpace")
     public void boardIsPresentedOnAWorkSpace() {
 
-        cycymberConfigTestData.setBoardId(boardService.getAllAvailableBoards());
+        cycymberConfigTestData.setBoardId(boardService.getAllAvailableBoards()); //<- с использованием my work space ендпоинта.
+        System.out.println("From GetresourcesOfABoard, line 69");
+        System.out.println("-----> " + cycymberConfigTestData.getBoardId());
         cycymberConfigTestData.setToDoListId(
                 boardService.getListOfIdOfAllListsOnABoard(
                         cycymberConfigTestData.getBoardId()). get(0).toString());

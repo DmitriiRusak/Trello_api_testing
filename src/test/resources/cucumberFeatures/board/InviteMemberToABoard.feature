@@ -1,3 +1,4 @@
+@All
 @Invite_member
 Feature: Invite member to a board
 

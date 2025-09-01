@@ -1,3 +1,4 @@
+@All
 @Delete_a_board
 #@Smoke
 Feature: Delete a board

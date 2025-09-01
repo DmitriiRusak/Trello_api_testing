@@ -1,3 +1,4 @@
+@All
 @CreateList
 Feature: Create a list
 

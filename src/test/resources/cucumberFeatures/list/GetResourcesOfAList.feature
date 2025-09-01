@@ -1,3 +1,4 @@
+@All
 Feature: Get resources of a list
 
   As an authorized user
@@ -12,7 +13,7 @@ Feature: Get resources of a list
 
     Scenario: Get all cards available on the list.
       When I create a card on a list
-      And I do request to get "cards" of a list
+      And I do request to get "card" of a list
       Then I got back requested resource
 
     Scenario: Get the board the list is on.

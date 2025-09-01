@@ -37,7 +37,7 @@ public class CucumberHooks {
 
     //Delete the board after every Scenario, but do it accordingly to test logic. If you do not need to keep the board existed
     //after scenario is done, add scenario teg to this hook.
-    @After("not @Get_resources_of_a_board")
+    @After("not (@EndToEndCustomerEnvironment or @Get_resources_of_a_board)")
     public void deleteTheBoardAfterEveryScenario() {
         LogFactory.getLogger().info("Deliting the board after Scenario is over");
         boardService.deleteBoard(cycymberConfigTestData.getBoardId());

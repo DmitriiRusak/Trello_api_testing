@@ -1,3 +1,5 @@
+@All
+@OptionsOfTheCard
 Feature: Options of a card
 
   As an authorized user.

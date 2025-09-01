@@ -22,9 +22,9 @@
 <!--        <suite>LabelesAPITest</suite>-->
 <!--        <suite>ListsAPITest</suite>-->
 <!--        <suite>MembersAPITest</suite>-->
-        <suite>AllAPIModuleTests</suite>
+<!--        <suite>AllAPIModuleTests</suite>-->
 
-<!--        <suite>SmokeTest</suite>-->
+        <suite>SmokeTest</suite>
 <!--        <suite>EndToEndBasicSetUp</suite>-->
 <!--        <suite>EndToEndCustomerEnvironment</suite>-->
 
@@ -136,8 +136,8 @@
                 <version>3.1.2</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testNGXmlRunners/restAssured/${suite}.xml</suiteXmlFile>
-<!--                        <suiteXmlFile>src/test/resources/testNGXmlRunners/cucumberRunners/${suite}.xml</suiteXmlFile>-->
+<!--                        <suiteXmlFile>src/test/resources/testNGXmlRunners/restAssured/${suite}.xml</suiteXmlFile>-->
+                        <suiteXmlFile>src/test/resources/testNGXmlRunners/cucumberRunners/${suite}.xml</suiteXmlFile>
                     </suiteXmlFiles>
 <!--                    <test>runners.SmokeTest</test>-->
                     <argLine>

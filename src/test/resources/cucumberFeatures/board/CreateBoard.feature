@@ -1,3 +1,4 @@
+@All
 @BoardComponentTesting
 Feature: Create a board
 

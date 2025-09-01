@@ -1,3 +1,5 @@
+@All
+@ResourcesOfACard
 Feature: Resources of a card
 
   As an authorized user
@@ -14,12 +16,12 @@ Feature: Resources of a card
 
   Scenario: Get actions of the card.
     When I do create a comment "A new comment from ResourcesOfACard, Scenario: Get actions of the card " on a card
-    And I do request to get resource "/actions" of a "cards"
+    And I do request to get resource "/actions" of a "card"
     Then I got back requested resource
 
   Scenario: Get attachments on a card
     When I add an attachment "src/test/resources/ForCreateAttachmentOnCardTest.txt" to the card
-    And I do request to get resource "/attachments" of a "cards"
+    And I do request to get resource "/attachments" of a "card"
     Then I got back requested resource
 
   Scenario: Get specific attachment on a card
@@ -27,16 +29,16 @@ Feature: Resources of a card
     Then attachment "AttachmentForResourcesOfACard.txt" on a card is presented
 
   Scenario: Get the board the card is on
-    When I do request to get resource "/board" of a "cards"
+    When I do request to get resource "/board" of a "card"
     Then I got back requested resource
 
   Scenario: Get checklists on a card
     When I do create a checklist on a card
-    And I do request to get resource "/checklists" of a "cards"
+    And I do request to get resource "/checklists" of a "card"
     Then I got back requested resource
 
   Scenario: Get the list the card is on
-    When I do request to get resource "/list" of a "cards"
+    When I do request to get resource "/list" of a "card"
     Then I got back requested resource
 
 
@@ -53,7 +55,7 @@ Feature: Resources of a card
 
   Scenario: Create new comment to a card
     When I do create a comment "A new comment from ResourceOfACard" on a card
-    Then Comment "A new comment from ResourceOfACard class" is created
+    Then Comment "A new comment from ResourceOfACard" is created
 
   Scenario: Create new label on a card
     When I do create a label

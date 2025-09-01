@@ -1,5 +1,6 @@
+@All
 @Archive_UnArchive_list
-Feature: Archive or un archive a list
+Feature: Archive or unarchive a list
 
   As an authorized user
   I want to be able to archive or unarchive a list

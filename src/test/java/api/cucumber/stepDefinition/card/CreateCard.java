@@ -52,7 +52,7 @@ public class CreateCard{
         String idOfTheCardThatWasRecivedAfterCardIsCreated = cycymberConfigTestData.getCardId();
 
         String cardIdPresentedOnAToDoList = listsService.getResourcesOfAList(cycymberConfigTestData.getToDoListId(),
-                PathParameters.endPoints.get("cardEndPoint")).
+                PathParameters.endPoints.get("card")).
                 jsonPath().getString("id");
 
         cardIdPresentedOnAToDoList = cardIdPresentedOnAToDoList.substring(1, cardIdPresentedOnAToDoList.length()-1);

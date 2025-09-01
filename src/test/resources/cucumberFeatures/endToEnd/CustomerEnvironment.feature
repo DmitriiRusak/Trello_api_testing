@@ -1,3 +1,4 @@
+@All
 @EndToEndCustomerEnvironment
 #  It is supposed that all the scenarios are being done one by one, from top to bottom.
 # Works only if no boards is currently presented on a workspace
@@ -29,4 +30,5 @@ Feature: Customer environment
     * I create a card using "name" option with value "learn one of TMS" on a list with name "Long_time_plans"
     * I create a card using "name" option with value "Find a job" on a list with name "Long_time_plans"
     Then 5 Cards are presented on a list "Long_time_plans"
+    And I delete the board
 

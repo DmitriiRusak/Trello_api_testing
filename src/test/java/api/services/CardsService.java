@@ -1,6 +1,7 @@
 package api.services;
 
 import api.resourcesForTests.CardFields;
+import api.resourcesForTests.PathParameters;
 import api.resourcesForTests.PathParameters.*;
 import api.utils.ApiClient;
 import api.utils.Specification;
@@ -166,9 +167,9 @@ public class CardsService{
     }
 
     @Step("Add a comment {'commentForAnAction'} to a card with id ={cardId}")
-    public Response addNewComentToACard(String cardId, String commentForAnAction, String commentsEnpoint) {
+    public Response addNewComentToACard(String cardId, String commentForAnAction) {
         cardRequestSpecification.queryParams("text", commentForAnAction);
-        Response response = ApiClient.getInstance().post(CardsEndPoints.CARDS_BASE_PATH + cardId + ActionsEndPoints.ACTIONS_BASE_PATH + commentsEnpoint, cardRequestSpecification);
+        Response response = ApiClient.getInstance().post(CardsEndPoints.CARDS_BASE_PATH + cardId + ActionsEndPoints.ACTIONS_BASE_PATH + PathParameters.CardsEndPoints.COMMENTS_ENDPOINT, cardRequestSpecification);
         cardRequestSpecification = specification.installRequest();
         return response;
     }

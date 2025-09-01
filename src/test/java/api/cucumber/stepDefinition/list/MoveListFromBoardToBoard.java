@@ -1,37 +1,47 @@
-//package api.cucumber.stepDefinition.list;
-//
-//import api.cucumber.continer.ConfigTestDataHolder;
-//import api.resourcesForTests.configurationData.CommonConfigData;
-//import api.services.ServiceWorkShop;
-//import io.cucumber.java.en.*;
-//import org.testng.Assert;
-//
-//public class MoveListFromBoardToBoard extends ServiceWorkShop {
-//
-//    private ConfigTestDataHolder configTestDataHolder;
-//
-//    public MoveListFromBoardToBoard(ConfigTestDataHolder configTestDataHolder) {
-//        this.configTestDataHolder = configTestDataHolder;
-//    }
-//
-//    @And("I create one more board")
-//    public void iCreateOneMoreBoard() {
-//        configTestDataHolder.getBoardTestData().setSecondBoardId(
-//                getBoardService().createBoard("One more board").jsonPath().getString("id"));
-//    }
-//
-//    @When("I move to do list, from one board, to another")
-//    public void iMoveToDoListFromOneBoardToAnother() {
-//        configTestDataHolder.getCommonConfigData().setCommonResponseBetweenSteps(
-//                getListsService().
-//                moveListFromOneBoardToAnother(configTestDataHolder.getListTestData().getToDoListId(),
-//                        configTestDataHolder.getBoardTestData().getSecondBoardId()));
-//    }
-//
-//    @Then("I see to do list being moved from one board, to another")
-//    public void iSeeToDoListBeingMovedFromOneBoardToAnother() {
-//        String boardIdTheListisOn = getListsService().getABoardAListIsOn(configTestDataHolder.getListTestData().getToDoListId()).jsonPath().getString("id");
-//
-//        Assert.assertEquals(configTestDataHolder.getBoardTestData().getSecondBoardId(), boardIdTheListisOn);
-//    }
-//}
+package api.cucumber.stepDefinition.list;
+
+import api.cucumber.continer.ConfigTestDataHolder;
+import api.resourcesForTests.CycymberConfigTestData;
+import api.services.BoardService;
+import api.services.ListsService;
+import io.cucumber.java.en.*;
+import org.testng.Assert;
+
+public class MoveListFromBoardToBoard{
+
+    private CycymberConfigTestData cycymberConfigTestData;
+    private ListsService listsService;
+    private BoardService boardService;
+
+    public MoveListFromBoardToBoard(CycymberConfigTestData cycymberConfigTestData, ListsService listsService, BoardService boardService) {
+        this.cycymberConfigTestData = cycymberConfigTestData;
+        this.listsService = listsService;
+        this.boardService = boardService;
+    }
+
+    @And("I create one more board")
+    public void iCreateOneMoreBoard() {
+        cycymberConfigTestData.setSecondBoardId(
+                boardService.createBoard("One more board").jsonPath().getString("id"));
+    }
+
+    @When("I move to do list, from one board, to another")
+    public void iMoveToDoListFromOneBoardToAnother() {
+        cycymberConfigTestData.setCommonResponse(
+                listsService.moveListFromOneBoardToAnother(
+                        cycymberConfigTestData.getToDoListId(),
+                        cycymberConfigTestData.getSecondBoardId()));
+    }
+
+    @Then("I see to do list being moved from one board, to another")
+    public void iSeeToDoListBeingMovedFromOneBoardToAnother() {
+        String boardIdTheListisOn = listsService.getABoardAListIsOn(cycymberConfigTestData.getToDoListId()).jsonPath().getString("id");
+
+        Assert.assertEquals(cycymberConfigTestData.getSecondBoardId(), boardIdTheListisOn);
+    }
+
+    @And("I delete the additional board")
+    public void iDeleteTheAdditionalBoard() {
+        boardService.deleteBoard(cycymberConfigTestData.getSecondBoardId());
+    }
+}

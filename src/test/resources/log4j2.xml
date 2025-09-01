@@ -5,7 +5,7 @@
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.zip">
             <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss.SSS} [%-4level] %msg%n" charset="UTF-8" />
             <Policies>
-                <SizeBasedTriggeringPolicy size="300 KB" />
+                <SizeBasedTriggeringPolicy size="500 KB" />
             </Policies>
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>

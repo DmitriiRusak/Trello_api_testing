@@ -24,7 +24,9 @@
 <!--        <suite>MembersAPITest</suite>-->
 <!--        <suite>AllAPIModuleTests</suite>-->
 
-        <suite>SmokeTest</suite>
+<!--        <suite>SmokeTest</suite>-->
+<!--        <suite>AllCucumberScenarios</suite>-->
+        <suite>ParallelTesting</suite>
 <!--        <suite>EndToEndBasicSetUp</suite>-->
 <!--        <suite>EndToEndCustomerEnvironment</suite>-->
 
@@ -143,6 +145,12 @@
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
+                    <properties>
+                        <property>
+                            <name>dataproviderthreadcount</name>
+                            <value>4</value>
+                        </property>
+                    </properties>
                 </configuration>
             </plugin>
 

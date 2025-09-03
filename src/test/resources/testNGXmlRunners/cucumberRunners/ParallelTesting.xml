@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="Parallel execution of scenarios">
+<suite name="Parallel execution, scenario level">
+
     <test name="Parallel testing">
         <classes>
             <class name="api.cucumber.runners.ParallelTesting"/>
@@ -9,3 +10,6 @@
     </test>
 
 </suite>
+<!-- Some of the feature files consist of scenarios that are designed to be executed one by one, in other words they have
+kind of logic and can not be independent of each other. These scenarios are not included in parallel testing, since I run
+parallel testing at the scenario level and by following these approuch it is needed to be all scenarios to be independent-->

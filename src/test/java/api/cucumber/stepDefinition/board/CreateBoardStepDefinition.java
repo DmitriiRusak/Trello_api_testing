@@ -1,7 +1,6 @@
 package api.cucumber.stepDefinition.board;
 
 import api.resourcesForTests.CycymberConfigTestData;
-import api.resourcesForTests.configurationData.BoardTestData;
 import api.services.BoardService;
 import api.utils.LogFactory;
 import io.cucumber.java.en.*;

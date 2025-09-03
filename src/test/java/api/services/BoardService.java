@@ -2,7 +2,6 @@ package api.services;
 
 import api.resourcesForTests.PathParameters;
 import api.resourcesForTests.PathParameters.BoardEndPoints;
-import api.resourcesForTests.configurationData.ListTestData;
 import api.utils.ApiClient;
 import api.utils.Specification;
 import io.qameta.allure.Step;

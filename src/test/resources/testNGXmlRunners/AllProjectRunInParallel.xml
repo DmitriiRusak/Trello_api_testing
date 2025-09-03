@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All project">
 
-<!-- In case you want to run it in parallel, it is only 4 threads per time is safe and logs are bad readable at these settings.-->
-<!--<suite name="All modules tests " parallel="classes" thread-count="4">-->
-<suite name="All modules tests ">
-
-    <test name="All API test">
+    <test name="All API test" parallel="classes" thread-count="4">
         <classes>
             <class name="api.tests.ActionsAPITest"/>
             <class name="api.tests.BoardApiTest"/>
@@ -17,4 +14,13 @@
         </classes>
     </test>
 
+    <test name="Cucumber run">
+        <classes>
+            <class name="api.cucumber.runners.ParallelTesting"/>
+        </classes>
+    </test>
+
 </suite>
+<!-- This is config file to run all tests presented in a project
+test - All API test - is preset to run in parallel mode
+test - Cucumber run - is also set to run in parallel mode. The settings are available in a runner ParallelTesting.java -->

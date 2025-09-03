@@ -1,6 +1,5 @@
 package api.cucumber.stepDefinition.list;
 
-import api.cucumber.continer.ConfigTestDataHolder;
 import api.resourcesForTests.CycymberConfigTestData;
 import api.services.ListsService;
 import io.cucumber.java.en.*;

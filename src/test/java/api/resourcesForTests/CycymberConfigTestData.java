@@ -7,8 +7,8 @@ import java.util.List;
 
 public class CycymberConfigTestData {
 
-    private final String BOARD_NAME = "Cucumber_board_for_Board";
-    private final String BOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS ="Board_specific_options";
+    public final String BOARD_NAME = "Cucumber_board_for_Board";
+    public final String BOARD_NAME_CREATED_WITH_SPECIFIC_OPTIONS ="Board_specific_options";
     public final String NAME_OF_CHECKLIST_CREATED = "First Checklist";
     public final String LABEL_NAME = "Label from API";
     public static final String EXPECTED_EMPTY_STRING_RESULT = "[:]";

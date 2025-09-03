@@ -15,20 +15,24 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  <!-- without that line same of the tests failed-->
         <allure.version>2.25.0</allure.version>
         <aspectj.version>1.9.20.1</aspectj.version>
-<!--        <suite>BoardAPITest</suite>-->
-<!--        <suite>ActionsAPITest</suite>-->
-<!--        <suite>CardsApiTest</suite>-->
-<!--        <suite>ChecklistsAPITest</suite>-->
-<!--        <suite>LabelesAPITest</suite>-->
-<!--        <suite>ListsAPITest</suite>-->
-<!--        <suite>MembersAPITest</suite>-->
-<!--        <suite>AllAPIModuleTests</suite>-->
 
-<!--        <suite>SmokeTest</suite>-->
-<!--        <suite>AllCucumberScenarios</suite>-->
+        <suite>BoardAPITest</suite>
+        <suite>ActionsAPITest</suite>
+        <suite>CardsApiTest</suite>
+        <suite>ChecklistsAPITest</suite>
+        <suite>LabelesAPITest</suite>
+        <suite>ListsAPITest</suite>
+        <suite>MembersAPITest</suite>
+        <suite>AllAPIModuleTests</suite>
+
+        <suite>AllProjectRunInParallel</suite> <!-- execute all tests in parallel-->
+        <suite>AllProjectRun</suite> <!-- execute all tests for both part of the project: Rest assured + Cucumber-->
+
+        <suite>SmokeTest</suite>
+        <suite>AllCucumberScenarios</suite>
         <suite>ParallelTesting</suite>
-<!--        <suite>EndToEndBasicSetUp</suite>-->
-<!--        <suite>EndToEndCustomerEnvironment</suite>-->
+        <suite>EndToEndBasicSetUp</suite>
+        <suite>EndToEndCustomerEnvironment</suite>
 
     </properties>
 
@@ -139,9 +143,10 @@
                 <configuration>
                     <suiteXmlFiles>
 <!--                        <suiteXmlFile>src/test/resources/testNGXmlRunners/restAssured/${suite}.xml</suiteXmlFile>-->
-                        <suiteXmlFile>src/test/resources/testNGXmlRunners/cucumberRunners/${suite}.xml</suiteXmlFile>
+<!--                        <suiteXmlFile>src/test/resources/testNGXmlRunners/cucumberRunners/${suite}.xml</suiteXmlFile>-->
+                        <suiteXmlFile>src/test/resources/testNGXmlRunners/${suite}.xml</suiteXmlFile>
+<!--                        <suiteXmlFile>${suite}.xml</suiteXmlFile>-->
                     </suiteXmlFiles>
-<!--                    <test>runners.SmokeTest</test>-->
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>

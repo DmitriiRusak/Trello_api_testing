@@ -1,6 +1,6 @@
 package api.tests;
 
-import api.resourcesForTests.configurationData.MemberTestData;
+import api.resourcesForTests.configurationData.ConfigTestData;
 import api.services.MembersService;
 import api.utils.LogFactory;
 import api.utils.TestListener;
@@ -16,38 +16,38 @@ import java.util.List;
 @Listeners(TestListener.class)
 public class MembersAPITest{
 
-    private final MemberTestData memberTestData = new MemberTestData();
+    private ConfigTestData configTestData = new ConfigTestData();
     private final MembersService membersService = new MembersService();
 
     @BeforeClass
     public void setUp() {
 
         LogFactory.getLogger().info("+++++++++++++++ class \uD83D\uDFE1" + this.getClass().getName() + "\uD83D\uDFE1 started +++++++++++++++");
-        memberTestData.setBoardId(membersService.createABord(memberTestData.getBOARD_NAME_FOR_MEMBERS()));
-        memberTestData.setFirstMemberId(membersService.getTheMembersOfABoard(memberTestData.getBoardId()).jsonPath().getString("id"));
-        memberTestData.setFirstMemberId(memberTestData.getFirstMemberId().substring(1, memberTestData.getFirstMemberId().length() - 1));
+        configTestData.setBoardId(membersService.createABord(configTestData.BOARD_NAME));
+        configTestData.setFirstMemberId(membersService.getTheMembersOfABoard(configTestData.getBoardId()).jsonPath().getString("id"));
+        configTestData.setFirstMemberId(configTestData.getFirstMemberId().substring(1, configTestData.getFirstMemberId().length() - 1));
     }
 
     @AfterClass
     public void tearDown() {
-        membersService.deleteBoard(memberTestData.getBoardId());
+        membersService.deleteBoard(configTestData.getBoardId());
     }
 
     @Test(priority = 0)
     @Description("Get a member")
     @Severity(SeverityLevel.NORMAL)
     public void testGetAMember() {
-        Response response = membersService.getAMember(memberTestData.getFirstMemberId());
+        Response response = membersService.getAMember(configTestData.getFirstMemberId());
         String memberIdReceivedBack = response.jsonPath().getString("id");
 
-        Assert.assertEquals(memberIdReceivedBack, memberTestData.getFirstMemberId());
+        Assert.assertEquals(memberIdReceivedBack, configTestData.getFirstMemberId());
     }
 
     @Test(priority = 1)
     @Description("Get actions of a member")
     @Severity(SeverityLevel.NORMAL)
     public void testGetMembersActions() {
-        Response response = membersService.getMembersActions(memberTestData.getFirstMemberId());
+        Response response = membersService.getMembersActions(configTestData.getFirstMemberId());
         List actionsIds = response.jsonPath().getList("id");
 
         Assert.assertTrue(actionsIds.size()>1);
@@ -57,11 +57,11 @@ public class MembersAPITest{
     @Description("Get a member's custom board backgrounds")
     @Severity(SeverityLevel.NORMAL)
     public void testGetMemberCustomBackgrounds() {
-        Response response = membersService.getMemberCustomBackgrounds(memberTestData.getFirstMemberId());
+        Response response = membersService.getMemberCustomBackgrounds(configTestData.getFirstMemberId());
 
         List membersBackgroundId = response.jsonPath().getList("id");
 
-        memberTestData.setBackgroundId(membersBackgroundId.get(0).toString());
+        configTestData.setBackgroundId(membersBackgroundId.get(0).toString());
 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(membersBackgroundId.size() > 5);
@@ -72,31 +72,31 @@ public class MembersAPITest{
     @Severity(SeverityLevel.NORMAL)
     public void testCreateStarForBoard() {
 
-        Response response = membersService.createStarForABoard(memberTestData.getFirstMemberId(), memberTestData.getBoardId(), memberTestData.getPOSITION());
+        Response response = membersService.createStarForABoard(configTestData.getFirstMemberId(), configTestData.getBoardId(), configTestData.POSITION);
         String idOfABoardTheStarIsOn = response.jsonPath().getString("idBoard");
-        memberTestData.setStarId(response.body().jsonPath().getString("id"));
+        configTestData.setStarId(response.body().jsonPath().getString("id"));
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(idOfABoardTheStarIsOn, memberTestData.getBoardId());
+        Assert.assertEquals(idOfABoardTheStarIsOn, configTestData.getBoardId());
     }
 
     @Test(priority = 3)
     @Description("Get a specific boardStar")
     @Severity(SeverityLevel.NORMAL)
     public void testGetBoardStarOfAMember() {
-        Response response = membersService.getBoardStarOfAMember(memberTestData.getFirstMemberId(), memberTestData.getStarId());
+        Response response = membersService.getBoardStarOfAMember(configTestData.getFirstMemberId(), configTestData.getStarId());
         String idOfABoardStar = response.jsonPath().getString("id");
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(idOfABoardStar, memberTestData.getStarId());
+        Assert.assertEquals(idOfABoardStar, configTestData.getStarId());
     }
 
     @Test(priority = 4)
     @Description("Update the position of a board star ")
     @Severity(SeverityLevel.NORMAL)
     public void testUpdateThePositionOfABoardStarOfAMember() {
-        String positionOfABoardStarBeforeUpdate = membersService.getBoardStarOfAMember(memberTestData.getFirstMemberId(), memberTestData.getStarId()).jsonPath().getString("pos");
-        Response response = membersService.updateThePositionOfABoardStarOfAMember(memberTestData.getFirstMemberId(), memberTestData.getStarId(), memberTestData.getUPDATE_POSITION());
+        String positionOfABoardStarBeforeUpdate = membersService.getBoardStarOfAMember(configTestData.getFirstMemberId(), configTestData.getStarId()).jsonPath().getString("pos");
+        Response response = membersService.updateThePositionOfABoardStarOfAMember(configTestData.getFirstMemberId(), configTestData.getStarId(), configTestData.UPDATE_POSITION);
         String positionOfABoardStarAfterUpdate = response.jsonPath().getString("pos");
 
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -107,19 +107,19 @@ public class MembersAPITest{
     @Description("Delete a star of a board")
     @Severity(SeverityLevel.NORMAL)
     public void testDeleteStarOfABoard() {
-        Response response = membersService.deleteStarBoard(memberTestData.getFirstMemberId(), memberTestData.getStarId());
+        Response response = membersService.deleteStarBoard(configTestData.getFirstMemberId(), configTestData.getStarId());
 
-        Response response1 =  membersService.getBoardStarOfAMember(memberTestData.getFirstMemberId(), memberTestData.getStarId());
+        Response response1 =  membersService.getBoardStarOfAMember(configTestData.getFirstMemberId(), configTestData.getStarId());
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(response1.asPrettyString(), memberTestData.getBOARD_STAR_NOT_FOUND_MESSAGE());
+        Assert.assertEquals(response1.asPrettyString(), configTestData.BOARD_STAR_NOT_FOUND_MESSAGE);
     }
 
     @Test(priority = 6)
     @Description("Get all the boards that the user is a member of")
     @Severity(SeverityLevel.NORMAL)
     public void testGetBoardsThatMemberBelongTo(){
-        Response response = membersService.getBoardsMemberBelongs(memberTestData.getFirstMemberId());
+        Response response = membersService.getBoardsMemberBelongs(configTestData.getFirstMemberId());
 
         List idOfBoardsThatBelongToMember = response.jsonPath().getList("id");
 
@@ -132,7 +132,7 @@ public class MembersAPITest{
     @Description("Get the boards the member has been invited to")
     @Severity(SeverityLevel.NORMAL)
     public void testGetTheBoardsTheMemberInvitedTo() {
-        Response response = membersService.getTheBoardsTheMemberInvitedTo(memberTestData.getFirstMemberId());
+        Response response = membersService.getTheBoardsTheMemberInvitedTo(configTestData.getFirstMemberId());
 
         List idOfBoardsTheMemberInvitedTo = response.jsonPath().getList("id");
 
@@ -146,7 +146,7 @@ public class MembersAPITest{
     @Description("Get the cards of a member")
     @Severity(SeverityLevel.NORMAL)
     public void testGetCardsOfAMember() {
-        Response response = membersService.getCardsOfAMember(memberTestData.getFirstMemberId());
+        Response response = membersService.getCardsOfAMember(configTestData.getFirstMemberId());
 
         List idOfCardsTheMemberIsOn = response.jsonPath().getList("id");
 

@@ -1,8 +1,6 @@
 package api.utils;
 
-import api.cucumber.continer.ConfigTestDataHolder;
 import api.resourcesForTests.CycymberConfigTestData;
-import api.resourcesForTests.configurationData.BoardTestData;
 import api.services.BoardService;
 import io.cucumber.java.*;
 

@@ -2,9 +2,7 @@ package api.utils;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import io.restassured.specification.QueryableRequestSpecification;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.SpecificationQuerier;
 
 import static io.restassured.RestAssured.given;
 
@@ -27,10 +25,6 @@ public class ApiClient {
         Response response = given().
                 spec(requestSpecification).
                 get(path);
-//        Response response = requestSpecification.get(path);
-
-//        restAssuredLogsIntegration(requestSpecification, response);
-//        cucumberLogsIntegration(requestSpecification, response);
 
         return response;
     }
@@ -42,10 +36,6 @@ public class ApiClient {
         Response response = given().
                 spec(requestSpecification).
                 post(path);
-//        Response response = requestSpecification.post(path);
-
-//        restAssuredLogsIntegration(requestSpecification, response);
-//        cucumberLogsIntegration(requestSpecification, response);
 
         return response;
     }
@@ -57,10 +47,6 @@ public class ApiClient {
         Response response = given().
                 spec(requestSpecification).
                 put(path);
-//        Response response = requestSpecification.put(path);
-
-//        restAssuredLogsIntegration(requestSpecification, response);
-//        cucumberLogsIntegration(requestSpecification, response);
 
         return response;
     }
@@ -72,11 +58,6 @@ public class ApiClient {
         Response response = given().
                 spec(requestSpecification).
                 delete(path);
-
-//         Response response = requestSpecification.delete();
-
-//        restAssuredLogsIntegration(requestSpecification, response);
-//        cucumberLogsIntegration(requestSpecification, response);
 
         return response;
     }

@@ -1,8 +1,6 @@
 package api.utils;
 
 import io.qameta.allure.Allure;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.BeforeSuite;

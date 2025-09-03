@@ -1,9 +1,8 @@
 package api.cucumber.stepDefinition.card;
 
-import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.configurationData.CycymberConfigTestData;
 import api.resourcesForTests.PathParameters;
 import api.services.*;
-import api.utils.LogFactory;
 import io.cucumber.java.en.*;
 import org.testng.Assert;
 

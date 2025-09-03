@@ -24,12 +24,6 @@ public class CucumberEventListener implements EventListener {
 //        eventPublisher.registerHandlerFor(TestStepStarted.class, this::onAStepStart);
     }
 
-//    private void onAStepStart(TestStepStarted testStepStarted){
-//        PickleStepTestStep pickleStepTestStep = (PickleStepTestStep) testStepStarted.getTestStep();
-//        LogFactory.getLogger().info("Step started: " + pickleStepTestStep.getStep().getText());
-////shows the message after all scenarios are executed, it brings the disorder in logs structure, I thot it should work before step
-//    }
-
     private void stepFinished (TestStepFinished testStepFinished){
 
         if(testStepFinished.getResult().getStatus() == Status.FAILED){

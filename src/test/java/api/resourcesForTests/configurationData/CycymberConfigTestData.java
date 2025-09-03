@@ -1,4 +1,4 @@
-package api.resourcesForTests;
+package api.resourcesForTests.configurationData;
 
 import io.restassured.response.Response;
 

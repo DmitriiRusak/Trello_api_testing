@@ -41,18 +41,76 @@
 ```bash
 mvn clean test -Dsuite=restAssured/AllAPIModuleTests
 ```
-
+---
 #### Run only Cucumber part of the framework
 ```bash
 mvn clean test -Dsuite=cucumberRunners/AllCucumberScenarios
 ```
-
+---
 #### Run all tests in parallel mode.
 ```bash
 mvn clean test -Dsuite=AllProjectRunInParallel
 ```
-
+---
 #### Run all tests one by one
 ```bash
 mvn clean test -Dsuite=AllProjectRun
 ```
+--- 
+#### Run regress testing with Rest assured + TestNG part of the framework
+```bash
+mvn clean test -Dsuite=restAssured/AllAPIModuleTests
+```
+
+---
+#### Run smoke testing with cucumber
+```bash
+mvn clean test -Dsuite=cucumberRunners/SmokeTest
+```
+---
+#### Run E2E testing with Cucumber that include: basic setup, as, create a board (with specific name), rename the default lists, create additional list, create a few cards.
+```bash
+mvn clean test -Dsuite=cucumberRunners/EndToEndBasicSetUp
+```
+---
+#### Run E2E testing with Cucumber that include: customer environment, as, create a board without lists on it, create 3-5 lists, create 3-5 cards on a first list.
+```bash
+mvn clean test -Dsuite=cucumberRunners/EndToEndCustomerEnvironment
+```
+--- 
+## Module testing with testNG and Rest assured that include and separately tests following features:
+### board
+```bash
+mvn clean test -Dsuite=restAssured/BoardAPITest
+```
+--- 
+### actions
+```bash
+mvn clean test -Dsuite=restAssured/ActionsAPITest
+```
+--- 
+### cards
+```bash
+mvn clean test -Dsuite=restAssured/CardsAPITest
+```
+---
+### checklists
+```bash
+mvn clean test -Dsuite=restAssured/ChecklistsAPITest
+```
+---
+### labels
+```bash
+mvn clean test -Dsuite=restAssured/LabelesAPITest
+```
+---
+### lists
+```bash
+mvn clean test -Dsuite=restAssured/ListsAPITest
+```
+---
+### members
+```bash
+mvn clean test -Dsuite=restAssured/MembersAPITest
+```
+

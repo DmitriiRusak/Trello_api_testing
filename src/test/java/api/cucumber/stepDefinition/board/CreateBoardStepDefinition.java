@@ -1,8 +1,7 @@
 package api.cucumber.stepDefinition.board;
 
-import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.configurationData.CycymberConfigTestData;
 import api.services.BoardService;
-import api.utils.LogFactory;
 import io.cucumber.java.en.*;
 import io.restassured.response.Response;
 import org.testng.Assert;

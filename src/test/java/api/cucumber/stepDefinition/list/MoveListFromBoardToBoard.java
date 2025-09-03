@@ -1,6 +1,6 @@
 package api.cucumber.stepDefinition.list;
 
-import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.configurationData.CycymberConfigTestData;
 import api.services.BoardService;
 import api.services.ListsService;
 import io.cucumber.java.en.*;

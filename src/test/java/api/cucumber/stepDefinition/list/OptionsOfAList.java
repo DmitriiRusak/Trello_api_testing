@@ -1,6 +1,6 @@
 package api.cucumber.stepDefinition.list;
 
-import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.configurationData.CycymberConfigTestData;
 import api.resourcesForTests.ListFields;
 import api.resourcesForTests.PathParameters;
 import api.services.BoardService;

@@ -1,6 +1,6 @@
 package api.cucumber.stepDefinition.card;
 
-import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.configurationData.CycymberConfigTestData;
 import api.resourcesForTests.PathParameters;
 import api.services.CardsService;
 import api.services.ListsService;

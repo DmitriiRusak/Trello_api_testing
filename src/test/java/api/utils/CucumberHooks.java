@@ -1,10 +1,8 @@
 package api.utils;
 
-import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.configurationData.CycymberConfigTestData;
 import api.services.BoardService;
 import io.cucumber.java.*;
-
-import java.io.FileNotFoundException;
 
 public class CucumberHooks {
 

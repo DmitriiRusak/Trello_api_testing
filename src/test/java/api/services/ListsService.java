@@ -1,6 +1,6 @@
 package api.services;
 
-import api.resourcesForTests.CycymberConfigTestData;
+import api.resourcesForTests.configurationData.CycymberConfigTestData;
 import api.resourcesForTests.PathParameters;
 import api.resourcesForTests.ListFields;
 import api.utils.ApiClient;

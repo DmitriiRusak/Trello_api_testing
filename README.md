@@ -18,6 +18,7 @@
   <a href="https://www.java.com/" rel="nofollow"><img width="10%" title="Java" src="logo/Java.png" alt="Java" style="max-width: 100%;"></a>
   <a href="https://rest-assured.io/" rel="nofollow"><img width="10%" title="Rest Assured" src="logo/RestAssured.svg" alt="RestAssured" style="max-width: 100%;"></a>
   <a href="https://cucumber.io/" rel="nofollow"><img width="24%" title="Rest Assured" src="logo/Cucumber.png" alt="RestAssured" style="max-width: 100%;"></a>
+  <a href="https://www.docker.com/" rel="nofollow"><img width="24%" title="Docker" src="logo/Docker-Logo.png" alt="RestAssured" style="max-width: 100%;"></a>
   <a href="https://maven.apache.org/" rel="nofollow"><img width="10%" title="Gradle" src="logo/Maven.png" alt="Maven"></a>
   <a href="https://testng.org/" rel="nofollow"><img width="10%" title="JUnit5" src="logo/TestNG.png" alt="TestNG" style="max-width: 100%;"></a>
   <a href="https://allurereport.org/" rel="nofollow"><img width="10%" title="Allure Report" src="logo/Allure.png" alt="Allure" style="max-width: 100%;"></a>
@@ -114,3 +115,15 @@ mvn clean test -Dsuite=restAssured/ListsAPITest
 mvn clean test -Dsuite=restAssured/MembersAPITest
 ```
 
+---
+## Build Docker image with name 'trello_cucumber_image'. 
+#### ❗ <font color="red"> Make sure to turn on docker engine </font>
+```bash
+docker build -t trello_cucumber_image .
+```
+### To run the image in interactive mode
+```bash
+docker run -it trello_cucumber_image
+```
+#### Once the VM is ready, use any of Maven commands described before to reproduce testing activities.
+#### For example run all tests one by one: <ins>mvn clean test -Dsuite=AllProjectRun.</ins>

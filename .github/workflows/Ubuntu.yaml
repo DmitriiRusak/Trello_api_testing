@@ -17,4 +17,4 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: run the project
-        run: mvn clean test -Dsuite=restAssured/AllAPIModuleTests
+        run: mvn test -Dsuite=restAssured/AllAPIModuleTests

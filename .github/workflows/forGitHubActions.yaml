@@ -17,5 +17,8 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Checkout java version
+        run: java -version
+
       - name: run the project
         run: mvn clean test -Dsuite=restAssured/BoardAPITest

@@ -21,4 +21,4 @@ jobs:
         run: mvn -version
 
       - name: run the project
-        run: mvn clean test -Dsuite=restAssured/BoardAPITest
+        run: mvn clean test -Dsuite=restAssured/AllAPIModuleTests

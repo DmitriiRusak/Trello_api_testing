@@ -7,6 +7,9 @@ jobs:
       - name: Get code
         uses: actions/checkout@v5
 
+      - name: List files
+        run: dir
+
       - name: Set up java 17
         uses: actions/setup-java@v4
         with:

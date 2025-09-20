@@ -20,6 +20,9 @@ jobs:
       - name: Checkout java version
         run: java -version
 
+      - name: Maven version
+        run: mvn -version
+
 #      - name: update maven
 #        run: mvn clean install -U
 

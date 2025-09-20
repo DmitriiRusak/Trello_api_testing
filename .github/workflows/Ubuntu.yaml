@@ -1,0 +1,17 @@
+name: Ubuntu
+on: push
+jobs:
+  run_the_project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+
+      - name: Set up java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17.0.2'
+          distribution: 'temurin'
+
+      - name: run the project
+        run: mvn clean test -Dsuite=restAssured/AllAPIModuleTests

@@ -11,7 +11,8 @@
         </RollingFile>
 
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout disableAnsi="false" pattern="[%highlight{%-4level}] %d{dd-MM-yyy HH:mm:ss} %msg%n" charset="UTF-8"/>
+<!--            charset="UTF-8"-->
+            <PatternLayout disableAnsi="false" pattern="[%highlight{%-4level}] %d{dd-MM-yyy HH:mm:ss} %msg%n"/>
         </Console>
     </Appenders>
 

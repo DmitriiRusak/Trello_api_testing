@@ -24,7 +24,6 @@ jobs:
         run: mvn clean test -Dsuite=restAssured/BoardAPITest
 
   run_actions_tests:
-    needs: run_board_tests
     runs-on: ubuntu-latest
     steps:
       - name: Get code

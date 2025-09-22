@@ -1,5 +1,6 @@
 name: Trello_cucumber
-on: [push, workflow_dispatch]
+#on: [push, workflow_dispatch]
+on: push
 jobs:
   run_board_tests:
     runs-on: windows-2025

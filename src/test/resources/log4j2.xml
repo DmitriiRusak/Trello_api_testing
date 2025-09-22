@@ -11,13 +11,13 @@
         </RollingFile>
 
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout disableAnsi="false" pattern="[%highlight{%-4level}] %d{dd-MM-yyy HH:mm:ss} %msg%n"/>
+            <PatternLayout disableAnsi="false" pattern="[%highlight{%-4level}] %d{dd-MM-yyy HH:mm:ss} %msg%n" charset="UTF-8"/>
         </Console>
     </Appenders>
 
     <Loggers>
         <Root level="INFO">
-<!--            <AppenderRef ref="Console"/>-->
+            <AppenderRef ref="Console"/>
             <AppenderRef ref="rolling" />
         </Root>
     </Loggers>

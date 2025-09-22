@@ -47,4 +47,4 @@ build/
 .allure/
 
 ###config.properties###
-config.properties
+#config.properties

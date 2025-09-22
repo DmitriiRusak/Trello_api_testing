@@ -1,6 +1,7 @@
 @All
 @Get_resources_of_a_board
 #  do not run these Scenarios in parallel mode, it is designed to be run in turns, one by one.
+#  In other words it should run sequentially.
 Feature: Get resources of a board
 
   As an authorized user

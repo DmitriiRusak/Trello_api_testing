@@ -23,7 +23,7 @@ jobs:
       - name: run the project
         run: mvn clean test -Dsuite=restAssured/BoardAPITest
 
-      - name: sofe the logs
+      - name: upload the logs
         uses: actions/upload-artifact@v4
         with:
           name: Board API tests logs

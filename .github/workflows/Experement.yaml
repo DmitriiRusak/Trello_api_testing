@@ -3,7 +3,7 @@ on: [push, workflow_dispatch]
 
 jobs:
   run_board_tests:
-    runs-on: windows-2025
+    runs-on: ubuntu-latest
     outputs:
       someVar: ${{steps.otp.outputs.myVariable}}
 
@@ -23,7 +23,7 @@ jobs:
         run: mvn clean test -Dsuite=restAssured/BoardAPITest
 
       - name: set output
-      - id: otp
+        id: otp
         run: echo "myVariable=Do I really need to handle the outputs" >> $GITHUB_OUTPUT
 
       - name: access output

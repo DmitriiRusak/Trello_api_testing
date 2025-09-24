@@ -19,8 +19,8 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: run the project
-        run: mvn clean test -Dsuite=restAssured/BoardAPITest
+#      - name: run the project
+#        run: mvn clean test -Dsuite=restAssured/BoardAPITest
 
       - name: set output
         id: otp
@@ -29,13 +29,19 @@ jobs:
       - name: access output
         run: echo "---------> ${{steps.otp.outputs.myVariable}}"
 
-      - name: access variable
-        run: echo ${{someVar}}
+      - name: access var
+        run: echo "${{someVar}}"
 
-#  run_actions_tests:
-#    needs: run_board_tests
-#    runs-on: ubuntu-latest
-#    steps:
+
+  run_actions_tests:
+
+    needs: run_board_tests
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: read the output
+        run: echo "${{needs.run_board_tests.outputs.someVar}}
+
 #
 #      - name: download the artifacts
 #        uses: actions/download-artifact@v4

@@ -24,10 +24,13 @@ jobs:
 
       - name: set output
         id: otp
-        run: mvn clean test -Dsuite=restAssured/BoardAPITest >> $GITHUB_OUTPUT
+        run: echo "myVariable=Do I really need to handle the outputs" >> $GITHUB_OUTPUT
 
       - name: access output
         run: echo "---------> ${{steps.otp.outputs.myVariable}}"
+
+      - name: access variable
+        run: echo someVar
 
 #  run_actions_tests:
 #    needs: run_board_tests

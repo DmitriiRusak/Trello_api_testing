@@ -41,6 +41,9 @@ jobs:
 
       - name: show artifacts
         run: ls
+
+      - name: open artifact
+        run: cat app.log
 #      - name: Get code
 #        uses: actions/checkout@v4
 #

@@ -30,7 +30,7 @@ jobs:
         run: echo "---------> ${{steps.otp.outputs.myVariable}}"
 
       - name: access var
-        run: echo "${{someVar}}"
+        run: echo "${{outputs.someVar}}"
 
 
   run_actions_tests:

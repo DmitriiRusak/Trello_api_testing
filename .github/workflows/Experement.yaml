@@ -40,7 +40,7 @@ jobs:
     steps:
 
       - name: read the output
-        run: echo "${{needs.run_board_tests.outputs.someVar}}
+        run: echo "${{needs.run_board_tests.outputs.someVar}}"
 
 #
 #      - name: download the artifacts

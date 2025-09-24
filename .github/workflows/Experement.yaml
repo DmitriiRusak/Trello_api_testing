@@ -29,8 +29,8 @@ jobs:
       - name: access output
         run: echo "---------> ${{steps.otp.outputs.myVariable}}"
 
-      - name: access var
-        run: echo "${{outputs.someVar}}"
+#      - name: access var
+#        run: echo "${{outputs.someVar}}"
 
 
   run_actions_tests:

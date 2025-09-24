@@ -24,7 +24,7 @@ jobs:
 
       - name: set output
         id: otp
-        run: echo "myVariable=Do I really need to handle the outputs" >> $GITHUB_OUTPUT
+        run: mvn clean test -Dsuite=restAssured/BoardAPITest >> $GITHUB_OUTPUT
 
       - name: access output
         run: echo "---------> ${{steps.otp.outputs.myVariable}}"

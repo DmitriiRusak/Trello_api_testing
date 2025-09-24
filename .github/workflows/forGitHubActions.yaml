@@ -30,17 +30,26 @@ jobs:
           path: Logs
 
   run_actions_tests:
+    needs: run_board_tests
     runs-on: ubuntu-latest
     steps:
-      - name: Get code
-        uses: actions/checkout@v4
 
-      - name: Set up java 17
-        uses: actions/setup-java@v4
+      - name: download the artifacts
+        uses: actions/download-artifact@v4
         with:
-          java-version: '17.0.2'
-          distribution: 'temurin'
-          cache: 'maven'
+          name: Board API tests_logs
 
-      - name: run the project
-        run: mvn clean test -Dsuite=restAssured/ActionsAPITest
+      - name: show artifacts
+        run: ls
+#      - name: Get code
+#        uses: actions/checkout@v4
+#
+#      - name: Set up java 17
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: '17.0.2'
+#          distribution: 'temurin'
+#          cache: 'maven'
+#
+#      - name: run the project
+#        run: mvn clean test -Dsuite=restAssured/ActionsAPITest

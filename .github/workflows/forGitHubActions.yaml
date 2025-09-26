@@ -21,7 +21,7 @@ jobs:
       - name: upload the logs
         uses: actions/upload-artifact@v4
         with:
-          name: Board tests logs
+          name: Board_tests_logs
           path: Logs
 
   run_actions_tests:
@@ -44,7 +44,7 @@ jobs:
       - name: upload the logs
         uses: actions/upload-artifact@v4
         with:
-          name: Action tests logs
+          name: Action_tests_logs
           path: Logs
 
   Logs_examination:
@@ -57,13 +57,13 @@ jobs:
       - name: download the artifacts of a Board tests
         uses: actions/download-artifact@v4
         with:
-          name: Board tests logs
+          name: Board_tests_logs
 
 #Download Board tests logs
       - name: download the artifacts of a Actions test
         uses: actions/download-artifact@v4
         with:
-          name: Action tests logs
+          name: Action_tests_logs
 
       - name: show artifacts
         run: ls

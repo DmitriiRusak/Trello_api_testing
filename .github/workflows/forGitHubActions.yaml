@@ -19,10 +19,15 @@ jobs:
         run: mvn clean test -Dsuite=restAssured/BoardAPITest
 
       - name: upload the logs
+        id: for_if_conditions_experement
         uses: actions/upload-artifact@v4
         with:
           name: Board_tests_logs
           path: logs/
+
+      - name: after the failure
+        if: steps.for_if_conditions_experement=='failure'
+        run: echo "there are some tests failure"
 
   run_actions_tests:
 #    needs: run_board_tests

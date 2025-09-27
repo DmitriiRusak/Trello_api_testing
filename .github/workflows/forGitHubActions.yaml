@@ -26,7 +26,7 @@ jobs:
           path: logs/
 
       - name: after the failure
-        if: failure() && steps.run the project.outcome =='failure'
+        if: failure() && steps.run the project.outcome=='failure'
         run: echo "there are some tests failure"
 
   run_actions_tests:

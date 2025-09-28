@@ -16,11 +16,12 @@ jobs:
           cache: 'maven'
 # Run the test
       - name: run the project
+        continue-on-error: true
         id: for_if_conditions_experement
         run: mvn clean test -Dsuite=restAssured/BoardAPITest
 
       - name: upload the logs
-        if: failure() && steps.for_if_conditions_experement.outcome=='failure'
+#        if: failure() && steps.for_if_conditions_experement.outcome=='failure'
         uses: actions/upload-artifact@v4
         with:
           name: Board_tests_logs

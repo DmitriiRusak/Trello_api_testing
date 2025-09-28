@@ -84,7 +84,7 @@ public class BoardApiTest{
         String actualNameOfTheList = response.jsonPath().getString("name");
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(actualNameOfTheList, configTestData.NAME_FOR_LIST);
+        Assert.assertEquals(actualNameOfTheList, configTestData.NAME_FOR_LIST+"mistake");
     }
 
     @Test(priority = 4)

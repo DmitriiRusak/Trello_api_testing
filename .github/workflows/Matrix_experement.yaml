@@ -21,7 +21,7 @@ jobs:
 
           # Run the test
       - name: run the project
-        run: mvn clean test -Dsuite=restAssured/LabelsApiTest
+        run: mvn clean test -Dsuite=restAssured/LabelesAPITest
 
       - name: upload the logs
         uses: actions/upload-artifact@v4

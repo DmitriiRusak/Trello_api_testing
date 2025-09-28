@@ -23,8 +23,8 @@ jobs:
       - name: run the project
         run: mvn clean test -Dsuite=restAssured/LabelesAPITest
 
-      - name: upload the logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: Labels_tests_logs
-          path: logs/
+#      - name: upload the logs
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: Labels_tests_logs
+#          path: logs/

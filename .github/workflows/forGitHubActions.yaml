@@ -55,7 +55,8 @@ jobs:
           path: logs/
 
   run_labels_tests:
-    uses: ./.github/workflows/Matrix_experement.yaml
+#    uses: ./.github/workflows/Matrix_experement.yaml
+    uses: .github/workflows/Matrix_experement.yaml
 
   Logs_examination:
 

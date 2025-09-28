@@ -1,11 +1,9 @@
-name: Matrix_strategy
+name: Labels_tests
 on: push
 jobs:
   single_job:
-    strategy:
-      matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{matrix.operating-system}}
+
+    runs-on: ubuntu-latest
     steps:
 
       - name: Get code
@@ -22,9 +20,3 @@ jobs:
           # Run the test
       - name: run the project
         run: mvn clean test -Dsuite=restAssured/LabelesAPITest
-
-#      - name: upload the logs
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: Labels_tests_logs
-#          path: logs/

@@ -57,7 +57,7 @@ jobs:
 
     needs: [run_board_tests,run_actions_tests]
 
-    if: failure() && needs.run_board_tests=='failure'
+    if: failure() && (needs.run_board_tests.status =='failure' || needs.run_actions_tests.status == 'failure')
     runs-on: ubuntu-latest
     steps:
 

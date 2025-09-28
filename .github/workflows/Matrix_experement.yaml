@@ -1,9 +1,9 @@
 name: Labels_tests
-on: push
+on: workflow_call
 jobs:
   single_job:
 
-    runs-on: workflow_call
+    runs-on: ubuntu-latest
     steps:
 
       - name: Get code

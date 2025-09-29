@@ -18,8 +18,7 @@ jobs:
 # Run the test
       - name: run the project
         id: for_if_condition
-#        run: mvn clean test -Dsuite=AllProjectRun
-        run: mvn clean test -Dsuite=restAssured/ActionsAPITest
+        run: mvn clean test -Dsuite=AllProjectRun
 
       - name: upload the logs
         if: always()

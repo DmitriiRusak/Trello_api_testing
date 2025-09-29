@@ -2,7 +2,7 @@ name: Trello_cucumber
 on: [push, workflow_dispatch]
 jobs:
 
-  run_board_tests:
+  run_all_tests:
     runs-on: windows-2025
     steps:
 # Download the project from gitHub
@@ -29,7 +29,7 @@ jobs:
 
   Logs_examination:
 
-    needs: [run_board_tests,run_actions_tests]
+    needs: run_all_tests
 
     if: failure()
     runs-on: ubuntu-latest

@@ -1,6 +1,7 @@
 name: Trello_cucumber
 on: [push, workflow_dispatch]
 jobs:
+
   run_board_tests:
     runs-on: windows-2025
     steps:
@@ -18,45 +19,13 @@ jobs:
       - name: run the project
         continue-on-error: true
         id: for_if_conditions_experement
-        run: mvn clean test -Dsuite=restAssured/BoardAPITest
+        run: mvn clean test -Dsuite=AllProjectRun
 
       - name: upload the logs
-#        if: failure() && steps.for_if_conditions_experement.outcome=='failure'
         uses: actions/upload-artifact@v4
         with:
           name: Board_tests_logs
           path: logs/
-
-      - name: after the failure
-        run: echo "there are some tests failure"
-
-  run_actions_tests:
-#    needs: run_board_tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Get code
-        uses: actions/checkout@v4
-
-      - name: Set up java 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17.0.2'
-          distribution: 'temurin'
-          cache: 'maven'
-
-      - name: run the project
-        run: mvn clean test -Dsuite=restAssured/ActionsAPITest
-
-      - name: upload the logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: Action_tests_logs
-          path: logs/
-
-  run_labels_tests:
-#    uses: ./.github/workflows/Matrix_experement.yaml
-    uses: ./.github/workflows/Matrix_experement.yaml
 
   Logs_examination:
 
@@ -71,15 +40,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: Board_tests_logs
-
-      - name: open artifact
-        run: cat app.log
-
-#Download Board tests logs
-      - name: download the artifacts of a Actions test
-        uses: actions/download-artifact@v4
-        with:
-          name: Action_tests_logs
 
       - name: open artifact
         run: cat app.log

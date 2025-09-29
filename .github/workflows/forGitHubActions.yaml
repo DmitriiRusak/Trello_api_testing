@@ -1,46 +1,45 @@
 name: Trello_cucumber
 on: [push, workflow_dispatch]
 jobs:
-  run_board_tests:
+
+  run_all_tests:
     runs-on: windows-2025
     steps:
+# Download the project from gitHub
       - name: Get code
         uses: actions/checkout@v4
-
-      - name: List files
-        run: dir
-
+# Download java
       - name: Set up java 17
         uses: actions/setup-java@v4
         with:
           java-version: '17.0.2'
           distribution: 'temurin'
           cache: 'maven'
-
-      - name: Maven and java versions
-        run: mvn -version
-
+# Run the test
       - name: run the project
-        run: mvn clean test -Dsuite=restAssured/BoardAPITest
+        id: for_if_condition
+        run: mvn clean test -Dsuite=AllProjectRun
 
       - name: upload the logs
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Board API tests logs
-          path: LogsFromGithubActions
+          name: Board_tests_logs
+          path: logs/
 
-  run_actions_tests:
+  Logs_examination:
+
+    needs: run_all_tests
+
+    if: failure()
     runs-on: ubuntu-latest
     steps:
-      - name: Get code
-        uses: actions/checkout@v4
 
-      - name: Set up java 17
-        uses: actions/setup-java@v4
+#Download Board tests logs
+      - name: download the artifacts of a Board tests
+        uses: actions/download-artifact@v4
         with:
-          java-version: '17.0.2'
-          distribution: 'temurin'
-          cache: 'maven'
+          name: Board_tests_logs
 
-      - name: run the project
-        run: mvn clean test -Dsuite=restAssured/ActionsAPITest
+      - name: open artifact
+        run: cat app.log

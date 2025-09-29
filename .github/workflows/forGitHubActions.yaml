@@ -19,7 +19,8 @@ jobs:
       - name: run the project
         continue-on-error: true
         id: for_if_conditions_experement
-        run: mvn clean test -Dsuite=AllProjectRun
+#        run: mvn clean test -Dsuite=AllProjectRun
+        run: mvn clean test -Dsuite=restAssured/ActionsAPITest
 
       - name: upload the logs
         uses: actions/upload-artifact@v4

@@ -103,7 +103,7 @@ public class ActionsAPITest {
         String boardNameRecivedFromApiCall = response.jsonPath().getString("name");
 
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals(boardNameRecivedFromApiCall, configTestData.BOARD_NAME);
+        Assert.assertEquals(boardNameRecivedFromApiCall, configTestData.BOARD_NAME + "mistake");
     }
 
     @Test(priority = 4)
